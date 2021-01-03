@@ -20,7 +20,7 @@
         <el-option label="容器" value="4" />
       </el-select>
       <el-button class="tool tool-query" type="primary" icon="el-icon-search" @click="handleQuery">查询</el-button>
-      <el-button v-if="access.export.allow" class="tool tool-export" :loading="loading.export" type="primary" icon="vue-icon-excel" @click="handleExport">导出</el-button>
+      <el-button class="tool tool-export" :loading="loading.export" type="primary" icon="vue-icon-excel" @click="handleExport">导出</el-button>
     </div>
 
     <audio id="audio" src="/static/audio/130808.wav" />
@@ -47,7 +47,7 @@
       <el-table-column label="数量" prop="quality" :sort-orders="sortOrders" align="center" show-overflow-tooltip />
       <el-table-column fixed="right" label="操作" align="center" width="60">
         <template slot-scope="{row}">
-          <el-tooltip v-if="access.detail.allow" class="item" effect="dark" content="详情" placement="top-end">
+          <el-tooltip class="item" effect="dark" content="详情" placement="top-end">
             <el-button type="primary" plain class="button-operate button-detail" size="mini" @click="handleDetail(row)"><i class="vue-icon-detail" /></el-button>
           </el-tooltip>
         </template>
@@ -168,7 +168,8 @@ export default {
   directives: { adaptive },
   data() {
     return {
-      access: this.$store.getters.access['SystemLog']['StoreRecord'],
+      // access: this.$store.getters.access['SystemLog']['StoreRecord'],
+      access: true,
       datas: null,
       operators: null,
       goodsCategories: null,
@@ -187,7 +188,7 @@ export default {
   created() {
     this.getDatas()
     this.getOperators()
-    this.getGoodsCategories()
+    // this.getGoodsCategories()
     this.getStoreOperateTypes()
   },
   methods: {

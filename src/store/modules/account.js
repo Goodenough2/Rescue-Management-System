@@ -1,6 +1,7 @@
 import { login, logout, getAccess } from '@/api/account'
 import { getToken, setToken, removeToken } from '@/utils/auth'
-import router, { resetRouter } from '@/router'
+// import router, { resetRouter } from '@/router'
+import { resetRouter } from '@/router'
 
 const state = {
   token: getToken(),
@@ -27,9 +28,9 @@ const actions = {
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password }).then(response => {
         // 存放token放入localStorage
-        commit('SET_TOKEN', response.data.token)
-        commit('SET_USER', response.data.user)
-        setToken(response.data.token)
+        commit('SET_TOKEN', response.token)
+        commit('SET_USER', response.user)
+        setToken(response.token)
         resolve()
       }).catch(error => {
         reject(error)
@@ -40,18 +41,23 @@ const actions = {
   // get user access
   getAccess({ commit }) {
     return new Promise((resolve, reject) => {
-      getAccess().then(response => {
-        const access = response.data.access
-        if (!access) {
-          reject('请重新登录！')
-        }
+      const access = getAccess().data.access
+      // 将access本地存储
+      commit('SET_ACCESS', access)
+      resolve({ access })
 
-        // 将access本地存储
-        commit('SET_ACCESS', access)
-        resolve({ access })
-      }).catch(error => {
-        reject(error)
-      })
+      // getAccess().then(response => {
+      //   const access = response.data.access
+      //   if (!access) {
+      //     reject('请重新登录！')
+      //   }
+      //
+      //   // 将access本地存储
+      //   commit('SET_ACCESS', access)
+      //   resolve({ access })
+      // }).catch(error => {
+      //   reject(error)
+      // })
     })
   },
 
@@ -89,13 +95,14 @@ const actions = {
       setToken(token)
 
       const { access } = await dispatch('getAccess')
-
+      //
       resetRouter()
 
       // generate accessible routes map based on access
       const accessRoutes = await dispatch('permission/generateRoutes', access, { root: true })
 
       // dynamically add accessible routes
+      // eslint-disable-next-line no-undef
       router.addRoutes(accessRoutes)
 
       // reset visited views and cached views

@@ -30,7 +30,7 @@ router.beforeEach(async(to, from, next) => {
         try {
           // get access
           const { access } = await store.dispatch('account/getAccess')
-
+          console.log(access)
           // generate accessible routes map based on access
           const accessRoutes = await store.dispatch('permission/generateRoutes', access)
 

@@ -9,16 +9,16 @@ export function filterAsyncRoutes(routes, access) {
   const res = []
   routes.forEach(route => {
     const tmp = { ...route }
-    // if (access[route.name] && access[route.name].allow) {
-    //   if (tmp.children) {
-    //     tmp.children = filterAsyncRoutes(tmp.children, access[route.name])
-    //   }
-    //   res.push(tmp)
-    // }
-    if (tmp.children) {
-      tmp.children = filterAsyncRoutes(tmp.children, access[route.name])
+    if (access[route.name] && access[route.name].allow) {
+      if (tmp.children) {
+        tmp.children = filterAsyncRoutes(tmp.children, access[route.name])
+      }
+      res.push(tmp)
     }
-    res.push(tmp)
+    // if (tmp.children) {
+    //   tmp.children = filterAsyncRoutes(tmp.children, access[route.name])
+    // }
+    // res.push(tmp)
   })
   return res
 }
