@@ -1,0 +1,135 @@
+{
+  "id": "1291905",
+  "name": "vue",
+  "font_family": "iconfont",
+  "css_prefix_text": "vue-icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "5820212",
+      "name": "上移",
+      "font_class": "rankup",
+      "unicode": "e6f2",
+      "unicode_decimal": 59122
+    },
+    {
+      "icon_id": "14847802",
+      "name": "import",
+      "font_class": "import",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "13618877",
+      "name": "导入",
+      "font_class": "export",
+      "unicode": "e63a",
+      "unicode_decimal": 58938
+    },
+    {
+      "icon_id": "1330765",
+      "name": "添加",
+      "font_class": "create",
+      "unicode": "e752",
+      "unicode_decimal": 59218
+    },
+    {
+      "icon_id": "10102019",
+      "name": "edit",
+      "font_class": "update",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "576659",
+      "name": "down",
+      "font_class": "arrow-up",
+      "unicode": "e68f",
+      "unicode_decimal": 59023
+    },
+    {
+      "icon_id": "1029238",
+      "name": "删除",
+      "font_class": "delete",
+      "unicode": "e61b",
+      "unicode_decimal": 58907
+    },
+    {
+      "icon_id": "2063953",
+      "name": "操作-详情查看",
+      "font_class": "detail",
+      "unicode": "e6c6",
+      "unicode_decimal": 59078
+    },
+    {
+      "icon_id": "3207166",
+      "name": "exportExcel",
+      "font_class": "excel",
+      "unicode": "e71f",
+      "unicode_decimal": 59167
+    },
+    {
+      "icon_id": "400896",
+      "name": "location2",
+      "font_class": "location",
+      "unicode": "e78e",
+      "unicode_decimal": 59278
+    },
+    {
+      "icon_id": "7644086",
+      "name": "nav-fold",
+      "font_class": "nav-unfold",
+      "unicode": "e629",
+      "unicode_decimal": 58921
+    },
+    {
+      "icon_id": "593038",
+      "name": "user04",
+      "font_class": "user2",
+      "unicode": "e700",
+      "unicode_decimal": 59136
+    },
+    {
+      "icon_id": "7239758",
+      "name": "fullscreen",
+      "font_class": "fullscreen",
+      "unicode": "e731",
+      "unicode_decimal": 59185
+    },
+    {
+      "icon_id": "7239759",
+      "name": "fullscreen-exit",
+      "font_class": "fullscreen-exit",
+      "unicode": "e732",
+      "unicode_decimal": 59186
+    },
+    {
+      "icon_id": "9822325",
+      "name": "keys",
+      "font_class": "keys",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "7683853",
+      "name": "user",
+      "font_class": "user",
+      "unicode": "e626",
+      "unicode_decimal": 58918
+    },
+    {
+      "icon_id": "5744191",
+      "name": "eye",
+      "font_class": "eye-open",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "7812307",
+      "name": "eye",
+      "font_class": "eye-close",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    }
+  ]
+}
