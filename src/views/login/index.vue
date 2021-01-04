@@ -1,58 +1,120 @@
 <template>
-  <div class="login">
-    <el-form ref="loginForm" :model="loginAccount" :rules="rules" class="login-form" autocomplete="on" label-position="left">
-      <div class="title-container">
-        <h3 class="title">{{ title }}</h3>
-      </div>
-      <el-form-item prop="username">
-        <span class="input-left-icon">
-          <i class="iconfont vue-icon-user" />
-        </span>
-        <el-input
-          ref="username"
-          v-model="loginAccount.username"
-          placeholder="账号"
-          name="username"
-          type="text"
-          tabindex="1"
-          autocomplete="on"
-        />
-      </el-form-item>
-      <el-tooltip v-model="capslockTooltip" content="大写锁定已打开" placement="right" manual>
-        <el-form-item prop="password">
-          <span class="input-left-icon">
-            <i class="iconfont vue-icon-keys" />
-          </span>
-          <el-input
-            :key="passwordType"
-            ref="password"
-            v-model="loginAccount.password"
-            :type="passwordType"
-            placeholder="密码"
-            name="password"
-            tabindex="2"
-            autocomplete="on"
-            @keyup.native="checkCapslock"
-            @blur="capslockTooltip = false"
-            @keyup.enter.native="handleLogin"
-          />
-          <span class="input-right-icon" @click="showPassword">
-            <i class="iconfont" :class="eyeStyle" />
-          </span>
-        </el-form-item>
-      </el-tooltip>
-      <el-button :loading="loading" type="primary" @click.native.prevent="handleLogin">登 录</el-button>
-      <div style="position:relative">
-        <div class="tips" hidden>
-          <span>Username : admin</span>
-          <span>Password : any</span>
+  <!--  <div class="login">-->
+  <!--    <el-form ref="loginForm" :model="loginAccount" :rules="rules" class="login-form" autocomplete="on" label-position="left">-->
+  <!--      <div class="title-container">-->
+  <!--        <h3 class="title">{{ title }}</h3>-->
+  <!--      </div>-->
+  <!--      <el-form-item prop="username">-->
+  <!--        <span class="input-left-icon">-->
+  <!--          <i class="iconfont vue-icon-user" />-->
+  <!--        </span>-->
+  <!--        <el-input-->
+  <!--          ref="username"-->
+  <!--          v-model="loginAccount.username"-->
+  <!--          placeholder="账号"-->
+  <!--          name="username"-->
+  <!--          type="text"-->
+  <!--          tabindex="1"-->
+  <!--          autocomplete="on"-->
+  <!--        />-->
+  <!--      </el-form-item>-->
+  <!--      <el-tooltip v-model="capslockTooltip" content="大写锁定已打开" placement="right" manual>-->
+  <!--        <el-form-item prop="password">-->
+  <!--          <span class="input-left-icon">-->
+  <!--            <i class="iconfont vue-icon-keys" />-->
+  <!--          </span>-->
+  <!--          <el-input-->
+  <!--            :key="passwordType"-->
+  <!--            ref="password"-->
+  <!--            v-model="loginAccount.password"-->
+  <!--            :type="passwordType"-->
+  <!--            placeholder="密码"-->
+  <!--            name="password"-->
+  <!--            tabindex="2"-->
+  <!--            autocomplete="on"-->
+  <!--            @keyup.native="checkCapslock"-->
+  <!--            @blur="capslockTooltip = false"-->
+  <!--            @keyup.enter.native="handleLogin"-->
+  <!--          />-->
+  <!--          <span class="input-right-icon" @click="showPassword">-->
+  <!--            <i class="iconfont" :class="eyeStyle" />-->
+  <!--          </span>-->
+  <!--        </el-form-item>-->
+  <!--      </el-tooltip>-->
+  <!--      <el-button :loading="loading" type="primary" @click.native.prevent="handleLogin">登 录</el-button>-->
+  <!--      <div style="position:relative">-->
+  <!--        <div class="tips" hidden>-->
+  <!--          <span>Username : admin</span>-->
+  <!--          <span>Password : any</span>-->
+  <!--        </div>-->
+  <!--        <div class="tips" hidden>-->
+  <!--          <span style="margin-right:18px;">Username : editor</span>-->
+  <!--          <span>Password : any</span>-->
+  <!--        </div>-->
+  <!--      </div>-->
+  <!--    </el-form>-->
+  <!--  </div>-->
+  <div>
+    <div class="logoheader m0">
+      <h1 class="fl">
+        <a href="javascsript:;"><img src="../../static/loginassets/images/logo_06.png" alt="logo"></a>
+      </h1>
+      <p class="fr"><span>客服热线：</span>999-9999-9999</p>
+    </div>
+    <div id="container" class="mainwrap">
+      <!--login-->
+      <div id="output" style="position:absolute;" />
+      <div class="mainbox m0">
+        <div class="login fr">
+          <div class="log-user">
+            <form id="loginForm">
+              <h2>用户登录</h2>
+              <p>请保护你账号和密码的安全，不要泄露给他人</p>
+
+              <div class="userinput">
+                <div class="cb">
+                  <div class="username mb15 mt15">
+                    <span class="fl img" />
+                    <input id="UserName" v-model="loginAccount.username" type="text" name="UserName" class="input" placeholder=" 账户">
+                  </div>
+                  <div class="userpw">
+                    <span class="fl img" />
+                    <input id="Password" v-model="loginAccount.password" name="Password" placeholder="密码" type="password" class="input">
+                  </div>
+                </div>
+                <div class="space">
+
+                  <el-button :loading="loading" type="primary" @click.native.prevent="handleLogin">登 录</el-button>
+                </div>
+                <!--                <el-form-item prop="username">-->
+                <!--                  <span class="input-left-icon">-->
+                <!--                    <i class="iconfont vue-icon-user" />-->
+                <!--                  </span>-->
+                <!--                  <el-input-->
+                <!--                    ref="username"-->
+                <!--                    v-model="loginAccount.username"-->
+                <!--                    placeholder="账号"-->
+                <!--                    name="username"-->
+                <!--                    type="text"-->
+                <!--                    tabindex="1"-->
+                <!--                    autocomplete="on"-->
+                <!--                  />-->
+                <!--                </el-form-item>-->
+                <!--                <div class="logbtn cb mt10">-->
+                <!--                  <input id="logbtn" value="登    录" class="btn loginBtn" type="submit">-->
+                <!--                </div>-->
+                <!--                <div id="loadImg" style="display:none" class="jzbtn mt10">-->
+                <!--                  <span>加载中 ...</span>-->
+                <!--                </div>-->
+              </div>
+            </form>
+          </div>
         </div>
-        <div class="tips" hidden>
-          <span style="margin-right:18px;">Username : editor</span>
-          <span>Password : any</span>
-        </div>
       </div>
-    </el-form>
+    </div>
+    <div class="loginfooter">
+      <p class="m0 mt15">Copyright © 2020 ~ 2021 Team All rights reserved. 最终解释权归本团队所有</p>
+    </div>
   </div>
 </template>
 
@@ -131,22 +193,22 @@ export default {
       }
     },
     handleLogin() {
-      this.$refs.loginForm.validate(valid => {
-        if (valid) {
-          this.loading = true
-          this.$store.dispatch('account/login', this.loginAccount)
-            .then(() => {
-              this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
-              this.loading = false
-            })
-            .catch(() => {
-              this.loading = false
-            })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
+      // this.$refs.loginForm.validate(valid => {
+      //   if (valid) {
+      this.loading = true
+      this.$store.dispatch('account/login', this.loginAccount)
+        .then(() => {
+          this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
+          this.loading = false
+        })
+        .catch(() => {
+          this.loading = false
+        })
+        // } else {
+        //   console.log('error submit!!')
+        //   return false
+        // }
+      // })
     },
     getOtherQuery(query) {
       return Object.keys(query).reduce((acc, cur) => {
@@ -159,7 +221,19 @@ export default {
   }
 }
 </script>
->
+
+<style scoped>
+  @import "../../static/loginassets/css/login.css";
+</style>
+
+<!--<script src="../../static/loginassets/js/jquery.cookie.js"></script>-->
+<!--<script src="../../static/loginassets/js/jquery.validate.js"></script>-->
+<!--<script src="../../static/loginassets/js/jquery.validate.wrapper.js"></script>-->
+<!--<script src="../../static/loginassets/js/jquery.form.js"></script>-->
+<!--<script src="../../static/loginassets/js/common.js"></script>-->
+<!--<script src="../../static/loginassets/js/jquery.tipsy.js"></script>-->
+<!--<script src="../../static/loginassets/js/jquery.idcode.js"></script>-->
+<!--<script type="text/javascript" src="../../static/loginassets/js/vector.js"></script>-->
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   $dark-bg: #2d3a4b;
@@ -167,7 +241,7 @@ export default {
   $dark-gray: #889aa4;
   $light-gray: #eee;
   $cursor:#fff;
-
+/*
   .login {
     min-height: 100%;
     width: 100%;
@@ -193,7 +267,7 @@ export default {
           text-align: center;
         }
       }
-
+*/
       .el-form-item {
         border: 1px solid rgba(255, 255, 255, 0.1);
         background: rgba(0, 0, 0, 0.1);
@@ -231,7 +305,7 @@ export default {
           padding: 0 12px;
           color: $dark-gray;
 
-          .iconfont{
+          .iconfont {
             font-size: 22px;
           }
         }
@@ -247,7 +321,7 @@ export default {
           user-select: none;
           color: $dark-gray;
 
-          .iconfont{
+          .iconfont {
             font-size: 22px;
           }
         }
@@ -259,18 +333,7 @@ export default {
         font-size: 18px;
         line-height: 26px;
       }
-    }
-
-    .tips {
-      font-size: 14px;
-      color: #fff;
-      margin-bottom: 10px;
-
-      span {
-        &:first-of-type {
-          margin-right: 16px;
-        }
-      }
-    }
+  .space {
+    padding-top: 15px;
   }
 </style>

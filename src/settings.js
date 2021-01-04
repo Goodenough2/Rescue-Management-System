@@ -1,6 +1,7 @@
 module.exports = {
   title: '归家行动后台指挥系统',
   baseURL: 'http://localhost:8080',
+  // baseURL: 'http://localhost:8888/api/v1',
 
   /**
    * @type {boolean} true | false
