@@ -121,6 +121,7 @@
 <script>
 import { title } from '@/settings'
 import setRule from '@/utils/form-validate'
+import { Victor } from '@/static/loginassets/js/vector'
 
 export default {
   name: 'Login',
@@ -164,7 +165,8 @@ export default {
     }
   },
   created() {
-    // window.addEventListener('storage', this.afterQRScan)
+    // // window.addEventListener('storage', this.afterQRScan)
+
   },
   mounted() {
     if (this.loginAccount.username === '') {
@@ -172,11 +174,15 @@ export default {
     } else if (this.loginAccount.password === '') {
       this.$refs.password.focus()
     }
+    this.backcreate()
   },
   destroyed() {
     // window.removeEventListener('storage', this.afterQRScan)
   },
   methods: {
+    backcreate() {
+      Victor('container', 'output') // 登录背景函数
+    },
     showPassword() {
       this.passwordVisible = !this.passwordVisible
     },
@@ -225,15 +231,6 @@ export default {
 <style scoped>
   @import "../../static/loginassets/css/login.css";
 </style>
-
-<!--<script src="../../static/loginassets/js/jquery.cookie.js"></script>-->
-<!--<script src="../../static/loginassets/js/jquery.validate.js"></script>-->
-<!--<script src="../../static/loginassets/js/jquery.validate.wrapper.js"></script>-->
-<!--<script src="../../static/loginassets/js/jquery.form.js"></script>-->
-<!--<script src="../../static/loginassets/js/common.js"></script>-->
-<!--<script src="../../static/loginassets/js/jquery.tipsy.js"></script>-->
-<!--<script src="../../static/loginassets/js/jquery.idcode.js"></script>-->
-<!--<script type="text/javascript" src="../../static/loginassets/js/vector.js"></script>-->
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   $dark-bg: #2d3a4b;
