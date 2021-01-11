@@ -64,11 +64,11 @@
         <el-row>
           <el-col :sl="24">
             <el-form-item label="备注" prop="remark">
-              <el-input v-model="create.models.remark" type="textarea"/>
+              <el-input v-model="create.models.remark" type="textarea" />
             </el-form-item>
           </el-col>
         </el-row>
-<!--        todo 权限列表添加-->
+        <!--        todo 权限列表添加-->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="create.dialog.visible = false">取消</el-button>
@@ -88,7 +88,7 @@
         <el-row>
           <el-col :sl="24">
             <el-form-item label="备注" prop="remark">
-              <el-input v-model="update.models.remark" type="textarea"/>
+              <el-input v-model="update.models.remark" type="textarea" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -170,7 +170,7 @@ export default {
     }
   },
   created() {
-    // this.getDatas()
+    this.getDatas()
     // this.getAllAccess()
   },
   methods: {
@@ -219,17 +219,20 @@ export default {
     },
     handleDetail(row) {
       // 若列表数据展示了全部属性，则可直接拷贝列表数据
+      this.detail.models = Object.assign({}, row)
       this.detail.dialog.visible = true
       this.loading.detail = true
-      role.get(row.id).then(response => {
-        this.detail.models = response.data.role
-        // console.log(response)
-        // 获取此id的access，转成tree
-        // this.accessDetail = this.arrayToTree(response.data.access)
-        this.loading.detail = false
-      }).catch(reject => {
-        this.loading.detail = false
-      })
+      this.loading.detail = false
+      // 运用请求的方式获取角色信息
+      // role.get(row.id).then(response => {
+      //   this.detail.models = response.data.role
+      //   // console.log(response)
+      //   // 获取此id的access，转成tree
+      //   // this.accessDetail = this.arrayToTree(response.data.access)
+      //   this.loading.detail = false
+      // }).catch(reject => {
+      //   this.loading.detail = false
+      // })
     },
     // // 监听穿梭框组件添加, accessTo用来接受添加与修改中的 赋予权限数据
     // add(fromData, toData, obj) {
@@ -275,35 +278,38 @@ export default {
     // },
     handleUpdate(row) {
       // 若列表数据展示了全部属性，则可直接拷贝列表数据用于编辑
-      // this.handleDetail(row)
+      this.update.models = Object.assign({}, row)
+      this.update.dialog.visible = true
       this.loading.update = true
-      role.get(row.id).then(response => {
-        this.detail.models = response.data.role
-        // console.log(response)
-        // 获取此id的access，转成tree
-        // this.accessDetail = this.arrayToTree(response.data.access)
-        // // console.log(this.detail.models)
-        // this.update.models = Object.assign({}, this.detail.models)
-        // // console.log(this.update.models)
-        // // 获取当前已有权限: tree型
-        // this.accessTo = this.accessDetail
-        // // 所有权限去掉当前权限 = 未获得权限: accessfrom: array
-        // const accessfrom = this.moveToData(this.treeToArray(this.accessList), this.treeToArray(this.accessTo))
-        // console.log(accessfrom)
-        // console.log(this.treeToArray(this.accessList))
-        // console.log(this.treeToArray(this.accessTo))
-        // if (this.x === 0) {
-        //   this.accessFrom = this.arrayToTree(accessfrom)
-        // }
-        // if (this.x === 1) {
-        //   this.accessFrom = this.arrayToTree2(accessfrom)
-        // }
-        // console.log(this.accessFrom)
-        this.loading.update = false
-        this.update.dialog.visible = true
-      }).catch(reject => {
-        this.loading.update = false
-      })
+      this.loading.update = false
+
+      // role.get(row.id).then(response => {
+      //   this.detail.models = response.data.role
+      // console.log(response)
+      // 获取此id的access，转成tree
+      // this.accessDetail = this.arrayToTree(response.data.access)
+      // // console.log(this.detail.models)
+      // this.update.models = Object.assign({}, this.detail.models)
+      // // console.log(this.update.models)
+      // // 获取当前已有权限: tree型
+      // this.accessTo = this.accessDetail
+      // // 所有权限去掉当前权限 = 未获得权限: accessfrom: array
+      // const accessfrom = this.moveToData(this.treeToArray(this.accessList), this.treeToArray(this.accessTo))
+      // console.log(accessfrom)
+      // console.log(this.treeToArray(this.accessList))
+      // console.log(this.treeToArray(this.accessTo))
+      // if (this.x === 0) {
+      //   this.accessFrom = this.arrayToTree(accessfrom)
+      // }
+      // if (this.x === 1) {
+      //   this.accessFrom = this.arrayToTree2(accessfrom)
+      // }
+      // console.log(this.accessFrom)
+      //   this.loading.update = false
+      //   this.update.dialog.visible = true
+      // }).catch(reject => {
+      //   this.loading.update = false
+      // })
 
       this.$nextTick(() => {
         this.$refs['formUpdate'].clearValidate()

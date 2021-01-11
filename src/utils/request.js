@@ -6,7 +6,7 @@ import { getToken } from '@/utils/auth'
 // create an axios instance
 const service = axios.create({
   // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
-  baseURL: 'http://localhost:8080', // url = base url + request url
+  baseURL: 'http://localhost:8888', // url = base url + request url
   // baseURL: 'http://localhost:8888/api/v1',
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 30000, // request timeout
@@ -35,16 +35,20 @@ const responseState = {
   // 成功
   // 2---，添加201-，删除202-，更新203-，获取204-，排序205-,  登录206-,  导入207-， 导出208-
   success: 20000,
-  createSuccess: 20100,
-  deleteSuccess: 20200,
-  updateSuccess: 20300,
+  loginSuccess: 20001,
+  logoutSuccess: 20002,
+  createSuccess: 20003,
+  deleteSuccess: 20004,
+  updateSuccess: 20005,
   rankSuccess: 20500,
-  loginSuccess: 20600,
   importSuccess: 20700,
   exportSuccess: 20600,
   // 失败 未知的、catch的
   // 5---，添加501-，删除502-，更新503-，获取504-，排序505-,  登录506-,  导入507-， 导出508-
   failure: 50000,
+  usernameNotFailure: 50001,
+  passwordWrongFailure: 50002,
+  usernameConflictFailure: 50003,
   createFailure: 50100,
   deleteFailure: 50200,
   updateFailure: 50300,
@@ -57,9 +61,9 @@ const responseState = {
   // 错误 已知的
   // 4---，账户401-，未找到404-，关联405--，冲突409-
   bad: 40000,
-  noToken: 40100,
-  tokenIllegal: 40101,
-  tokenExpired: 40102,
+  noToken: 4003,
+  tokenIllegal: 4002,
+  tokenExpired: 4001,
   loggedInOther: 40105,
   notFound: 40400,
   updataDataNotFound: 40430,
@@ -94,6 +98,7 @@ service.interceptors.response.use(
       case responseState.updateSuccess:
       case responseState.rankSuccess:
       case responseState.loginSuccess:
+      case responseState.logoutSuccess:
       case responseState.importSuccess:
       case responseState.exportSuccess:
         if (res.message) {
@@ -101,6 +106,9 @@ service.interceptors.response.use(
         }
         break
       case responseState.failure:
+      case responseState.usernameNotFailure:
+      case responseState.usernameConflictFailure:
+      case responseState.passwordWrongFailure:
       case responseState.createFailure:
       case responseState.deleteFailure:
       case responseState.updateFailure:
