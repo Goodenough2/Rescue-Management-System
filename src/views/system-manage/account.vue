@@ -1,11 +1,11 @@
 <template>
   <div class="app-container list">
     <div class="toolbar">
-      <el-input v-model.trim="query.userName" class="query-item" style="width: 120px" placeholder="用户名" clearable @clear="handleQuery" />
+      <el-input v-model.trim="query.username" class="query-item" style="width: 120px" placeholder="用户名" clearable @clear="handleQuery" />
       <el-select v-model="query.roleId" class="query-item" style="width:120px" placeholder="用户角色" clearable @clear="handleQuery">
         <el-option v-for="item in roles" :key="item.id" :label="item.name" :value="item.id" />
       </el-select>
-      <el-input v-model.trim="query.number" class="query-item" style="width: 120px" placeholder="用户工号" clearable @clear="handleQuery" />
+      <el-input v-model.trim="query.code" class="query-item" style="width: 120px" placeholder="用户工号" clearable @clear="handleQuery" />
       <el-button class="tool tool-query" type="primary" icon="el-icon-search" @click="handleQuery">查询</el-button>
       <el-button v-if="access.create.allow" class="tool tool-create" type="primary" icon="el-icon-edit" @click="handleCreate">添加</el-button>
       <el-button v-if="access.delete.allow" class="tool tool-create" type="danger" icon="el-icon-delete" @click="handleDeletes">批量删除</el-button>
@@ -18,9 +18,9 @@
           <span>{{ (page.current - 1) * page.size + scope.$index + 1 }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="角色" prop="role.name" :sort-orders="sortOrders" align="center" width="100" show-overflow-tooltip />
-      <el-table-column label="用户名" prop="userName" :sort-orders="sortOrders" align="center" width="100" show-overflow-tooltip />
-      <el-table-column label="用户工号" prop="number" :sort-orders="sortOrders" align="center" width="100" show-overflow-tooltip />
+      <el-table-column label="角色" prop="roleName" :sort-orders="sortOrders" align="center" width="100" show-overflow-tooltip />
+      <el-table-column label="用户名" prop="username" :sort-orders="sortOrders" align="center" width="100" show-overflow-tooltip />
+      <el-table-column label="用户工号" prop="code" :sort-orders="sortOrders" align="center" width="100" show-overflow-tooltip />
       <el-table-column label="备注" prop="remark" :sort-orders="sortOrders" align="left" show-overflow-tooltip />
       <el-table-column fixed="right" label="操作" align="center" width="180">
         <template slot-scope="{row}">
@@ -44,21 +44,28 @@
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
             <el-form-item label="角色名">
-              {{ detail.models.role.name }}
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="用户名">
-              {{ detail.models.userName }}
+              {{ detail.models.roleName }}
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
             <el-form-item label="用户工号">
-              {{ detail.models.number }}
+              {{ detail.models.code }}
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :xl="6" :md="12" :sm="24">
+            <el-form-item label="用户名">
+              {{ detail.models.username }}
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :xl="6" :md="12" :sm="24">
+            <el-form-item label="密码">
+              {{ detail.models.password }}
             </el-form-item>
           </el-col>
         </el-row>
@@ -85,22 +92,29 @@
         </el-row>
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="用户名" prop="name">
-              <el-input v-model="create.models.userName" />   <!-- 在这里做了修改 -->
+            <el-form-item label="用户名" prop="username">
+              <el-input v-model="create.models.username" />   <!-- 在这里做了修改 -->
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="用户工号" prop="number">
-              <el-input v-model="create.models.number" type="number" />
+            <el-form-item label="密码" prop="password">
+              <el-input v-model="create.models.password" show-password />   <!-- 在这里做了修改 -->
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :xl="6" :md="12" :sm="24">
+            <el-form-item label="用户工号" prop="code">
+              <el-input v-model="create.models.code" type="number" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :sl="24">
             <el-form-item label="备注" prop="remark">
-              <el-input v-model="create.models.remark" type="textarea"/>
+              <el-input v-model="create.models.remark" type="textarea" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -124,22 +138,29 @@
         </el-row>
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="用户名" prop="userName">
-              <el-input v-model="update.models.userName" />
+            <el-form-item label="用户名" prop="username">
+              <el-input v-model="update.models.username" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="用户工号" prop="number">
-              <el-input v-model="update.models.number" />
+            <el-form-item label="密码" prop="password">
+              <el-input v-model="update.models.password" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :xl="6" :md="12" :sm="24">
+            <el-form-item label="用户工号" prop="code">
+              <el-input v-model="update.models.code" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :sl="24">
             <el-form-item label="备注" prop="remark">
-              <el-input v-model="update.models.remark" type="textarea"/>
+              <el-input v-model="update.models.remark" type="textarea" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -167,38 +188,33 @@ export default {
     return {
       access: this.$store.getters.access['SystemManage']['Account'],
       datas: null,
-      state: [
-        { id: 0, name: '正常' },
-        { id: 1, name: '锁定' },
-        { id: 2, name: '离职' }
-      ],
       roles: null,
-      query: { userName: null, roleId: null, number: null, state: null },
+      query: { username: null, password: null, roleId: null, code: null, state: null },
       page: { total: 0, current: 1, size: 20 },
       sort: { prop: 'sort', order: 'ascending' },
       detail: {
         dialog: { title: '用户信息', visible: false, labelWidth: '120px' },
-        models: { userName: null, role: { name: null }, number: null, state: null, remark: null }
+        models: { username: null, password: null, roleName: null, code: null, state: null, remark: null }
       },
       create: {
         dialog: { title: '添加用户', visible: false, labelWidth: '120px' },
-        models: { userName: null, roleId: null, number: null, state: null, remark: null },
+        models: { username: null, password: null, roleId: null, code: null, state: null, remark: null },
         rules: {
-          userName: setRule('用户名称', [{ required: true }, { length: [0, 50] }]),
+          username: setRule('用户名', [{ required: true }, { length: [0, 50] }]),
+          password: setRule('密码', [{ required: true }, { length: [0, 10] }]),
           roleId: setRule('用户角色', [{ required: true }]),
-          number: setRule('用户工号', [{ required: true }, { length: [0, 50] }]),
-          state: setRule('用户状态', [{ required: true }]),
-          remark: setRule('备注', [{ length: [0, 255] }])
+          code: setRule('用户工号', [{ required: true }, { length: [0, 50] }]),
+          remark: setRule(' ', [{ length: [0, 255] }])
         }
       },
       update: {
         dialog: { title: '编辑角色信息', visible: false, labelWidth: '120px' },
-        models: { userName: null, roleId: null, number: null, state: null, remark: null },
+        models: { username: null, password: null, roleId: null, code: null, state: null, remark: null },
         rules: {
-          userName: setRule('用户名称', [{ required: true }, { length: [0, 50] }]),
+          username: setRule('用户名', [{ required: true }, { length: [0, 50] }]),
+          password: setRule('密码', [{ required: true }, { length: [0, 10] }]),
           roleId: setRule('用户角色', [{ required: true }]),
-          number: setRule('用户工号', [{ required: true }, { length: [0, 50] }]),
-          state: setRule('用户状态', [{ required: true }]),
+          code: setRule('用户工号', [{ required: true }, { length: [0, 50] }]),
           remark: setRule('备注', [{ length: [0, 255] }])
         }
       },
@@ -264,7 +280,7 @@ export default {
         user.create(this.create.models).then(response => {
           // 为方便连续添加，create对话框不关闭
           // 需要清空的表单，手动清空，至少清空一个必填项，防止点击两遍
-          this.create.models.userName = '' // 这里做了修改
+          this.create.models.username = '' // 这里做了修改
           // 重新获取数据
           this.getDatas()
         }).catch(reject => {
