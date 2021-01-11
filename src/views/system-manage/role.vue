@@ -2,30 +2,19 @@
   <div class="app-container list">
     <div class="toolbar">
       <el-input v-model.trim="query.name" class="query-item" style="width: 120px" placeholder="角色名" clearable @clear="handleQuery" />
-      <el-select v-model="query.type" class="query-item" style="width: 120px" placeholder="角色类型" clearable @clear="handleQuery">
-        <el-option label="管理员" value="1" />
-        <el-option label="其他" value="2" />
-      </el-select>
       <el-button class="tool tool-query" type="primary" icon="el-icon-search" @click="handleQuery">查询</el-button>
-      <el-button v-if="access.create.allow" class="tool tool-create" type="primary" icon="el-icon-edit" @click="handleCreate">添加</el-button>
-      <el-button v-if="access.delete.allow" class="tool tool-create" type="danger" icon="el-icon-delete" @click="handleDeletes">批量删除</el-button>
+      <el-button class="tool tool-create" type="primary" icon="el-icon-edit" @click="handleCreate">添加</el-button>
+      <el-button class="tool tool-create" type="danger" icon="el-icon-delete" @click="handleDeletes">批量删除</el-button>
     </div>
 
     <el-table ref="listTable" v-loading="loading.list" v-adaptive="{ bottomOffset: 55 }" height="200px" :data="datas" :default-sort="sort" border fit highlight-current-row @sort-change="handleSort">
       <el-table-column type="selection" align="center" width="35" />
-      <el-table-column label="序号" type="index" align="center" width="65" fixed>
+      <el-table-column label="序号" type="index" align="center" width="100" fixed>
         <template slot-scope="scope">
           <span>{{ (page.current - 1) * page.size + scope.$index + 1 }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="角色名" prop="name" :sort-orders="sortOrders" align="center" width="100" show-overflow-tooltip />
-      <el-table-column label="角色类型" :sort-orders="sortOrders" align="center" width="80" show-overflow-tooltip>
-        <template slot-scope="{row}">
-          <span v-if="row.type=='0'">开发人员</span>
-          <span v-if="row.type=='1'">管理员</span>
-          <span v-if="row.type=='2'">其他</span>
-        </template>
-      </el-table-column>
+      <el-table-column label="角色名" prop="name" :sort-orders="sortOrders" align="center" width="150" show-overflow-tooltip />
       <el-table-column label="备注" prop="remark" :sort-orders="sortOrders" align="left" show-overflow-tooltip />
       <el-table-column fixed="right" label="操作" align="center" width="180">
         <template slot-scope="{row}">
@@ -55,27 +44,9 @@
         </el-row>
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="角色类型">
-              <span v-if="detail.models.type==0">开发人员</span>
-              <span v-if="detail.models.type==1">管理员</span>
-              <span v-if="detail.models.type==2">其他</span>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :xl="6" :md="12" :sm="24">
             <el-form-item label="备注">
               {{ detail.models.remark }}
             </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-form-item label="拥有权限为如下">
-          </el-form-item>
-        </el-row>
-        <el-row>
-          <el-col :xl="6" :md="12" :sm="24">
-            <el-tree :data="accessDetail" :props="defaultProps" />
           </el-col>
         </el-row>
       </el-form>
@@ -115,26 +86,13 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="角色类型" prop="type">
-              <el-select v-model="update.models.type" clearable>
-                <el-option v-for="item in type" :key="item.id" :label="item.name" :value="item.id" />
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
           <el-col :sl="24">
             <el-form-item label="备注" prop="remark">
               <el-input v-model="update.models.remark" type="textarea"/>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row>
-          <el-col :xl="6" :md="12" :sm="24">
-            <tree-transfer :title="title" :from_data="accessFrom" :to_data="accessTo" :default-props="{ label:'label' }" mode="transfer" height="540px" filter open-all @addBtn="add" @removeBtn="remove" />
-          </el-col>
-        </el-row>
+        <!--        todo 权限列表添加-->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="update.dialog.visible = false">取消</el-button>
@@ -149,11 +107,12 @@ import adaptive from '@/directive/el-table'
 import setRule from '@/utils/form-validate'
 import Pagination from '@/components/Pagination'
 import * as role from '@/api/system-manage/role'
-import TreeTransfer from 'el-tree-transfer'
+// import TreeTransfer from 'el-tree-transfer'
 
 export default {
   name: 'Role',
-  components: { Pagination, TreeTransfer },
+  // components: { Pagination, TreeTransfer },
+  components: { Pagination },
   directives: { adaptive },
   data() {
     return {
@@ -161,16 +120,16 @@ export default {
       datas: null,
       title: ['权限列表', '赋予权限'],
       x: 0,
-      fromData: [
-        { id: 1, pid: 0, label: '货物管理' },
-        { id: 2, pid: 1, label: '货物颜色' },
-        { id: 3, pid: 1, label: 'no.3' },
-        { id: 4, pid: 1, label: 'no.4' },
-        { id: 5, pid: 1, label: 'no.5' },
-        { id: 6, pid: 2, label: 'no.6' },
-        { id: 7, pid: 2, label: 'no.7' },
-        { id: 8, pid: 2, label: 'no.8' }
-      ],
+      // fromData: [
+      //   { id: 1, pid: 0, label: '货物管理' },
+      //   { id: 2, pid: 1, label: '货物颜色' },
+      //   { id: 3, pid: 1, label: 'no.3' },
+      //   { id: 4, pid: 1, label: 'no.4' },
+      //   { id: 5, pid: 1, label: 'no.5' },
+      //   { id: 6, pid: 2, label: 'no.6' },
+      //   { id: 7, pid: 2, label: 'no.7' },
+      //   { id: 8, pid: 2, label: 'no.8' }
+      // ],
       // // 所有权限数据
       // accessList: [],
       // // 详情中权限数据
@@ -179,10 +138,10 @@ export default {
       // accessFrom: [],
       // // 修改或添加时，存放赋予的权限
       // accessTo: [],
-      defaultProps: {
-        children: 'children',
-        label: 'label'
-      },
+      // defaultProps: {
+      //   children: 'children',
+      //   label: 'label'
+      // },
       query: { name: null, type: null },
       page: { total: 0, current: 1, size: 20 },
       sort: { prop: 'sort', order: 'ascending' },
@@ -195,16 +154,14 @@ export default {
         models: { name: null, remark: null, access: [] },
         rules: {
           name: setRule('角色名称', [{ required: true }, { length: [0, 50] }]),
-          // type: setRule('角色类型', [{ selected: true }]),
           remark: setRule('备注', [{ length: [0, 255] }])
         }
       },
       update: {
         dialog: { title: '编辑角色信息', visible: false, labelWidth: '120px' },
-        models: { name: null, type: null, remark: null, access: null },
+        models: { name: null, remark: null, access: null },
         rules: {
           name: setRule('角色名称', [{ required: true }, { length: [0, 50] }]),
-          type: setRule('角色类别', [{ selected: true }]),
           remark: setRule('备注', [{ length: [0, 255] }])
         }
       },
@@ -213,8 +170,8 @@ export default {
     }
   },
   created() {
-    this.getDatas()
-    this.getAllAccess()
+    // this.getDatas()
+    // this.getAllAccess()
   },
   methods: {
     getDatas() {

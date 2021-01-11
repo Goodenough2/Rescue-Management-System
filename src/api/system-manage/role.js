@@ -1,3 +1,4 @@
+// 角色管理api接口
 import request from '@/utils/request'
 
 // 获取列表数据（查询、翻页）
@@ -40,7 +41,7 @@ export function getAccess(id) {
 // 获得下拉列表的数据
 export function getlist() {
   return request({
-    url: '/role/selectlist',
+    url: '/role/selectList',
     method: 'get'
   })
 }

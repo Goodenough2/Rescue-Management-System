@@ -6,11 +6,6 @@
         <el-option v-for="item in roles" :key="item.id" :label="item.name" :value="item.id" />
       </el-select>
       <el-input v-model.trim="query.number" class="query-item" style="width: 120px" placeholder="用户工号" clearable @clear="handleQuery" />
-      <el-select v-model="query.state" class="query-item" style="width:120px" placeholder="用户状态" clearable @clear="handleQuery">
-        <el-option label="正常" value="0" />
-        <el-option label="锁定" value="1" />
-        <el-option label="离职" value="2" />
-      </el-select>
       <el-button class="tool tool-query" type="primary" icon="el-icon-search" @click="handleQuery">查询</el-button>
       <el-button v-if="access.create.allow" class="tool tool-create" type="primary" icon="el-icon-edit" @click="handleCreate">添加</el-button>
       <el-button v-if="access.delete.allow" class="tool tool-create" type="danger" icon="el-icon-delete" @click="handleDeletes">批量删除</el-button>
@@ -26,13 +21,6 @@
       <el-table-column label="角色" prop="role.name" :sort-orders="sortOrders" align="center" width="100" show-overflow-tooltip />
       <el-table-column label="用户名" prop="userName" :sort-orders="sortOrders" align="center" width="100" show-overflow-tooltip />
       <el-table-column label="用户工号" prop="number" :sort-orders="sortOrders" align="center" width="100" show-overflow-tooltip />
-      <el-table-column label="用户状态" :sort-orders="sortOrders" align="center" width="80" show-overflow-tooltip>
-        <template slot-scope="{row}">
-          <span v-if="row.state=='0'">正常</span>
-          <span v-if="row.state=='1'">锁定</span>
-          <span v-if="row.state=='2'">离职</span>
-        </template>
-      </el-table-column>
       <el-table-column label="备注" prop="remark" :sort-orders="sortOrders" align="left" show-overflow-tooltip />
       <el-table-column fixed="right" label="操作" align="center" width="180">
         <template slot-scope="{row}">
@@ -76,15 +64,6 @@
         </el-row>
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="用户状态">
-              <span v-if="detail.models.state==0">正常</span>
-              <span v-if="detail.models.state==1">锁定</span>
-              <span v-if="detail.models.state==2">离职</span>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :xl="6" :md="12" :sm="24">
             <el-form-item label="备注">
               {{ detail.models.remark }}
             </el-form-item>
@@ -115,17 +94,6 @@
           <el-col :xl="6" :md="12" :sm="24">
             <el-form-item label="用户工号" prop="number">
               <el-input v-model="create.models.number" type="number" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="用户状态" prop="state">
-              <el-select v-model="create.models.state" clearable>
-                <el-option label="正常" value="0" />
-                <el-option label="锁定" value="1" />
-                <el-option label="离职" value="2" />
-              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -165,15 +133,6 @@
           <el-col :xl="6" :md="12" :sm="24">
             <el-form-item label="用户工号" prop="number">
               <el-input v-model="update.models.number" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="用户状态" prop="state">
-              <el-select v-model="update.models.state" clearable>
-                <el-option v-for="item in state" :key="item.id" :label="item.name" :value="item.id" />
-              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
