@@ -91,28 +91,13 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="角色类型" prop="type">
-              <el-select v-model="create.models.type" clearable>
-                <el-option label="开发人员" value="0" />
-                <el-option label="管理员" value="1" />
-                <el-option label="其他" value="2" />
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
           <el-col :sl="24">
             <el-form-item label="备注" prop="remark">
               <el-input v-model="create.models.remark" type="textarea"/>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row>
-          <el-col :xl="6" :md="12" :sm="24">
-            <tree-transfer :title="title" :from_data="accessList" :to_data="accessTo" :default-props="{ label:'label' }" mode="transfer" height="540px" filter open-all @addBtn="add" @removeBtn="remove" />
-          </el-col>
-        </el-row>
+<!--        todo 权限列表添加-->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="create.dialog.visible = false">取消</el-button>
@@ -186,19 +171,14 @@ export default {
         { id: 7, pid: 2, label: 'no.7' },
         { id: 8, pid: 2, label: 'no.8' }
       ],
-      // 所有权限数据
-      accessList: [],
-      // 详情中权限数据
-      accessDetail: [],
-      // 修改中的未获得的权限
-      accessFrom: [],
-      // 修改或添加时，存放赋予的权限
-      accessTo: [],
-      type: [
-        { id: 0, name: '开发人员' },
-        { id: 1, name: '管理员' },
-        { id: 2, name: '其他' }
-      ],
+      // // 所有权限数据
+      // accessList: [],
+      // // 详情中权限数据
+      // accessDetail: [],
+      // // 修改中的未获得的权限
+      // accessFrom: [],
+      // // 修改或添加时，存放赋予的权限
+      // accessTo: [],
       defaultProps: {
         children: 'children',
         label: 'label'
@@ -212,10 +192,10 @@ export default {
       },
       create: {
         dialog: { title: '添加角色', visible: false, labelWidth: '120px' },
-        models: { name: null, type: null, remark: null, access: [] },
+        models: { name: null, remark: null, access: [] },
         rules: {
           name: setRule('角色名称', [{ required: true }, { length: [0, 50] }]),
-          type: setRule('角色类型', [{ selected: true }]),
+          // type: setRule('角色类型', [{ selected: true }]),
           remark: setRule('备注', [{ length: [0, 255] }])
         }
       },
@@ -247,30 +227,30 @@ export default {
         this.loading.list = false
       })
     },
-    // 数组转为Tree
-    arrayToTree(list, pid = null) {
-      return list.filter(item => item.pid === pid).map(item => ({
-        ...item,
-        children: this.arrayToTree(list, item.id)
-      }))
-    },
-    arrayToTree2(list, pid = 0) {
-      return list.filter(item => item.pid === pid).map(item => ({
-        ...item,
-        children: this.arrayToTree(list, item.id)
-      }))
-    },
-    // Tree转为array
-    treeToArray(data) {
-      return data.reduce((arr, { id, label, pid, children = [] }) =>
-        arr.concat([{ id, label, pid }], this.treeToArray(children, id)), [])
-    },
-    getAllAccess() {
-      role.getAllAccess().then(response => {
-        this.accessList = this.arrayToTree(response.data)
-      }).catch(reject => {
-      })
-    },
+    // // 数组转为Tree
+    // arrayToTree(list, pid = null) {
+    //   return list.filter(item => item.pid === pid).map(item => ({
+    //     ...item,
+    //     children: this.arrayToTree(list, item.id)
+    //   }))
+    // },
+    // arrayToTree2(list, pid = 0) {
+    //   return list.filter(item => item.pid === pid).map(item => ({
+    //     ...item,
+    //     children: this.arrayToTree(list, item.id)
+    //   }))
+    // },
+    // // Tree转为array
+    // treeToArray(data) {
+    //   return data.reduce((arr, { id, label, pid, children = [] }) =>
+    //     arr.concat([{ id, label, pid }], this.treeToArray(children, id)), [])
+    // },
+    // getAllAccess() {
+    //   role.getAllAccess().then(response => {
+    //     this.accessList = this.arrayToTree(response.data)
+    //   }).catch(reject => {
+    //   })
+    // },
     handleQuery() {
       this.page.current = 1
       this.getDatas()
@@ -286,35 +266,35 @@ export default {
       this.loading.detail = true
       role.get(row.id).then(response => {
         this.detail.models = response.data.role
-        console.log(response)
+        // console.log(response)
         // 获取此id的access，转成tree
-        this.accessDetail = this.arrayToTree(response.data.access)
+        // this.accessDetail = this.arrayToTree(response.data.access)
         this.loading.detail = false
       }).catch(reject => {
         this.loading.detail = false
       })
     },
-    // 监听穿梭框组件添加, accessTo用来接受添加与修改中的 赋予权限数据
-    add(fromData, toData, obj) {
-      this.accessTo = toData
-    },
-    // 监听穿梭框组件移除, toData为右侧权限数据
-    remove(fromData, toData, obj) {
-      this.accessTo = toData
-    },
+    // // 监听穿梭框组件添加, accessTo用来接受添加与修改中的 赋予权限数据
+    // add(fromData, toData, obj) {
+    //   this.accessTo = toData
+    // },
+    // // 监听穿梭框组件移除, toData为右侧权限数据
+    // remove(fromData, toData, obj) {
+    //   this.accessTo = toData
+    // },
     handleCreate() {
       this.create.dialog.visible = true
       this.x = 1
-      console.log(this.accessList)
+      // console.log(this.accessList)
     },
     createData() {
       this.$refs['formCreate'].validate((valid) => {
         if (!valid) return false
-        if (this.accessTo !== []) {
-          this.create.models.access = this.treeToArray(this.accessTo)
-        } else {
-          this.create.models.access = []
-        }
+        // if (this.accessTo !== []) {
+        //   this.create.models.access = this.treeToArray(this.accessTo)
+        // } else {
+        //   this.create.models.access = []
+        // }
         role.create(this.create.models).then(response => {
           // 为方便连续添加，create对话框不关闭
           // 需要清空的表单，手动清空，至少清空一个必填项，防止点击两遍
@@ -328,14 +308,14 @@ export default {
       })
     },
     // 一个数组去掉另一个数组中的对象
-    moveToData(fromData, toData) {
-      const idList = toData.map(v => v.id)
-      // console.log(idList)
-      fromData = fromData.filter(item => {
-        return !idList.includes(item.id)
-      })
-      return fromData
-    },
+    // moveToData(fromData, toData) {
+    //   const idList = toData.map(v => v.id)
+    //   // console.log(idList)
+    //   fromData = fromData.filter(item => {
+    //     return !idList.includes(item.id)
+    //   })
+    //   return fromData
+    // },
     handleUpdate(row) {
       // 若列表数据展示了全部属性，则可直接拷贝列表数据用于编辑
       // this.handleDetail(row)
@@ -344,24 +324,24 @@ export default {
         this.detail.models = response.data.role
         // console.log(response)
         // 获取此id的access，转成tree
-        this.accessDetail = this.arrayToTree(response.data.access)
-        // console.log(this.detail.models)
-        this.update.models = Object.assign({}, this.detail.models)
-        // console.log(this.update.models)
-        // 获取当前已有权限: tree型
-        this.accessTo = this.accessDetail
-        // 所有权限去掉当前权限 = 未获得权限: accessfrom: array
-        const accessfrom = this.moveToData(this.treeToArray(this.accessList), this.treeToArray(this.accessTo))
-        console.log(accessfrom)
+        // this.accessDetail = this.arrayToTree(response.data.access)
+        // // console.log(this.detail.models)
+        // this.update.models = Object.assign({}, this.detail.models)
+        // // console.log(this.update.models)
+        // // 获取当前已有权限: tree型
+        // this.accessTo = this.accessDetail
+        // // 所有权限去掉当前权限 = 未获得权限: accessfrom: array
+        // const accessfrom = this.moveToData(this.treeToArray(this.accessList), this.treeToArray(this.accessTo))
+        // console.log(accessfrom)
         // console.log(this.treeToArray(this.accessList))
         // console.log(this.treeToArray(this.accessTo))
-        if (this.x === 0) {
-          this.accessFrom = this.arrayToTree(accessfrom)
-        }
-        if (this.x === 1) {
-          this.accessFrom = this.arrayToTree2(accessfrom)
-        }
-        console.log(this.accessFrom)
+        // if (this.x === 0) {
+        //   this.accessFrom = this.arrayToTree(accessfrom)
+        // }
+        // if (this.x === 1) {
+        //   this.accessFrom = this.arrayToTree2(accessfrom)
+        // }
+        // console.log(this.accessFrom)
         this.loading.update = false
         this.update.dialog.visible = true
       }).catch(reject => {
@@ -375,7 +355,7 @@ export default {
     updateData() {
       this.$refs['formUpdate'].validate((valid) => {
         if (!valid) return false
-        this.update.models.access = this.treeToArray(this.accessTo)
+        // this.update.models.access = this.treeToArray(this.accessTo)
         const tempData = Object.assign({}, this.update.models)
         role.update(tempData).then(response => {
           // 重新获取数据
