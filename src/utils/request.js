@@ -9,7 +9,8 @@ const service = axios.create({
   baseURL: 'http://localhost:8080', // url = base url + request url
   // baseURL: 'http://localhost:8888/api/v1',
   // withCredentials: true, // send cookies when cross-domain requests
-  timeout: 30000 // request timeout
+  timeout: 30000, // request timeout
+  withCredentials: true // 允许携带cookie
 })
 
 // request interceptor
