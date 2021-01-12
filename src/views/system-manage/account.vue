@@ -62,13 +62,13 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row>
-          <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="密码">
-              {{ detail.models.password }}
-            </el-form-item>
-          </el-col>
-        </el-row>
+<!--        <el-row>-->
+<!--          <el-col :xl="6" :md="12" :sm="24">-->
+<!--            <el-form-item label="密码">-->
+<!--              {{ detail.models.password }}-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--        </el-row>-->
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
             <el-form-item label="备注">

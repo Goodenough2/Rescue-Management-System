@@ -29,8 +29,8 @@ export function logout() {
 
 export function updatePwd(data) {
   return request({
-    url: '/account/updatePwd',
-    method: 'post',
+    url: '/user/changePwd',
+    method: 'put',
     data
   })
 }

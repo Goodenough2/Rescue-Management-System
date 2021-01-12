@@ -88,9 +88,9 @@ export const constantRoutes = [
         meta: { title: '首页', icon: 'dashboard', affix: true }
       }
     ]
-  },
-  logManageRouter,
-  systemManageRouter
+  }
+  // logManageRouter,
+  // systemManageRouter
 ]
 
 /**
@@ -107,8 +107,8 @@ export const asyncRoutes = [
   // alarmManageRouter,
   // applicationManageRouter,
   // sampleManageRouter,
-  // logManageRouter,
-  // systemManageRouter,
+  logManageRouter,
+  systemManageRouter,
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
