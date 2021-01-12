@@ -3,7 +3,7 @@
     <div class="toolbar">
       <el-input v-model.trim="query.username" class="query-item" style="width: 120px" placeholder="用户名" clearable @clear="handleQuery" />
       <el-select v-model="query.roleId" class="query-item" style="width:120px" placeholder="用户角色" clearable @clear="handleQuery">
-        <el-option v-for="item in roles" :key="item.id" :label="item.name" :value="item.id" />
+        <el-option v-for="item in roles" :key="item.id" :label="item.name" :value="item.name" />
       </el-select>
       <el-input v-model.trim="query.code" class="query-item" style="width: 120px" placeholder="用户工号" clearable @clear="handleQuery" />
       <el-button class="tool tool-query" type="primary" icon="el-icon-search" @click="handleQuery">查询</el-button>
@@ -189,7 +189,7 @@ export default {
       access: this.$store.getters.access['SystemManage']['Account'],
       datas: null,
       roles: null,
-      query: { username: null, password: null, roleId: null, code: null, state: null },
+      query: { username: null, roleId: null, code: null, state: null },
       page: { total: 0, current: 1, size: 20 },
       sort: { prop: 'sort', order: 'ascending' },
       detail: {
