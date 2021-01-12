@@ -142,7 +142,7 @@ export default {
       //   children: 'children',
       //   label: 'label'
       // },
-      query: { name: null, type: null },
+      query: { name: null },
       page: { total: 0, current: 1, size: 20 },
       sort: { prop: 'sort', order: 'ascending' },
       detail: {

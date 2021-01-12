@@ -198,7 +198,7 @@ export default {
       },
       create: {
         dialog: { title: '添加用户', visible: false, labelWidth: '120px' },
-        models: { username: null, password: null, roleId: null, code: null, state: null, remark: null },
+        models: { username: null, password: null, roleId: null, code: null, remark: null },
         rules: {
           username: setRule('用户名', [{ required: true }, { length: [0, 50] }]),
           password: setRule('密码', [{ required: true }, { length: [0, 10] }]),

@@ -61,9 +61,10 @@ const responseState = {
   // 错误 已知的
   // 4---，账户401-，未找到404-，关联405--，冲突409-
   bad: 40000,
-  noToken: 4003,
-  tokenIllegal: 4002,
-  tokenExpired: 4001,
+  noToken: 40003,
+  tokenIllegal: 40002,
+  tokenExpired: 40001,
+  noPermission: 40004,
   loggedInOther: 40105,
   notFound: 40400,
   updataDataNotFound: 40430,
@@ -164,6 +165,16 @@ service.interceptors.response.use(
         break
       case responseState.loggedInOther:
         MessageBox.alert('您已在其他设备登录，若要在此设备使用系统，请重新登录', '提示', {
+          confirmButtonText: '确定',
+          type: 'warning'
+        }).then(() => {
+          store.dispatch('account/resetToken').then(() => {
+            location.reload()
+          })
+        })
+        break
+      case responseState.noPermission:
+        MessageBox.alert('您当前已不具备访问权限，请重新登录', '提示', {
           confirmButtonText: '确定',
           type: 'warning'
         }).then(() => {

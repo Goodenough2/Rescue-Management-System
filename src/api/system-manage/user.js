@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取列表数据（查询、翻页）
 export function getList(query, page, sort) {
   return request({
-    url: '/account/list',
+    url: '/user/list',
     method: 'post',
     data: {
       page: { current: page.current, size: page.size },
@@ -16,7 +16,7 @@ export function getList(query, page, sort) {
 // 根据id获取数据
 export function get(id) {
   return request({
-    url: `/account/${id}/detail`,
+    url: `/user/${id}/detail`,
     method: 'get'
   })
 }
@@ -24,7 +24,7 @@ export function get(id) {
 // 获得下拉列表的数据
 export function getlist() {
   return request({
-    url: '/account/selectlist',
+    url: '/user/selectlist',
     method: 'get'
   })
 }
@@ -32,7 +32,7 @@ export function getlist() {
 // 添加数据
 export function create(data) {
   return request({
-    url: '/account/create',
+    url: '/user/create',
     method: 'post',
     data
   })
@@ -41,7 +41,7 @@ export function create(data) {
 // 排序上移
 export function rankup(id) {
   return request({
-    url: `/account/${id}/rankup`,
+    url: `/user/${id}/rankup`,
     method: 'patch'
   })
 }
@@ -49,7 +49,7 @@ export function rankup(id) {
 // 更新数据
 export function update(data) {
   return request({
-    url: '/account/update',
+    url: '/user/update',
     method: 'put',
     data
   })
@@ -58,7 +58,7 @@ export function update(data) {
 // 删除、批量删除数据
 export function del(data) {
   return request({
-    url: '/account/delete',
+    url: '/user/delete',
     method: 'delete',
     data: data
   })
