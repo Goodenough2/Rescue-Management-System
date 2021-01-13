@@ -2,6 +2,27 @@
   "code": 20000,
   "data": {
     "access": {
+      "SystemOperation": {
+        "informationEntry": {
+          "allow": true,
+          "view": {
+            "allow": true
+          },
+          "create": {
+            "allow": true
+          },
+          "update": {
+            "allow": true
+          },
+          "detail": {
+            "allow": true
+          },
+          "delete": {
+            "allow": true
+          }
+        },
+        "allow": true
+      },
       "SystemManage": {
         "Role": {
           "allow": true,
@@ -72,7 +93,7 @@
         }
       },
       "SystemLog": {
-        "allow": false,
+        "allow": true,
         "StoreRecord": {
           "allow": false,
           "view": {

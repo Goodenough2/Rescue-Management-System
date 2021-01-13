@@ -168,7 +168,6 @@ export default {
   directives: { adaptive },
   data() {
     return {
-      // access: this.$store.getters.access['SystemLog']['StoreRecord'],
       access: true,
       datas: null,
       operators: null,

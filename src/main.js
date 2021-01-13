@@ -19,6 +19,8 @@ import './permission' // permission control
 import './utils/error-log' // error log
 
 import * as filters from './filters' // global filters
+import BaiduMap from 'vue-baidu-map'
+// import vueJsonp from 'vue-jsonp'
 
 /**
  * If you don't want to use mock-server
@@ -35,6 +37,11 @@ import * as filters from './filters' // global filters
 
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium' // set element-ui default size
+})
+// Vue.use(vueJsonp)
+
+Vue.use(BaiduMap, {
+  ak: '1GlSTo1MojUZ1U4frgD4bY7648LBTRG9'
 })
 
 // register global utility filters

@@ -7,17 +7,9 @@ Vue.use(Router)
 import Layout from '@/layout'
 
 /* Router Modules */
-// import storeManageRouter from './modules/store-manage'
-// import goodsManageRouter from './modules/goods-manage'
-// import orderManageRouter from './modules/order-manage'
 import systemManageRouter from './modules/system-manage'
-// import bussinessOperationManageRouter from './modules/business-operation'
-// import alarmManageRouter from './modules/alarm-manage'
+import systemOperationRouter from './modules/system-operation'
 import logManageRouter from './modules/log-manage'
-// import dataStatisticsRouter from './modules/data-statistics'
-// import orderBusinessRouter from './modules/order-business'
-// import applicationManageRouter from './modules/application-manage'
-// import sampleManageRouter from './modules/sample-manage'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -89,8 +81,6 @@ export const constantRoutes = [
       }
     ]
   }
-  // logManageRouter,
-  // systemManageRouter
 ]
 
 /**
@@ -98,15 +88,7 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user roles
  */
 export const asyncRoutes = [
-  // bussinessOperationManageRouter,
-  // dataStatisticsRouter,
-  // orderBusinessRouter,
-  // storeManageRouter,
-  // goodsManageRouter,
-  // orderManageRouter,
-  // alarmManageRouter,
-  // applicationManageRouter,
-  // sampleManageRouter,
+  systemOperationRouter,
   logManageRouter,
   systemManageRouter,
 

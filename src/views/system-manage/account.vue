@@ -3,7 +3,7 @@
     <div class="toolbar">
       <el-input v-model.trim="query.username" class="query-item" style="width: 120px" placeholder="用户名" clearable @clear="handleQuery" />
       <el-select v-model="query.roleName" class="query-item" style="width:120px" placeholder="用户角色" clearable @clear="handleQuery">
-        <el-option v-for="item in roles" :key="item.id" :label="item.name" :value="item.name" />
+        <el-option v-for="item in roles" :key="item.id" :label="item.name" :value="item.id" />
       </el-select>
       <el-input v-model.trim="query.code" class="query-item" style="width: 120px" placeholder="用户工号" clearable @clear="handleQuery" />
       <el-button class="tool tool-query" type="primary" icon="el-icon-search" @click="handleQuery">查询</el-button>
@@ -18,9 +18,9 @@
           <span>{{ (page.current - 1) * page.size + scope.$index + 1 }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="角色" prop="roleName" :sort-orders="sortOrders" align="center" width="100" show-overflow-tooltip />
-      <el-table-column label="用户名" prop="username" :sort-orders="sortOrders" align="center" width="100" show-overflow-tooltip />
-      <el-table-column label="用户工号" prop="code" :sort-orders="sortOrders" align="center" width="100" show-overflow-tooltip />
+      <el-table-column label="角色" prop="roleName" :sort-orders="sortOrders" align="center" width="150" show-overflow-tooltip />
+      <el-table-column label="用户名" prop="username" :sort-orders="sortOrders" align="center" width="150" show-overflow-tooltip />
+      <el-table-column label="用户工号" prop="code" :sort-orders="sortOrders" align="center" width="150" show-overflow-tooltip />
       <el-table-column label="备注" prop="remark" :sort-orders="sortOrders" align="left" show-overflow-tooltip />
       <el-table-column fixed="right" label="操作" align="center" width="180">
         <template slot-scope="{row}">
