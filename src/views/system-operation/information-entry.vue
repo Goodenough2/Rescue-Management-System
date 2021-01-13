@@ -145,7 +145,7 @@
         <bml-marker-clusterer :average-center="true">
           <bm-marker v-for="marker of markers" :position="{lng: marker.lng, lat: marker.lat}" :icon="{url: require('@/static/icon2.png'), size: {width: 30, height: 40}}">
             <bm-info-window title="走失地:" :position="{lng: marker.lng, lat: marker.lat}" :show="true">
-              <p v-text="infoWindow.contents" />
+              <strong><p v-text="infoWindow.contents" /></strong>
             </bm-info-window>
           </bm-marker>
         </bml-marker-clusterer>
