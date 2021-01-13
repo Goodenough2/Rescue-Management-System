@@ -2,116 +2,99 @@
   <div class="app-container list">
     <el-form ref="formCreate" :rules="create.rules" :model="create.models" label-position="right" :label-width="create.dialog.labelWidth">
       <el-row>
-        <el-col :xl="4" :lg="8" :md="12" :sm="18" :xs="24">
-          <el-form-item label="操作意图" prop="storeOperateTypeId">
-            <el-select v-model="create.models.storeOperateTypeId" clearable filterable>
-              <el-option v-for="item in storeOperateTypes" :key="item.id" :label="item.name" :value="item.id" />
+        <el-col :xl="4" :lg="6" :md="10" :sm="18" :xs="24">
+          <el-form-item label="老人姓名" prop="name">
+            <el-input v-model.number="create.models.name" />
+          </el-form-item>
+        </el-col>
+        <el-col :xl="4" :lg="6" :md="10" :sm="18" :xs="24">
+          <el-form-item label="老人性别" prop="gender">
+            <el-select v-model="create.models.gender" clearable>
+              <el-option label="女" value="0" />
+              <el-option label="男" value="1" />
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :xl="4" :lg="8" :md="12" :sm="18" :xs="24">
-          <el-form-item label="货物类型" prop="goods.goodsCategoryId">
-            <el-select v-model="create.models.goods.goodsCategoryId" filterable placeholder="请选择" @change="selectChanged">
-              <el-option v-for="item in goodsCategories" :key="item.id" :label="item.name" :value="item.id" />
-            </el-select>
-            <el-tooltip class="item" effect="dark" content="货物类别" placement="top-end">
-              <el-button type="primary" plain class="button-operate button-detail" circle icon="el-icon-edit" @click="handleCreateCategories()" />
-            </el-tooltip>
+        <el-col :xl="4" :lg="6" :md="10" :sm="18" :xs="24">
+          <el-form-item label="老人年龄" prop="age">
+            <el-input v-model.number="create.models.age" type="number" />
           </el-form-item>
         </el-col>
-        <el-col :xl="4" :lg="8" :md="12" :sm="18" :xs="24">
-          <el-form-item label="入库数量" prop="goods.quality">
-            <el-input v-model.number="create.models.goods.quality" type="number" />
+        <el-col :xl="4" :lg="6" :md="10" :sm="18" :xs="24">
+          <el-form-item label="老人身高" prop="height">
+            <el-input v-model.number="create.models.height" type="number" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :xl="4" :lg="6" :md="10" :sm="18" :xs="24">
+          <el-form-item label="走失时间" prop="lostTime">
+            <el-date-picker
+              v-model="create.models.lostTime"
+              type="datetime"
+              placeholder="选择日期时间"
+              align="right"
+              :picker-options="pickerOptions"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :xl="10" :lg="12" :md="15" :sm="18" :xs="24">
+          <el-form-item label="户籍地址" prop="address">
+            <el-input v-model.number="create.models.address" />
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :xl="4" :lg="8" :md="12" :sm="18" :xs="24">
-          <el-form-item label="点击添加">
-            <el-button @click="addaddress">选择走失位置</el-button>
+          <el-form-item label="走失位置">
+            <el-button @click="addAddress">点击选择位置</el-button>
           </el-form-item>
         </el-col>
       </el-row>
-      <div v-for="(goodsStorageMode, index) in create.models.goodsStorageModes" :key="index" class="unit">
+      <div class="unit">
         <el-row>
-          <el-col :xl="5" :sm="6" :xs="7">
-            <el-form-item v-if="index === 0" :key="goodsStorageMode.key" :label="(index + 1) + '级货物单位' " :prop="'goodsStorageModes.' + index + '.unitId'">
-              <el-input v-model="unitname" :disabled="true" />
-            </el-form-item>
-            <el-form-item v-if="index > 0" :key="goodsStorageMode.key" :label="(index + 1) + '级货物单位' " :prop="'goodsStorageModes.' + index + '.unitId'" :rules="{ required: true, message: '请选择货物单位', trigger: 'blur' }">
-              <el-select v-model="goodsStorageMode.unitId" clearable @change="((val)=>{changeUnit(val, index)})">
-                <el-option v-for="item in goodsUnits" :key="item.id" :label="item.name" :value="item.id" />
-              </el-select>
-            </el-form-item>
-            <el-form-item v-if="false" :key="goodsStorageMode.key" :label=" '名称' " :prop="'goodsStorageModes.' + index + '.name'" :rules="[{ required: true, message: '请输入存储模式名称', trigger: 'blur' }]">
-              <el-input v-model="goodsStorageMode.name" />
-            </el-form-item>
-          </el-col>
-          <el-tooltip v-if="index>0" class="remove-unit" effect="dark" content="删除货物存储模式" placement="top-end">
-            <el-button type="danger" plain icon="el-icon-delete" circle @click.prevent="removeDomain(goodsStorageMode)" />
-          </el-tooltip>
-        </el-row>
-        <el-row>
-          <el-col :xl="3" :lg="4" :md="5" :sm="8" :xs="12">
-            <el-form-item :key="goodsStorageMode.key" :label=" '换算系数' " :prop="'goodsStorageModes.' + index + '.ratio'" :rules="{required: true, message: '请输入存储模式换算系数', trigger: 'blur'}">
-              <el-input v-model="goodsStorageMode.ratio" type="number" :disabled="index===0" />
-            </el-form-item>
-          </el-col>
-          <el-col :xl="3" :lg="4" :md="5" :sm="8" :xs="12">
-            <el-form-item :key="goodsStorageMode.key" :label=" '重量/kg:' " :prop="'goodsStorageModes.' + index + '.weight'" :rules="{ required: true, message: '请输入存储模式重量', trigger: 'blur' }">
-              <el-input v-model="goodsStorageMode.weight" type="number" />
-            </el-form-item>
-          </el-col>
-          <el-col :xl="3" :lg="4" :md="5" :sm="8" :xs="12">
-            <el-form-item :key="goodsStorageMode.key" :label=" '长度/cm:' " :prop="'goodsStorageModes.' + index + '.length'" :rules="{ required: true, message: '请输入存储模式长度', trigger: 'blur' }">
-              <el-input v-model="goodsStorageMode.length" type="number" />
-            </el-form-item>
-          </el-col>
-          <el-col :xl="3" :lg="4" :md="5" :sm="8" :xs="12">
-            <el-form-item :key="goodsStorageMode.key" :label=" '宽度/cm:' " :prop="'goodsStorageModes.' + index + '.width'" :rules="{ required: true, message: '请输入存储模式宽度', trigger: 'blur' }">
-              <el-input v-model="goodsStorageMode.width" type="number" />
-            </el-form-item>
-          </el-col>
-          <el-col :xl="3" :lg="4" :md="5" :sm="8" :xs="12">
-            <el-form-item :key="goodsStorageMode.key" :label=" '高度/cm:' " :prop="'goodsStorageModes.' + index + '.height'" :rules="{ required: true, message: '请输入存储模式高度', trigger: 'blur' }">
-              <el-input v-model="goodsStorageMode.height" type="number" />
-            </el-form-item>
-          </el-col>
+          <baidu-map class="mapSmall" :center="center" :zoom="zoom" :scroll-wheel-zoom="false" @ready="handler">
+            <bm-view style="width: 500px; height:300px; flex: 1" />
+            <bm-overview-map anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :isOpen="true"></bm-overview-map>
+            <bml-marker-clusterer :average-center="true">
+              <bm-marker v-for="marker of markers" :position="{lng: marker.lng, lat: marker.lat}" :icon="{url: require('@/static/icon2.png'), size: {width: 30, height: 40}}">
+                <bm-info-window title="<i class=&quot;el-icon-office-building&quot;></i><strong>走失位置</strong>" :position="{lng: marker.lng, lat: marker.lat}" :show="true">
+                  <i class="el-icon-location-outline" />
+                  <strong>{{ infoWindow.contents }}</strong>
+                </bm-info-window>
+              </bm-marker>
+            </bml-marker-clusterer>
+          </baidu-map>
         </el-row>
       </div>
       <el-row>
         <el-col :xl="4" :lg="8" :md="12" :sm="18" :xs="24">
-          <el-form-item label="目的位置条码" prop="locationCode">
-            <el-input v-model="create.models.locationCode" />
+          <el-form-item label="走失位置" prop="lostAddress">
+            <el-input v-model="create.models.lostAddress" />
           </el-form-item>
         </el-col>
         <el-col :xl="4" :lg="8" :md="12" :sm="18" :xs="24">
-          <el-form-item label="货物条形码" prop="goods.goodsBarCode">
-            <el-input v-model="create.models.goods.goodsBarCode" />
-          </el-form-item>
-        </el-col>
-        <el-col :xl="4" :lg="8" :md="12" :sm="18" :xs="24">
-          <el-form-item label="货物RFID" prop="goods.goodsRfidCode">
-            <el-input v-model="create.models.goods.goodsRfidCode" />
+          <el-form-item label="身份证号" prop="idCard">
+            <el-input v-model="create.models.idCard" />
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
-        <el-col :xl="4" :lg="8" :md="12" :sm="18" :xs="24">
-          <el-form-item label="送货人信息" prop="deliveryman">
-            <el-input v-model="create.models.deliveryman" />
+        <el-col :xl="4" :lg="6" :md="10" :sm="18" :xs="24">
+          <el-form-item label="老人职业" prop="job">
+            <el-input v-model.number="create.models.job" />
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :sl="24">
-          <el-form-item label="入库备注说明" prop="description">
+          <el-form-item label="具体描述" prop="description">
             <el-input v-model="create.models.description" type="textarea" />
           </el-form-item>
         </el-col>
       </el-row>
       <el-form-item>
-        <el-button type="primary" @click="createData()">入库</el-button>
+        <el-button type="primary" @click="createData()">录入信息</el-button>
       </el-form-item>
     </el-form>
     <el-dialog v-loading="loading.address" custom-class="dialog-fullscreen dialog-update" :title="address.dialog.title" :visible.sync="address.dialog.visible" :modal="false" :modal-append-to-body="false" :close-on-click-modal="false">
@@ -140,12 +123,13 @@
         <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :show-address-bar="true" :auto-location="true" />
         <bm-navigation anchor="BMAP_ANCHOR_TOP_RIGHT" />
         <bm-city-list anchor="BMAP_ANCHOR_TOP_LEFT" :offset="{width:40,height:20}" />
-        <bm-view style="width: 100%; height:400px; flex: 1" />
+        <bm-view style="width: 100%; height:450px; flex: 1" />
         <bm-local-search :keyword="keyword" :auto-viewport="true" />
         <bml-marker-clusterer :average-center="true">
           <bm-marker v-for="marker of markers" :position="{lng: marker.lng, lat: marker.lat}" :icon="{url: require('@/static/icon2.png'), size: {width: 30, height: 40}}">
-            <bm-info-window title="走失地:" :position="{lng: marker.lng, lat: marker.lat}" :show="true">
-              <strong><p v-text="infoWindow.contents" /></strong>
+            <bm-info-window title="<i class=&quot;el-icon-office-building&quot;></i><strong>走失位置</strong>" :position="{lng: marker.lng, lat: marker.lat}" :show="true">
+              <i class="el-icon-location-outline" />
+              <strong>{{ infoWindow.contents }}</strong>
             </bm-info-window>
           </bm-marker>
         </bml-marker-clusterer>
@@ -157,21 +141,6 @@
     </el-dialog>
 
   </div>
-  <!--  <baidu-map :center="center" :zoom="zoom" style="height:1080px" :scroll-wheel-zoom="true" @ready="handler" @click="getClickInfo" />-->
-<!--  <div class="map">-->
-<!--    <label>关键词：<input v-model="keyword"></label>-->
-<!--    <label>地区：<input v-model="location"></label>-->
-<!--    <baidu-map :center="center" :zoom="zoom" :scroll-wheel-zoom="true" @ready="handler" @click="getClickInfo">-->
-<!--      <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :show-address-bar="true" :auto-location="true" />-->
-<!--      <bm-view style="width: 100%; height:500px; flex: 1" />-->
-<!--      <bm-local-search :keyword="keyword" :auto-viewport="true" :location="location" />-->
-<!--      <bml-marker-clusterer :average-center="true">-->
-<!--        <bm-marker v-for="marker of markers" :position="{lng: marker.lng, lat: marker.lat}" />-->
-<!--      </bml-marker-clusterer>-->
-<!--    </baidu-map>-->
-<!--  </div>-->
-
-<!--  <baidu-map class="map" :center="center" :zoom="zoom" @ready="handler" />-->
 </template>
 
 <script>
@@ -184,52 +153,60 @@ export default {
     return {
       center: { lng: 0, lat: 0 },
       zoom: 13,
-      markers: [{ lng: 109, lat: 36, showFlag: false }],
+      markers: [{ lng: 0, lat: 0, showFlag: false }],
       keyword: null,
       location: null,
       infoWindow: {
         show: true,
         contents: '地址为：'
       },
-      goodsCategories: null,
-      operators: null,
-      goodsUnits: null,
-      storeOperateTypes: null,
-      cells: null,
-      devices: null,
-      vessels: null,
-      unitname: null,
-      goodsCategoriesAll: null,
+      pickerOptions: {
+        shortcuts: [{
+          text: '今天',
+          onClick(picker) {
+            picker.$emit('pick', new Date())
+          }
+        }, {
+          text: '昨天',
+          onClick(picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24)
+            picker.$emit('pick', date)
+          }
+        }, {
+          text: '一周前',
+          onClick(picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', date)
+          }
+        }]
+      },
       create: {
-        dialog: { title: '货物入库', visible: false, labelWidth: '100px' },
+        dialog: { title: '老人信息录入', visible: false, labelWidth: '150px' },
         models: {
-          goods: {
-            goodsCategoryId: null,
-            quality: null,
-            inspectorId: null,
-            goodsBarCode: null,
-            goodsRfidCode: null
-          },
-          storeOperateTypeId: null,
-          description: null,
-          deliveryman: null,
-          locationCode: null,
-          goodsStorageModes: [
-            { ratio: null, unitId: null, name: null, weight: null, length: null, width: null, height: null }
-          ]
+          name: null,
+          gender: null,
+          age: null,
+          height: null,
+          lostTime: '',
+          address: null,
+          lostAddress: null,
+          lostLng: null,
+          lostLat: null,
+          job: null,
+          idCard: null,
+          description: null
         },
         rules: {
-          storeOperateTypeId: setRule('操作类型', [{ selected: true }]),
-          locationCode: setRule('单元格条码', [{ required: true }, { length: [0, 255] }]),
-          goods: {
-            goodsCategoryId: setRule('货物种类', [{ selected: true }]),
-            storageModeId: setRule('货物存储模式', [{ selected: true }]),
-            quality: setRule('货物数量', [{ required: true }]),
-            goodsBarCode: setRule('货物条形码', [{ length: [0, 255] }]),
-            goodsRfidCode: setRule('货物RFID', [{ length: [0, 255] }])
-          },
-          description: setRule('入库备注描述', [{ length: [0, 255] }]),
-          deliveryman: setRule('送货人信息', [{ required: true }, { length: [0, 50] }])
+          name: setRule('老人名字', [{ required: true }]),
+          gender: setRule('老人性别', [{ selected: true }]),
+          age: setRule('老人年龄', [{ required: true }]),
+          height: setRule('老人身高', [{ required: true }]),
+          lostTime: setRule('走失时间', [{ required: true }]),
+          address: setRule('户籍地址', [{ required: true }]),
+          lostAddress: setRule('走失时的详细地址', [{ required: true }]),
+          idCard: setRule('身份证号', [{ required: true }])
         }
       },
       address: {
@@ -277,16 +254,19 @@ export default {
         this.infoWindow.contents = '地址：' + res.address
       })
     },
-    addaddress() {
+    addAddress() {
       this.loading.address = true
       this.address.dialog.visible = true
       this.loading.address = false
     },
-    infoWindowClose(marker) {
-      marker.showFlag = false
-    },
-    infoWindowOpen(marker) {
-      marker.showFlag = true
+    addressData() {
+      this.address.dialog.visible = false
+      this.create.models.lostLng = this.markers[0].lng
+      this.create.models.lostLat = this.markers[0].lat
+      this.create.models.lostAddress = this.infoWindow.contents.replace('地址：', '')
+      this.center.lat = this.markers[0].lat
+      this.center.lng = this.markers[0].lng
+      this.zoom = 12
     }
 
   }
@@ -318,6 +298,20 @@ export default {
     .map .anchorBL {
       display: none !important;
     }
+
+  .mapSmall {
+    width: 100px;
+    height: 150px;
+    /*margin-top: 10px;*/
+    margin-bottom: 150px;
+  }
+  /* 去除百度地图版权那行字 和 百度logo */
+  .mapSmall  .BMap_cpyCtrl {
+    display: none !important;
+  }
+  .mapSmall .anchorBL {
+    display: none !important;
+  }
 </style>
 
 <style lang="scss" scoped>
@@ -327,15 +321,9 @@ export default {
   }
   .unit {
     position: relative;
-    margin: -1px 40px 0 100px;
-    border: 1px dashed #ccc;
-    padding-bottom: 8px;
-
-    .remove-unit {
-      position: absolute;
-      top: 5px;
-      right: 5px;
-    }
+    margin: 0 850px 0 150px;
+    border: 2px dashed #ccc;
+    /*padding-bottom: 8px;*/
   }
 
   .prompt {
@@ -343,4 +331,5 @@ export default {
     color: red;
     font-size: 10px;
   }
+
 </style>
