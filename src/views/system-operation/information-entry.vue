@@ -46,7 +46,7 @@
       </el-row>
       <el-row>
         <el-col :xl="4" :lg="8" :md="12" :sm="18" :xs="24">
-          <el-form-item label="走失位置">
+          <el-form-item label="走失位置" prop="lostLng">
             <el-button @click="addAddress">点击选择位置</el-button>
           </el-form-item>
         </el-col>
@@ -82,20 +82,20 @@
             <el-input v-model.number="create.models.job" />
           </el-form-item>
         </el-col>
-<!--        <el-col :xl="4" :lg="8" :md="10" :sm="18" :xs="24">-->
-<!--          <el-form-item label="老人职业" prop="job">-->
-<!--            <el-cascader-->
-<!--              v-model="selectedOptions"-->
-<!--              size="large"-->
-<!--              :options="options"-->
-<!--              @change="handleChange"-->
-<!--            />-->
-<!--          </el-form-item>-->
-<!--        </el-col>-->
+        <!--        <el-col :xl="4" :lg="8" :md="10" :sm="18" :xs="24">-->
+        <!--          <el-form-item label="老人职业" prop="job">-->
+        <!--            <el-cascader-->
+        <!--              v-model="selectedOptions"-->
+        <!--              size="large"-->
+        <!--              :options="options"-->
+        <!--              @change="handleChange"-->
+        <!--            />-->
+        <!--          </el-form-item>-->
+        <!--        </el-col>-->
       </el-row>
       <el-row>
         <el-col :xl="6" :lg="10" :md="115" :sm="18" :xs="24">
-          <el-form-item label="老人照片上传" prop="job">
+          <el-form-item label="老人照片上传" prop="photo">
             <el-upload
               list-type="picture"
               action=""
@@ -177,7 +177,9 @@
 <script>
 import adaptive from '@/directive/el-table'
 import setRule from '@/utils/form-validate'
+import * as elderly from '@/api/elderly-manage/elderly'
 import { regionData } from 'element-china-area-data'
+
 export default {
   name: 'InformationEntry',
   directives: { adaptive },
@@ -247,6 +249,8 @@ export default {
           lostTime: setRule('走失时间', [{ required: true }]),
           address: setRule('户籍地址', [{ required: true }]),
           lostAddress: setRule('走失时的详细地址', [{ required: true }]),
+          lostLng: setRule('走失位置', [{ selected: true }]),
+          photo: setRule('上传老人图片', [{ selected: true }]),
           idCard: setRule('身份证号', [{ required: true }])
         }
       },
@@ -344,8 +348,32 @@ export default {
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url
       this.dialogVisible = true
+    },
+    createData() {
+      this.$refs['formCreate'].validate((valid) => {
+        if (!valid) return false
+        elderly.create(this.create.models).then(response => {
+        // 为方便连续添加，create对话框不关闭
+        // 需要清空的表单，手动清空，至少清空一个必填项，防止点击两遍
+          this.create.models.name = null
+          this.create.models.gender = null
+          this.create.models.age = null
+          this.create.models.height = null
+          this.create.models.lostTime = ''
+          this.create.models.address = null
+          this.create.models.lostAddress = null
+          this.create.models.lostLng = null
+          this.create.models.lostLat = null
+          this.create.models.job = null
+          this.create.models.idCard = null
+          this.create.models.description = null
+          this.create.models.photo = ''
+          // 重新获取数据
+          this.getDatas()
+        }).catch(reject => {
+        })
+      })
     }
-
   }
 }
 </script>
@@ -380,6 +408,7 @@ export default {
     width: 600px;
     height: 300px;
     margin-left: 150px;
+    margin-top: 6px;
     border: 2px dashed #ccc;
   }
   /* 去除百度地图版权那行字 和 百度logo */
