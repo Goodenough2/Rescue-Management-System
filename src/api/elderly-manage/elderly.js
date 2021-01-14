@@ -49,7 +49,7 @@ export function getlist() {
 // 添加数据
 export function create(data) {
   return request({
-    url: '/role/create',
+    url: '/elderly/create',
     method: 'post',
     data: {
       elderly: data,

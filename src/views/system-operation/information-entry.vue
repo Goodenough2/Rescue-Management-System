@@ -60,7 +60,7 @@
         <baidu-map class="mapSmall" :center="center" :zoom="zoom" :scroll-wheel-zoom="false" @ready="handler">
           <bm-overview-map anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :is-open="true" />
           <bml-marker-cluster :average-center="true">
-            <bm-marker v-for="marker of markers" :position="{lng: marker.lng, lat: marker.lat}" :icon="{url: require('@/static/icon2.png'), size: {width: 30, height: 40}}" :key="marker.lng">
+            <bm-marker v-for="marker of markers" :key="marker.lng" :position="{lng: marker.lng, lat: marker.lat}" :icon="{url: require('@/static/icon2.png'), size: {width: 30, height: 40}}">
               <bm-info-window title="<i class=&quot;el-icon-office-building&quot;></i><strong>走失位置</strong>" :position="{lng: marker.lng, lat: marker.lat}" :show="true">
                 <i class="el-icon-location-outline" />
                 <strong>{{ infoWindow.contents }}</strong>
@@ -85,6 +85,11 @@
         <el-col :xl="5" :lg="8" :md="10" :sm="18" :xs="24">
           <el-form-item label="老人职业" prop="job">
             <el-input v-model.number="create.models.job" />
+          </el-form-item>
+        </el-col>
+        <el-col :xl="5" :lg="8" :md="10" :sm="18" :xs="24">
+          <el-form-item label="老人相貌特征" prop="look">
+            <el-input v-model.number="create.models.look" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -152,7 +157,7 @@
         <bm-view style="width: 100%; height:450px; flex: 1" />
         <bm-local-search :keyword="keyword" :auto-viewport="true" />
         <bml-marker-cluster :average-center="true">
-          <bm-marker v-for="marker of markers" :position="{lng: marker.lng, lat: marker.lat}" :icon="{url: require('@/static/icon2.png'), size: {width: 30, height: 40}}" :key="marker.lng">
+          <bm-marker v-for="marker of markers" :key="marker.lng" :position="{lng: marker.lng, lat: marker.lat}" :icon="{url: require('@/static/icon2.png'), size: {width: 30, height: 40}}">
             <bm-info-window title="<i class=&quot;el-icon-office-building&quot;></i><strong>走失位置</strong>" :position="{lng: marker.lng, lat: marker.lat}" :show="true">
               <i class="el-icon-location-outline" />
               <strong>{{ infoWindow.contents }}</strong>
@@ -236,6 +241,7 @@ export default {
           job: null,
           idCard: null,
           description: null,
+          look: null,
           photo: ''
         },
         rules: {

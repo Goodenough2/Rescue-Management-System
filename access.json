@@ -118,6 +118,159 @@
             "allow": true
           }
         }
+      },
+      "ElderlyManage": {
+        "allow": true,
+        "Elderly": {
+          "allow": true,
+          "view": {
+            "allow": true
+          },
+          "import": {
+            "allow": true
+          },
+          "create": {
+            "allow": true
+          },
+          "update": {
+            "allow": true
+          },
+          "detail": {
+            "allow": true
+          },
+          "delete": {
+            "allow": true
+          },
+          "export": {
+            "allow": true
+          }
+        }
+      },
+      "AreaManage": {
+        "allow": true,
+        "PoliceStation": {
+          "allow": true,
+          "view": {
+            "allow": true
+          },
+          "import": {
+            "allow": true
+          },
+          "create": {
+            "allow": true
+          },
+          "update": {
+            "allow": true
+          },
+          "detail": {
+            "allow": true
+          },
+          "delete": {
+            "allow": true
+          },
+          "export": {
+            "allow": true
+          }
+        },
+        "Hospital": {
+          "allow": true,
+          "view": {
+            "allow": true
+          },
+          "import": {
+            "allow": true
+          },
+          "create": {
+            "allow": true
+          },
+          "update": {
+            "allow": true
+          },
+          "detail": {
+            "allow": true
+          },
+          "delete": {
+            "allow": true
+          },
+          "export": {
+            "allow": true
+          }
+        },
+        "Shelter": {
+          "allow": true,
+          "view": {
+            "allow": true
+          },
+          "import": {
+            "allow": true
+          },
+          "create": {
+            "allow": true
+          },
+          "update": {
+            "allow": true
+          },
+          "detail": {
+            "allow": true
+          },
+          "delete": {
+            "allow": true
+          },
+          "export": {
+            "allow": true
+          }
+        }
+      },
+      "TeamManage": {
+        "allow": true,
+        "Member": {
+          "allow": true,
+          "view": {
+            "allow": true
+          },
+          "import": {
+            "allow": true
+          },
+          "create": {
+            "allow": true
+          },
+          "update": {
+            "allow": true
+          },
+          "detail": {
+            "allow": true
+          },
+          "delete": {
+            "allow": true
+          },
+          "export": {
+            "allow": true
+          }
+        },
+        "Team": {
+          "allow": true,
+          "view": {
+            "allow": true
+          },
+          "import": {
+            "allow": true
+          },
+          "create": {
+            "allow": true
+          },
+          "update": {
+            "allow": true
+          },
+          "detail": {
+            "allow": true
+          },
+          "delete": {
+            "allow": true
+          },
+          "export": {
+            "allow": true
+          }
+        }
       }
     }
   }

@@ -10,6 +10,9 @@ import Layout from '@/layout'
 import systemManageRouter from './modules/system-manage'
 import systemOperationRouter from './modules/system-operation'
 import logManageRouter from './modules/log-manage'
+import elderlyManageRouter from './modules/elderly-manage'
+import areaManageRouter from './modules/area-manage'
+import teamManageRouter from './modules/team-manage'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -89,6 +92,9 @@ export const constantRoutes = [
  */
 export const asyncRoutes = [
   systemOperationRouter,
+  elderlyManageRouter,
+  teamManageRouter,
+  areaManageRouter,
   logManageRouter,
   systemManageRouter,
 
