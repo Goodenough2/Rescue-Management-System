@@ -60,7 +60,7 @@
         <baidu-map class="mapSmall" :center="center" :zoom="zoom" :scroll-wheel-zoom="false" @ready="handler">
           <bm-overview-map anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :is-open="true" />
           <bml-marker-cluster :average-center="true">
-            <bm-marker v-for="marker of markers" :position="{lng: marker.lng, lat: marker.lat}" :icon="{url: require('@/static/icon2.png'), size: {width: 30, height: 40}}">
+            <bm-marker v-for="marker of markers" :position="{lng: marker.lng, lat: marker.lat}" :icon="{url: require('@/static/icon2.png'), size: {width: 30, height: 40}}" :key="marker.lng">
               <bm-info-window title="<i class=&quot;el-icon-office-building&quot;></i><strong>走失位置</strong>" :position="{lng: marker.lng, lat: marker.lat}" :show="true">
                 <i class="el-icon-location-outline" />
                 <strong>{{ infoWindow.contents }}</strong>
@@ -152,7 +152,7 @@
         <bm-view style="width: 100%; height:450px; flex: 1" />
         <bm-local-search :keyword="keyword" :auto-viewport="true" />
         <bml-marker-cluster :average-center="true">
-          <bm-marker v-for="marker of markers" :position="{lng: marker.lng, lat: marker.lat}" :icon="{url: require('@/static/icon2.png'), size: {width: 30, height: 40}}">
+          <bm-marker v-for="marker of markers" :position="{lng: marker.lng, lat: marker.lat}" :icon="{url: require('@/static/icon2.png'), size: {width: 30, height: 40}}" :key="marker.lng">
             <bm-info-window title="<i class=&quot;el-icon-office-building&quot;></i><strong>走失位置</strong>" :position="{lng: marker.lng, lat: marker.lat}" :show="true">
               <i class="el-icon-location-outline" />
               <strong>{{ infoWindow.contents }}</strong>
