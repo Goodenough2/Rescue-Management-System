@@ -20,11 +20,6 @@
             <el-input v-model.number="create.models.age" type="number" />
           </el-form-item>
         </el-col>
-        <el-col :xl="4" :lg="6" :md="10" :sm="18" :xs="24">
-          <el-form-item label="老人身高" prop="height">
-            <el-input v-model.number="create.models.height" type="number" />
-          </el-form-item>
-        </el-col>
       </el-row>
       <el-row>
         <el-col :xl="4" :lg="6" :md="10" :sm="18" :xs="24">
@@ -38,7 +33,12 @@
             />
           </el-form-item>
         </el-col>
-        <el-col :xl="10" :lg="12" :md="15" :sm="18" :xs="24">
+        <el-col :xl="4" :lg="6" :md="10" :sm="18" :xs="24">
+          <el-form-item label="老人身高(cm)" prop="height">
+            <el-input v-model.number="create.models.height" type="number" />
+          </el-form-item>
+        </el-col>
+        <el-col :xl="4" :lg="6" :md="10" :sm="18" :xs="24">
           <el-form-item label="户籍地址" prop="address">
             <el-input v-model.number="create.models.address" />
           </el-form-item>
@@ -51,22 +51,19 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <div class="unit">
-        <el-row>
-          <baidu-map class="mapSmall" :center="center" :zoom="zoom" :scroll-wheel-zoom="false" @ready="handler">
-            <bm-view style="width: 500px; height:300px; flex: 1" />
-            <bm-overview-map anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :isOpen="true"></bm-overview-map>
-            <bml-marker-clusterer :average-center="true">
-              <bm-marker v-for="marker of markers" :position="{lng: marker.lng, lat: marker.lat}" :icon="{url: require('@/static/icon2.png'), size: {width: 30, height: 40}}">
-                <bm-info-window title="<i class=&quot;el-icon-office-building&quot;></i><strong>走失位置</strong>" :position="{lng: marker.lng, lat: marker.lat}" :show="true">
-                  <i class="el-icon-location-outline" />
-                  <strong>{{ infoWindow.contents }}</strong>
-                </bm-info-window>
-              </bm-marker>
-            </bml-marker-clusterer>
-          </baidu-map>
-        </el-row>
-      </div>
+      <el-row>
+        <baidu-map class="mapSmall" :center="center" :zoom="zoom" :scroll-wheel-zoom="false" @ready="handler">
+          <bm-overview-map anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :is-open="true" />
+          <bml-marker-cluster :average-center="true">
+            <bm-marker v-for="marker of markers" :position="{lng: marker.lng, lat: marker.lat}" :icon="{url: require('@/static/icon2.png'), size: {width: 30, height: 40}}">
+              <bm-info-window title="<i class=&quot;el-icon-office-building&quot;></i><strong>走失位置</strong>" :position="{lng: marker.lng, lat: marker.lat}" :show="true">
+                <i class="el-icon-location-outline" />
+                <strong>{{ infoWindow.contents }}</strong>
+              </bm-info-window>
+            </bm-marker>
+          </bml-marker-cluster>
+        </baidu-map>
+      </el-row>
       <el-row>
         <el-col :xl="4" :lg="8" :md="12" :sm="18" :xs="24">
           <el-form-item label="走失位置" prop="lostAddress">
@@ -85,6 +82,40 @@
             <el-input v-model.number="create.models.job" />
           </el-form-item>
         </el-col>
+<!--        <el-col :xl="4" :lg="8" :md="10" :sm="18" :xs="24">-->
+<!--          <el-form-item label="老人职业" prop="job">-->
+<!--            <el-cascader-->
+<!--              v-model="selectedOptions"-->
+<!--              size="large"-->
+<!--              :options="options"-->
+<!--              @change="handleChange"-->
+<!--            />-->
+<!--          </el-form-item>-->
+<!--        </el-col>-->
+      </el-row>
+      <el-row>
+        <el-col :xl="6" :lg="10" :md="115" :sm="18" :xs="24">
+          <el-form-item label="老人照片上传" prop="job">
+            <el-upload
+              list-type="picture"
+              action=""
+              accept=".jpg, .png"
+              :limit="1"
+              :auto-upload="false"
+              :file-list="fileList"
+              :on-change="getFile"
+              :on-preview="handlePictureCardPreview"
+              :on-remove="handleUploadRemove"
+            >
+              <el-button size="small" type="primary">选择图片上传</el-button>
+              <div slot="tip" class="el-upload__tip">只能上传一张jpg/png文件</div>
+            </el-upload>
+            <el-dialog :visible.sync="dialogVisible" append-to-body>
+              <img width="100%" :src="dialogImageUrl" alt>
+            </el-dialog>
+          </el-form-item>
+        </el-col>
+
       </el-row>
       <el-row>
         <el-col :sl="24">
@@ -125,14 +156,14 @@
         <bm-city-list anchor="BMAP_ANCHOR_TOP_LEFT" :offset="{width:40,height:20}" />
         <bm-view style="width: 100%; height:450px; flex: 1" />
         <bm-local-search :keyword="keyword" :auto-viewport="true" />
-        <bml-marker-clusterer :average-center="true">
+        <bml-marker-cluster :average-center="true">
           <bm-marker v-for="marker of markers" :position="{lng: marker.lng, lat: marker.lat}" :icon="{url: require('@/static/icon2.png'), size: {width: 30, height: 40}}">
             <bm-info-window title="<i class=&quot;el-icon-office-building&quot;></i><strong>走失位置</strong>" :position="{lng: marker.lng, lat: marker.lat}" :show="true">
               <i class="el-icon-location-outline" />
               <strong>{{ infoWindow.contents }}</strong>
             </bm-info-window>
           </bm-marker>
-        </bml-marker-clusterer>
+        </bml-marker-cluster>
       </baidu-map>
       <div slot="footer" class="dialog-footer">
         <el-button @click="address.dialog.visible = false">取消</el-button>
@@ -146,6 +177,7 @@
 <script>
 import adaptive from '@/directive/el-table'
 import setRule from '@/utils/form-validate'
+import { regionData } from 'element-china-area-data'
 export default {
   name: 'InformationEntry',
   directives: { adaptive },
@@ -160,6 +192,7 @@ export default {
         show: true,
         contents: '地址为：'
       },
+      // 日期选择器快捷键
       pickerOptions: {
         shortcuts: [{
           text: '今天',
@@ -182,6 +215,13 @@ export default {
           }
         }]
       },
+      // 二级地址联动数据项
+      options: regionData,
+      selectedOptions: [],
+      // 图片上传配置项
+      dialogVisible: false,
+      fileList: [],
+      dialogImageUrl: null,
       create: {
         dialog: { title: '老人信息录入', visible: false, labelWidth: '150px' },
         models: {
@@ -196,7 +236,8 @@ export default {
           lostLat: null,
           job: null,
           idCard: null,
-          description: null
+          description: null,
+          photo: ''
         },
         rules: {
           name: setRule('老人名字', [{ required: true }]),
@@ -267,6 +308,42 @@ export default {
       this.center.lat = this.markers[0].lat
       this.center.lng = this.markers[0].lng
       this.zoom = 12
+    },
+    handleChange(value) {
+      console.log(value)
+    },
+    // 获取图片转base64
+    getBase64(file) {
+      return new Promise(function(resolve, reject) {
+        const reader = new FileReader()
+        let imgResult = ''
+        reader.readAsDataURL(file)
+        reader.onload = function() {
+          imgResult = reader.result
+        }
+        reader.onerror = function(error) {
+          reject(error)
+        }
+        reader.onloadend = function() {
+          resolve(imgResult)
+        }
+      })
+    },
+    getFile(file, fileList) {
+      this.getBase64(file.raw).then(res => {
+        const params = res.split(',')
+        console.log(params, 'params')
+        if (params.length > 0) {
+          this.create.models.photo = params[1]
+        }
+      })
+    },
+    handleUploadRemove(file, fileList) {
+      this.create.models.photo = ''
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url
+      this.dialogVisible = true
     }
 
   }
@@ -300,10 +377,10 @@ export default {
     }
 
   .mapSmall {
-    width: 100px;
-    height: 150px;
-    /*margin-top: 10px;*/
-    margin-bottom: 150px;
+    width: 600px;
+    height: 300px;
+    margin-left: 150px;
+    border: 2px dashed #ccc;
   }
   /* 去除百度地图版权那行字 和 百度logo */
   .mapSmall  .BMap_cpyCtrl {
