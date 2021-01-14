@@ -49,8 +49,12 @@ const responseState = {
   usernameNotFailure: 50001,
   passwordWrongFailure: 50002,
   usernameConflictFailure: 50003,
+  createConflictFailure: 50004,
+  updateConflictFailure: 50005,
+  deleteFailure: 50006,
+  noFaceDetecetedFailure: 50007,
+  featueExtractFailure: 50008,
   createFailure: 50100,
-  deleteFailure: 50200,
   updateFailure: 50300,
   getDataFailure: 50400,
   rankFailure: 50500,
@@ -118,6 +122,10 @@ service.interceptors.response.use(
       case responseState.loginFailure:
       case responseState.importFailure:
       case responseState.exportFailure:
+      case responseState.createConflictFailure:
+      case responseState.updateConflictFailure:
+      case responseState.noFaceDetecetedFailure:
+      case responseState.featueExtractFailure:
       case responseState.bad:
       case responseState.notFound:
       case responseState.updateDataNotFound:

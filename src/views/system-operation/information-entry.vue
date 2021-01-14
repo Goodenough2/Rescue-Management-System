@@ -375,6 +375,7 @@ export default {
           this.create.models.idCard = null
           this.create.models.description = null
           this.create.models.photo = ''
+          this.create.models.look = null
           // 重新获取数据
           this.getDatas()
         }).catch(reject => {
