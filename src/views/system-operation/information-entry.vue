@@ -2,12 +2,12 @@
   <div class="app-container list">
     <el-form ref="formCreate" :rules="create.rules" :model="create.models" label-position="right" :label-width="create.dialog.labelWidth">
       <el-row>
-        <el-col :xl="4" :lg="6" :md="10" :sm="18" :xs="24">
+        <el-col :xl="5" :lg="8" :md="10" :sm="18" :xs="24">
           <el-form-item label="老人姓名" prop="name">
             <el-input v-model.number="create.models.name" />
           </el-form-item>
         </el-col>
-        <el-col :xl="4" :lg="6" :md="10" :sm="18" :xs="24">
+        <el-col :xl="5" :lg="8" :md="10" :sm="18" :xs="24">
           <el-form-item label="老人性别" prop="gender">
             <el-select v-model="create.models.gender" clearable>
               <el-option label="女" value="0" />
@@ -15,14 +15,14 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :xl="4" :lg="6" :md="10" :sm="18" :xs="24">
+        <el-col :xl="5" :lg="8" :md="10" :sm="18" :xs="24">
           <el-form-item label="老人年龄" prop="age">
             <el-input v-model.number="create.models.age" type="number" />
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
-        <el-col :xl="4" :lg="6" :md="10" :sm="18" :xs="24">
+        <el-col :xl="5" :lg="8" :md="10" :sm="18" :xs="24">
           <el-form-item label="走失时间" prop="lostTime">
             <el-date-picker
               v-model="create.models.lostTime"
@@ -33,19 +33,24 @@
             />
           </el-form-item>
         </el-col>
-        <el-col :xl="4" :lg="6" :md="10" :sm="18" :xs="24">
+        <el-col :xl="5" :lg="8" :md="10" :sm="18" :xs="24">
+          <el-form-item label="户籍所在地" prop="province">
+            <el-cascader
+              v-model="selectedOptions"
+              size="large"
+              :options="options"
+              @change="handleChange"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :xl="5" :lg="8" :md="10" :sm="18" :xs="24">
           <el-form-item label="老人身高(cm)" prop="height">
             <el-input v-model.number="create.models.height" type="number" />
           </el-form-item>
         </el-col>
-        <el-col :xl="4" :lg="6" :md="10" :sm="18" :xs="24">
-          <el-form-item label="户籍地址" prop="address">
-            <el-input v-model.number="create.models.address" />
-          </el-form-item>
-        </el-col>
       </el-row>
       <el-row>
-        <el-col :xl="4" :lg="8" :md="12" :sm="18" :xs="24">
+        <el-col :xl="5" :lg="8" :md="12" :sm="18" :xs="24">
           <el-form-item label="走失位置" prop="lostLng">
             <el-button @click="addAddress">点击选择位置</el-button>
           </el-form-item>
@@ -65,33 +70,23 @@
         </baidu-map>
       </el-row>
       <el-row>
-        <el-col :xl="4" :lg="8" :md="12" :sm="18" :xs="24">
+        <el-col :xl="5" :lg="8" :md="12" :sm="18" :xs="24">
           <el-form-item label="走失位置" prop="lostAddress">
             <el-input v-model="create.models.lostAddress" />
           </el-form-item>
         </el-col>
-        <el-col :xl="4" :lg="8" :md="12" :sm="18" :xs="24">
+        <el-col :xl="5" :lg="8" :md="12" :sm="18" :xs="24">
           <el-form-item label="身份证号" prop="idCard">
             <el-input v-model="create.models.idCard" />
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
-        <el-col :xl="4" :lg="6" :md="10" :sm="18" :xs="24">
+        <el-col :xl="5" :lg="8" :md="10" :sm="18" :xs="24">
           <el-form-item label="老人职业" prop="job">
             <el-input v-model.number="create.models.job" />
           </el-form-item>
         </el-col>
-        <!--        <el-col :xl="4" :lg="8" :md="10" :sm="18" :xs="24">-->
-        <!--          <el-form-item label="老人职业" prop="job">-->
-        <!--            <el-cascader-->
-        <!--              v-model="selectedOptions"-->
-        <!--              size="large"-->
-        <!--              :options="options"-->
-        <!--              @change="handleChange"-->
-        <!--            />-->
-        <!--          </el-form-item>-->
-        <!--        </el-col>-->
       </el-row>
       <el-row>
         <el-col :xl="6" :lg="10" :md="115" :sm="18" :xs="24">
@@ -178,7 +173,7 @@
 import adaptive from '@/directive/el-table'
 import setRule from '@/utils/form-validate'
 import * as elderly from '@/api/elderly-manage/elderly'
-import { regionData } from 'element-china-area-data'
+import { regionData, CodeToText } from 'element-china-area-data'
 
 export default {
   name: 'InformationEntry',
@@ -217,7 +212,7 @@ export default {
           }
         }]
       },
-      // 二级地址联动数据项
+      // 三级地址联动数据项（不带全部）
       options: regionData,
       selectedOptions: [],
       // 图片上传配置项
@@ -232,7 +227,9 @@ export default {
           age: null,
           height: null,
           lostTime: '',
-          address: null,
+          province: null,
+          city: null,
+          area: null,
           lostAddress: null,
           lostLng: null,
           lostLat: null,
@@ -244,6 +241,7 @@ export default {
         rules: {
           name: setRule('老人名字', [{ required: true }]),
           gender: setRule('老人性别', [{ selected: true }]),
+          province: setRule('户籍所在地', [{ selected: true }]),
           age: setRule('老人年龄', [{ required: true }]),
           height: setRule('老人身高', [{ required: true }]),
           lostTime: setRule('走失时间', [{ required: true }]),
@@ -314,7 +312,10 @@ export default {
       this.zoom = 12
     },
     handleChange(value) {
-      console.log(value)
+      // console.log(value)
+      this.create.models.province = CodeToText[value[0]]
+      this.create.models.city = CodeToText[value[1]]
+      this.create.models.area = CodeToText[value[2]]
     },
     // 获取图片转base64
     getBase64(file) {
