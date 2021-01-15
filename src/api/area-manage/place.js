@@ -75,3 +75,17 @@ export function del(data) {
     data: data
   })
 }
+
+// 导出Excel
+export function exportExcel(query, page, sort) {
+  return request({
+    url: '/place/export',
+    method: 'post',
+    responseType: 'blob',
+    data: {
+      page: { current: page.current, size: page.size },
+      sort: { property: sort.prop, direction: sort.order },
+      query: { ...query }
+    }
+  })
+}

@@ -12,7 +12,8 @@
       <el-input v-model.trim="query.name" class="query-item" style="width: 120px" placeholder="名称" clearable @clear="handleQuery" />
       <el-input v-model.trim="query.address" class="query-item" style="width: 120px" placeholder="详细地址" clearable @clear="handleQuery" />
       <el-button class="tool tool-query" type="primary" icon="el-icon-search" @click="handleQuery">查询</el-button>
-<!--      <el-button class="tool tool-create" type="primary" icon="el-icon-edit" @click="handleCreate">添加</el-button>-->
+      <el-button class="tool tool-export" :loading="loading.export" type="primary" icon="vue-icon-excel" @click="handleExport">导出</el-button>
+      <!--      <el-button class="tool tool-create" type="primary" icon="el-icon-edit" @click="handleCreate">添加</el-button>-->
 <!--      <el-button class="tool tool-create" type="danger" icon="el-icon-delete" @click="handleDeletes">批量删除</el-button>-->
     </div>
 
@@ -382,6 +383,24 @@ export default {
       // map.addOverlay(marker) // 将标注添加到地图中
       // var circle = new BMap.Circle(point, 6, { strokeColor: 'Red', strokeWeight: 6, strokeOpacity: 1, Color: 'Red', fillColor: '#f03' })
       // map.addOverlay(circle)
+    },
+    handleExport() {
+      this.loading.export = true
+      place.exportExcel(this.query, this.page, this.sort).then(response => {
+        const blob = new Blob([response])
+        const fileName = '派出所信息.xls'
+        const elink = document.createElement('a')
+        elink.onload = () => { URL.revokeObjectURL(elink.href) }
+        elink.download = fileName
+        elink.style.display = 'none'
+        elink.href = URL.createObjectURL(blob)
+        document.body.appendChild(elink)
+        elink.click()
+        document.body.removeChild(elink)
+        this.loading.export = false
+      }).catch(reject => {
+        this.loading.export = false
+      })
     }
   }
 }
