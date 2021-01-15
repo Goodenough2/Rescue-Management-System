@@ -16,7 +16,7 @@ export default {
       path: 'police-station',
       component: () => import('@/views/area-manage/police-station'),
       name: 'PoliceStation',
-      meta: { title: '警察局信息管理' }
+      meta: { title: '派出所信息管理' }
     },
     {
       path: 'hospital',
@@ -28,7 +28,7 @@ export default {
       path: 'shelter',
       component: () => import('@/views/area-manage/shelter'),
       name: 'Shelter',
-      meta: { title: '收容所信息管理' }
+      meta: { title: '养老院信息管理' }
     }
   ]
 
