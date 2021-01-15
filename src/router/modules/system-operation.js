@@ -17,6 +17,12 @@ export default {
       component: () => import('@/views/system-operation/information-entry'),
       name: 'informationEntry',
       meta: { title: '信息调查表录入' }
+    },
+    {
+      path: 'task-schedule',
+      component: () => import('@/views/system-operation/task-schedule'),
+      name: 'TaskSchedule',
+      meta: { title: '任务调度' }
     }
   ]
 }

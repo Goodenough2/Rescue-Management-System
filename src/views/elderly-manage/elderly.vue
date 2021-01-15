@@ -12,24 +12,27 @@
       <el-input v-model.trim="query.name" class="query-item" style="width: 120px" placeholder="名称" clearable @clear="handleQuery" />
       <el-input v-model.trim="query.address" class="query-item" style="width: 120px" placeholder="详细地址" clearable @clear="handleQuery" />
       <el-button class="tool tool-query" type="primary" icon="el-icon-search" @click="handleQuery">查询</el-button>
-      <!--      <el-button class="tool tool-create" type="primary" icon="el-icon-edit" @click="handleCreate">添加</el-button>-->
+      <el-button class="tool tool-create" type="primary" icon="el-icon-edit" @click="handleCreate">录入老人信息</el-button>
       <!--      <el-button class="tool tool-create" type="danger" icon="el-icon-delete" @click="handleDeletes">批量删除</el-button>-->
     </div>
 
-    <el-table ref="listTable" v-loading="loading.list" v-adaptive="{ bottomOffset: 55 }" height="200px" :data="datas" :default-sort="sort" border fit highlight-current-row @sort-change="handleSort">
+    <el-table ref="listTable" v-loading="loading.list" v-adaptive="{ bottomOffset: 55 }" height="585px" :data="datas" :default-sort="sort" border fit highlight-current-row @sort-change="handleSort">
       <el-table-column type="selection" align="center" width="35" />
       <el-table-column label="序号" type="index" align="center" width="50" fixed>
         <template slot-scope="scope">
           <span>{{ (page.current - 1) * page.size + scope.$index + 1 }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="省份" prop="province" :sort-orders="sortOrders" align="center" width="100" show-overflow-tooltip />
-      <el-table-column label="市" prop="city" :sort-orders="sortOrders" align="center" width="100" show-overflow-tooltip />
-      <el-table-column label="区/县" prop="area" :sort-orders="sortOrders" align="center" width="100" show-overflow-tooltip />
-      <el-table-column label="名称" prop="name" :sort-orders="sortOrders" align="center" width="280" show-overflow-tooltip />
-      <el-table-column label="详细地址" prop="address" :sort-orders="sortOrders" align="center" width="420" show-overflow-tooltip />
-      <el-table-column label="电话" prop="telephone" :sort-orders="sortOrders" align="center" width="150" show-overflow-tooltip />
-      <el-table-column label="备注" prop="remark" :sort-orders="sortOrders" align="left" show-overflow-tooltip />
+      <el-table-column label="省份" prop="province" :sort-orders="sortOrders" align="center" width="80" show-overflow-tooltip />
+      <el-table-column label="市" prop="city" :sort-orders="sortOrders" align="center" width="80" show-overflow-tooltip />
+      <el-table-column label="区/县" prop="area" :sort-orders="sortOrders" align="center" width="80" show-overflow-tooltip />
+      <el-table-column label="姓名" prop="name" :sort-orders="sortOrders" align="center" width="80" show-overflow-tooltip />
+      <el-table-column label="年龄" prop="age" :sort-orders="sortOrders" align="center" width="50" show-overflow-tooltip />
+      <el-table-column label="走失时间" prop="lostTime" :sort-orders="sortOrders" align="center" width="170" show-overflow-tooltip />
+      <el-table-column label="走失地点" prop="lostAddress" :sort-orders="sortOrders" align="center" width="200" show-overflow-tooltip />
+      <el-table-column label="老人工作" prop="job" :sort-orders="sortOrders" align="center" width="120" show-overflow-tooltip />
+      <el-table-column label="最近更新时间" prop="updateTime" :sort-orders="sortOrders" align="center" width="170" show-overflow-tooltip />
+      <el-table-column label="家属描述" prop="description" :sort-orders="sortOrders" align="left" show-overflow-tooltip />
       <el-table-column fixed="right" label="操作" align="center" width="80">
         <template slot-scope="{row}">
           <el-tooltip class="item" effect="dark" content="详情" placement="top-end">
@@ -72,21 +75,28 @@
         </el-row>
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="名称">
+            <el-form-item label="老人名字">
               {{ detail.models.name }}
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="详细地址">
-              {{ detail.models.address }}
+            <el-form-item label="老人照片">
+              <img :src="'data:image/png;base64,'+ detail.models.photo" style="width: 300px;height: 300px">
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="具体位置">
+            <el-form-item label="走失地址">
+              {{ detail.models.lostAddress }}
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :xl="6" :md="12" :sm="24">
+            <el-form-item label="具体走失位置">
               <baidu-map class="mapSmall" :center="center" :zoom="zoom" :scroll-wheel-zoom="false" @ready="handlerDetail">
                 <bm-overview-map anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :is-open="true" />
                 <bml-marker-cluster :average-center="true">
@@ -98,14 +108,49 @@
         </el-row>
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="电话">
-              {{ detail.models.telephone }}
+            <el-form-item label="样貌特征">
+              {{ detail.models.look }}
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="备注">
+            <el-form-item label="工作">
+              {{ detail.models.job }}
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :xl="6" :md="12" :sm="24">
+            <el-form-item label="身份证号">
+              {{ detail.models.idCard }}
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :xl="6" :md="12" :sm="24">
+            <el-form-item label="家属描述">
+              {{ detail.models.description }}
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :xl="6" :md="12" :sm="24">
+            <el-form-item label="创建时间">
+              {{ detail.models.createTime }}
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :xl="6" :md="12" :sm="24">
+            <el-form-item label="最新更新时间">
+              {{ detail.models.updateTime }}
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :xl="6" :md="12" :sm="24">
+            <el-form-item label="队员备注">
               {{ detail.models.remark }}
             </el-form-item>
           </el-col>
@@ -201,7 +246,7 @@ import adaptive from '@/directive/el-table'
 import setRule from '@/utils/form-validate'
 import Pagination from '@/components/Pagination'
 import * as role from '@/api/system-manage/role'
-import * as place from '@/api/area-manage/place'
+import * as elderly from '@/api/elderly-manage/elderly'
 import { regionData, CodeToText } from 'element-china-area-data'
 
 export default {
@@ -219,8 +264,7 @@ export default {
       // 三级地址联动数据项（不带全部）
       options: regionData,
       selectedOptions: [],
-      x: 0,
-      query: { type: 2, name: null, address: null, province: null, city: null, area: null },
+      query: { name: null, address: null, province: null, city: null, area: null },
       page: { total: 0, current: 1, size: 20 },
       sort: { prop: 'sort', order: 'ascending' },
       detail: {
@@ -261,17 +305,17 @@ export default {
   methods: {
     getDatas() {
       this.loading.list = true
-      place.getList(this.query, this.page, this.sort).then(response => {
-        this.datas = response.data.items
-        this.page.total = response.data.total
-        this.loading.list = false
-      }).catch(reject => {
-        this.loading.list = false
-      })
-      // var j = police.getList(this.query, this.page, this.sort)
-      // this.datas = j.data.items
-      // this.page.total = j.data.total
-      // this.loading.list = false
+      // place.getList(this.query, this.page, this.sort).then(response => {
+      //   this.datas = response.data.items
+      //   this.page.total = response.data.total
+      //   this.loading.list = false
+      // }).catch(reject => {
+      //   this.loading.list = false
+      // })
+      var j = elderly.getList(this.query, this.page, this.sort)
+      this.datas = j.data.items
+      this.page.total = j.data.total
+      this.loading.list = false
     },
     handleQuery() {
       this.page.current = 1
@@ -286,10 +330,10 @@ export default {
       // 若列表数据展示了全部属性，则可直接拷贝列表数据
       this.detail.models = Object.assign({}, row)
       const temp = { lng: 0, lat: 0, showFlag: false }
-      temp.lat = this.detail.models.lat
-      temp.lng = this.detail.models.lng
-      this.center.lat = this.detail.models.lat
-      this.center.lng = this.detail.models.lng
+      temp.lat = this.detail.models.lostLat
+      temp.lng = this.detail.models.lostLng
+      this.center.lat = this.detail.models.lostLng
+      this.center.lng = this.detail.models.lostLng
       this.markers.splice(0, 1, temp)
       this.loading.detail = true
       this.detail.dialog.visible = true
@@ -372,8 +416,8 @@ export default {
       this.query.area = CodeToText[value[2]]
     },
     handlerDetail({ BMap, map }) {
-      this.center.lng = this.detail.models.lng
-      this.center.lat = this.detail.models.lat
+      this.center.lng = this.detail.models.lostLng
+      this.center.lat = this.detail.models.lostLat
       this.zoom = 19
       this.detialmap = map
       // var point = new BMap.Point(this.center.lng, this.center.lng)

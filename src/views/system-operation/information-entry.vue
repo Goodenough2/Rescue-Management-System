@@ -82,6 +82,50 @@
         </el-col>
       </el-row>
       <el-row>
+        <el-col :xl="4" :lg="8" :md="12" :sm="18" :xs="24">
+          <el-form-item label="点击添加">
+            <el-button @click="addDomain">新增家属信息</el-button>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <div v-for="(relative, index) in create.models.relatives" :key="index" class="unit">
+        <el-row>
+          <el-col :xl="6" :lg="7" :md="10" :sm="12" :xs="15">
+            <el-form-item :key="relative.key" :label="'家属' + (index + 1) + '姓名'" :prop="'relatives.' + index + '.name'" :rules="{ required: true, message: '请输入家属姓名', trigger: 'blur' }">
+              <el-input v-model="relative.name" />
+            </el-form-item>
+          </el-col>
+          <el-col :xl="6" :lg="7" :md="10" :sm="12" :xs="15">
+            <el-form-item :key="relative.key" :label=" '性别' " :prop="'relatives.' + index + '.gender'" :rules="{required: true, message: '请选择家属性别', trigger: 'blur'}">
+              <el-select v-model="relative.gender" clearable>
+                <el-option label="女" value="0" />
+                <el-option label="男" value="1" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :xl="6" :lg="7" :md="10" :sm="12" :xs="15">
+            <el-form-item :key="relative.key" :label=" '电话号码' " :prop="'relatives.' + index + '.phoneNumber'" :rules="{ required: true, message: '请输入电话号码', trigger: 'blur' }">
+              <el-input v-model="relative.phoneNumber" />
+            </el-form-item>
+          </el-col>
+          <el-tooltip v-if="index>0" class="remove-unit" effect="dark" content="删除家属信息" placement="top-end">
+            <el-button type="danger" plain icon="el-icon-delete" circle @click.prevent="removeDomain(relative)" />
+          </el-tooltip>
+        </el-row>
+        <el-row>
+          <el-col :xl="6" :lg="7" :md="10" :sm="12" :xs="15">
+            <el-form-item :key="relative.key" :label=" '与走失老人的关系' " :prop="'relatives.' + index + '.relationship'" :rules="{ required: true, message: '请输入与走失老人的关系', trigger: 'blur' }">
+              <el-input v-model="relative.relationship" />
+            </el-form-item>
+          </el-col>
+          <el-col :xl="12" :lg="14" :md="16" :sm="17" :xs="20">
+            <el-form-item :key="relative.key" :label=" '备注' " :prop="'relatives.' + index + '.remark'">
+              <el-input v-model="relative.remark" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </div>
+      <el-row>
         <el-col :xl="5" :lg="8" :md="10" :sm="18" :xs="24">
           <el-form-item label="老人职业" prop="job">
             <el-input v-model.number="create.models.job" />
@@ -242,7 +286,10 @@ export default {
           idCard: null,
           description: null,
           look: null,
-          photo: ''
+          photo: '',
+          relatives: [
+            { name: null, gender: null, phoneNumber: null, relationship: null, remark: null }
+          ]
         },
         rules: {
           name: setRule('老人名字', [{ required: true }]),
@@ -381,6 +428,19 @@ export default {
         }).catch(reject => {
         })
       })
+    },
+    addDomain() {
+      this.create.models.relatives.push(
+        { name: null, gender: null, phoneNumber: null, relationship: null, remark: null }
+      )
+    },
+    removeDomain(item) {
+      if (this.create.models.relatives.length > 1) {
+        var index = this.create.models.relatives.indexOf(item)
+        if (index !== -1) {
+          this.create.models.relatives.splice(index, 1)
+        }
+      }
     }
   }
 }
@@ -435,9 +495,15 @@ export default {
   }
   .unit {
     position: relative;
-    margin: 0 850px 0 150px;
-    border: 2px dashed #ccc;
-    /*padding-bottom: 8px;*/
+    margin: -1px 200px 0 150px;
+    border: 1px dashed #ccc;
+    padding-bottom: 8px;
+
+    .remove-unit {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+    }
   }
 
   .prompt {

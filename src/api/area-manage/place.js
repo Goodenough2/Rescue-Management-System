@@ -80,12 +80,12 @@ export function del(data) {
 export function exportExcel(query, page, sort) {
   return request({
     url: '/place/export',
-    method: 'get',
-    responseType: 'blob'
-    // data: {
-    //   page: { current: page.current, size: page.size },
-    //   sort: { property: sort.prop, direction: sort.order },
-    //   query: { ...query }
-    // }
+    method: 'post',
+    responseType: 'blob',
+    data: {
+      page: { current: page.current, size: page.size },
+      sort: { property: sort.prop, direction: sort.order },
+      query: { ...query }
+    }
   })
 }

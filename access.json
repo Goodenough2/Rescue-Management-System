@@ -21,6 +21,24 @@
             "allow": true
           }
         },
+        "TaskSchedule": {
+          "allow": true,
+          "view": {
+            "allow": true
+          },
+          "create": {
+            "allow": true
+          },
+          "update": {
+            "allow": true
+          },
+          "detail": {
+            "allow": true
+          },
+          "delete": {
+            "allow": true
+          }
+        },
         "allow": true
       },
       "SystemManage": {
@@ -122,6 +140,30 @@
       "ElderlyManage": {
         "allow": true,
         "Elderly": {
+          "allow": true,
+          "view": {
+            "allow": true
+          },
+          "import": {
+            "allow": true
+          },
+          "create": {
+            "allow": true
+          },
+          "update": {
+            "allow": true
+          },
+          "detail": {
+            "allow": true
+          },
+          "delete": {
+            "allow": true
+          },
+          "export": {
+            "allow": true
+          }
+        },
+        "Relative": {
           "allow": true,
           "view": {
             "allow": true

@@ -17,6 +17,12 @@ export default {
       component: () => import('@/views/elderly-manage/elderly'),
       name: 'Elderly',
       meta: { title: '走失人员管理' }
+    },
+    {
+      path: 'relative-manage',
+      component: () => import('@/views/elderly-manage/relative'),
+      name: 'Relative',
+      meta: { title: '亲属管理' }
     }
   ]
 
