@@ -399,13 +399,12 @@
 import adaptive from '@/directive/el-table'
 import setRule from '@/utils/form-validate'
 import Pagination from '@/components/Pagination'
-import * as role from '@/api/system-manage/role'
 import * as elderly from '@/api/elderly-manage/elderly'
-import * as relative from '@/api/elderly-manage/relative'
+// import * as relative from '@/api/elderly-manage/relative'
 import { regionData, CodeToText, TextToCode } from 'element-china-area-data'
 
 export default {
-  name: 'Shelter',
+  name: 'Elderly',
   components: { Pagination },
   directives: { adaptive },
   data() {
@@ -548,7 +547,7 @@ export default {
     handleRelative(row) {
       this.loading.relativeDetail = true
       this.relativeDetail.dialog.visible = true
-      relative.get(row.id).then(response => {
+      elderly.getRelative(row.id).then(response => {
         this.relativeDetail.models = response.data
       }).catch(reject => {
       })
@@ -589,7 +588,7 @@ export default {
       this.$refs['formUpdate'].validate((valid) => {
         if (!valid) return false
         const tempData = Object.assign({}, this.update.models)
-        role.update(tempData).then(response => {
+        elderly.update(tempData).then(response => {
           // 重新获取数据
           this.getDatas()
           this.update.dialog.visible = false
@@ -618,7 +617,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        role.del(ids).then(response => {
+        elderly.del(ids).then(response => {
           // 重新获取数据
           this.getDatas()
         }).catch(reject => {

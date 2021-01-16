@@ -24,6 +24,13 @@ export function get(id) {
     method: 'get'
   })
 }
+// 根据id获取数据
+export function getRelative(id) {
+  return request({
+    url: `/elderly/getRelative/${id}`,
+    method: 'get'
+  })
+}
 
 // 根据当前用户所有权限数据
 export function getAllAccess() {
