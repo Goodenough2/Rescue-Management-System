@@ -9,11 +9,11 @@
         :options="options"
         @change="handleChange"
       />
-      <el-input v-model.trim="query.name" class="query-item" style="width: 120px" placeholder="名称" clearable @clear="handleQuery" />
+      <el-input v-model.trim="query.name" class="query-item" style="width: 120px" placeholder="姓名" clearable @clear="handleQuery" />
       <el-input v-model.trim="query.address" class="query-item" style="width: 120px" placeholder="详细地址" clearable @clear="handleQuery" />
       <el-button class="tool tool-query" type="primary" icon="el-icon-search" @click="handleQuery">查询</el-button>
       <el-button class="tool tool-create" type="primary" icon="el-icon-edit" @click="handleCreate">录入老人信息</el-button>
-      <!--      <el-button class="tool tool-create" type="danger" icon="el-icon-delete" @click="handleDeletes">批量删除</el-button>-->
+      <el-button class="tool tool-create" type="danger" icon="el-icon-delete" @click="handleDeletes">批量删除</el-button>
     </div>
 
     <el-table ref="listTable" v-loading="loading.list" v-adaptive="{ bottomOffset: 55 }" height="585px" :data="datas" :default-sort="sort" border fit highlight-current-row @sort-change="handleSort">
@@ -33,17 +33,20 @@
       <el-table-column label="老人工作" prop="job" :sort-orders="sortOrders" align="center" width="120" show-overflow-tooltip />
       <el-table-column label="最近更新时间" prop="updateTime" :sort-orders="sortOrders" align="center" width="170" show-overflow-tooltip />
       <el-table-column label="家属描述" prop="description" :sort-orders="sortOrders" align="left" show-overflow-tooltip />
-      <el-table-column fixed="right" label="操作" align="center" width="80">
+      <el-table-column fixed="right" label="操作" align="center" width="180">
         <template slot-scope="{row}">
           <el-tooltip class="item" effect="dark" content="详情" placement="top-end">
             <el-button type="primary" plain class="button-operate button-detail" size="mini" @click="handleDetail(row)"><i class="vue-icon-detail" /></el-button>
           </el-tooltip>
-          <!--          <el-tooltip class="item" effect="dark" content="编辑" placement="top-end">-->
-          <!--            <el-button type="primary" plain class="button-operate button-update" size="mini" @click="handleUpdate(row)"><i class="vue-icon-update" /></el-button>-->
-          <!--          </el-tooltip>-->
-          <!--          <el-tooltip class="item" effect="dark" content="删除" placement="top-end">-->
-          <!--            <el-button type="primary" plain class="button-operate button-delete" size="mini" @click="handleDelete(row)"><i class="vue-icon-delete" /></el-button>-->
-          <!--          </el-tooltip>-->
+          <el-tooltip class="item" effect="dark" content="家属信息" placement="top-end">
+            <el-button type="success" plain class="button-operate button-detail" size="mini" @click="handleRelative(row)"><i class="el-icon-user" /></el-button>
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" content="编辑" placement="top-end">
+            <el-button type="primary" plain class="button-operate button-update" size="mini" @click="handleUpdate(row)"><i class="vue-icon-update" /></el-button>
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" content="删除" placement="top-end">
+            <el-button type="primary" plain class="button-operate button-delete" size="mini" @click="handleDelete(row)"><i class="vue-icon-delete" /></el-button>
+          </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
@@ -77,6 +80,14 @@
           <el-col :xl="6" :md="12" :sm="24">
             <el-form-item label="老人名字">
               {{ detail.models.name }}
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :xl="6" :md="12" :sm="24">
+            <el-form-item label="老人性别">
+              <span v-if="detail.models.gender==0">女</span>
+              <span v-if="detail.models.gender==1">男</span>
             </el-form-item>
           </el-col>
         </el-row>
@@ -158,77 +169,220 @@
       </el-form>
     </el-dialog>
 
-    <el-dialog custom-class="dialog-fullscreen dialog-create" :title="create.dialog.title" :visible.sync="create.dialog.visible" :modal="false" :modal-append-to-body="false" :close-on-click-modal="false">
-      <el-form ref="formCreate" :rules="create.rules" :model="create.models" label-position="right" :label-width="create.dialog.labelWidth">
-        <el-row>
-          <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="省份" prop="name">
-              <el-input v-model="create.models.name" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :sl="24">
-            <el-form-item label="备注" prop="remark">
-              <el-input v-model="create.models.remark" type="textarea" />
-            </el-form-item>
-          </el-col>
-        </el-row>
+    <el-dialog v-loading="loading.relativeDetail" custom-class="dialog-fullscreen dialog-detail" :title="relativeDetail.dialog.title" :visible.sync="relativeDetail.dialog.visible" :modal="false" :modal-append-to-body="false">
+      <el-form ref="formDetail" label-position="right" :label-width="relativeDetail.dialog.labelWidth">
+<!--        <el-row>-->
+<!--          <el-col :xl="4" :lg="8" :md="12" :sm="18" :xs="24">-->
+<!--            <el-form-item label="点击添加">-->
+<!--              <el-button @click="addDomain">新增家属信息</el-button>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--        </el-row>-->
+        <div v-for="(relative, index) in relativeDetail.models" :key="index">
+          <el-row>
+            <el-col :xl="12" :lg="14" :md="16" :sm="17" :xs="20">
+              <el-form-item :key="relative.key" :label="'家属' + (index + 1)+':'" :prop="'relatives.' + index + '.name'">
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :xl="6" :lg="7" :md="10" :sm="12" :xs="15">
+              <el-form-item :key="relative.key" :label="'姓名'" :prop="'relatives.' + index + '.name'">
+                {{ relative.name }}
+              </el-form-item>
+            </el-col>
+            <el-col :xl="6" :lg="7" :md="10" :sm="12" :xs="15">
+              <el-form-item :key="relative.key" :label=" '性别' " :prop="'relatives.' + index + '.gender'">
+                <span v-if="relative.gender == 0">女</span>
+                <span v-if="relative.gender == 1">男</span>
+              </el-form-item>
+            </el-col>
+            <el-col :xl="6" :lg="7" :md="10" :sm="12" :xs="15">
+              <el-form-item :key="relative.key" :label=" '电话号码' " :prop="'relatives.' + index + '.phoneNumber'">
+                {{ relative.phoneNumber }}
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :xl="6" :lg="7" :md="10" :sm="12" :xs="15">
+              <el-form-item :key="relative.key" :label=" '与走失老人关系' " :prop="'relatives.' + index + '.relationship'">
+                {{ relative.relationship }}
+              </el-form-item>
+            </el-col>
+            <el-col :xl="12" :lg="14" :md="16" :sm="17" :xs="20">
+              <el-form-item :key="relative.key" :label=" '备注' " :prop="'relatives.' + index + '.remark'">
+                {{ relative.remark }}
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+        </div>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="create.dialog.visible = false">取消</el-button>
-        <el-button type="primary" @click="createData()">提交</el-button>
-      </div>
     </el-dialog>
 
     <el-dialog v-loading="loading.update" custom-class="dialog-fullscreen dialog-update" :title="update.dialog.title" :visible.sync="update.dialog.visible" :modal="false" :modal-append-to-body="false" :close-on-click-modal="false">
       <el-form ref="formUpdate" :rules="update.rules" :model="update.models" label-position="right" :label-width="update.dialog.labelWidth">
         <el-row>
-          <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="省份" prop="province">
-              <el-input v-model="update.models.province" />
+          <el-col :xl="5" :lg="8" :md="10" :sm="18" :xs="24">
+            <el-form-item label="老人姓名" prop="name">
+              <el-input v-model.number="update.models.name" />
+            </el-form-item>
+          </el-col>
+          <el-col :xl="5" :lg="8" :md="10" :sm="18" :xs="24">
+            <el-form-item label="老人性别" prop="gender">
+              <el-select v-model="update.models.gender" clearable>
+                <el-option label="女" value="0" />
+                <el-option label="男" value="1" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :xl="5" :lg="8" :md="10" :sm="18" :xs="24">
+            <el-form-item label="老人年龄" prop="age">
+              <el-input v-model.number="update.models.age" type="number" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-          <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="市" prop="city">
-              <el-input v-model="update.models.city" />
+          <el-col :xl="5" :lg="8" :md="10" :sm="18" :xs="24">
+            <el-form-item label="走失时间" prop="lostTime">
+              <el-date-picker
+                v-model="update.models.lostTime"
+                type="datetime"
+                placeholder="选择日期时间"
+                align="right"
+                :picker-options="pickerOptions"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :xl="5" :lg="8" :md="10" :sm="18" :xs="24">
+            <el-form-item label="户籍所在地" prop="province">
+              <el-cascader
+                v-model="selectedUpdataOptions"
+                size="large"
+                :options="options"
+                @change="handleUpdateChange"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :xl="5" :lg="8" :md="10" :sm="18" :xs="24">
+            <el-form-item label="老人身高(cm)" prop="height">
+              <el-input v-model.number="update.models.height" type="number" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-          <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="区/县" prop="area">
-              <el-input v-model="update.models.area" />
+          <el-col :xl="5" :lg="8" :md="12" :sm="18" :xs="24">
+            <el-form-item label="具体走失位置" prop="lostLng">
+              <baidu-map class="mapSmall" :center="center" :zoom="zoom" :scroll-wheel-zoom="false" @ready="handler" @rightclick="getClickInfo">
+                <bm-overview-map anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :is-open="true" />
+                <bml-marker-cluster :average-center="true">
+                  <bm-marker v-for="marker of markers" :key="marker.lng" :position="{lng: marker.lng, lat: marker.lat}" :icon="{url: require('@/static/icon2.png'), size: {width: 30, height: 40}}">
+                    <bm-info-window title="<i class=&quot;el-icon-office-building&quot;></i><strong>走失位置</strong>" :position="{lng: marker.lng, lat: marker.lat}" :show="true">
+                      <i class="el-icon-location-outline" />
+                      <strong>{{ infoWindow.contents }}</strong>
+                    </bm-info-window>
+                  </bm-marker>
+                </bml-marker-cluster>
+              </baidu-map>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row />
+        <el-row>
+          <el-col :xl="5" :lg="8" :md="12" :sm="18" :xs="24">
+            <el-form-item label="走失位置" prop="lostAddress">
+              <el-input v-model="update.models.lostAddress" />
+            </el-form-item>
+          </el-col>
+          <el-col :xl="5" :lg="8" :md="12" :sm="18" :xs="24">
+            <el-form-item label="身份证号" prop="idCard">
+              <el-input v-model="update.models.idCard" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <!--        <el-row>-->
+        <!--          <el-col :xl="4" :lg="8" :md="12" :sm="18" :xs="24">-->
+        <!--            <el-form-item label="点击添加">-->
+        <!--              <el-button @click="addDomain">新增家属信息</el-button>-->
+        <!--            </el-form-item>-->
+        <!--          </el-col>-->
+        <!--        </el-row>-->
+        <!--        <div v-for="(relative, index) in update.models.relatives" :key="index" class="unit">-->
+        <!--          <el-row>-->
+        <!--            <el-col :xl="6" :lg="7" :md="10" :sm="12" :xs="15">-->
+        <!--              <el-form-item :key="relative.key" :label="'家属' + (index + 1) + '姓名'" :prop="'relatives.' + index + '.name'" :rules="{ required: true, message: '请输入家属姓名', trigger: 'blur' }">-->
+        <!--                <el-input v-model="relative.name" />-->
+        <!--              </el-form-item>-->
+        <!--            </el-col>-->
+        <!--            <el-col :xl="6" :lg="7" :md="10" :sm="12" :xs="15">-->
+        <!--              <el-form-item :key="relative.key" :label=" '性别' " :prop="'relatives.' + index + '.gender'" :rules="{required: true, message: '请选择家属性别', trigger: 'blur'}">-->
+        <!--                <el-select v-model="relative.gender" clearable>-->
+        <!--                  <el-option label="女" value="0" />-->
+        <!--                  <el-option label="男" value="1" />-->
+        <!--                </el-select>-->
+        <!--              </el-form-item>-->
+        <!--            </el-col>-->
+        <!--            <el-col :xl="6" :lg="7" :md="10" :sm="12" :xs="15">-->
+        <!--              <el-form-item :key="relative.key" :label=" '电话号码' " :prop="'relatives.' + index + '.phoneNumber'" :rules="{ required: true, message: '请输入电话号码', trigger: 'blur' }">-->
+        <!--                <el-input v-model="relative.phoneNumber" />-->
+        <!--              </el-form-item>-->
+        <!--            </el-col>-->
+        <!--            <el-tooltip v-if="index>0" class="remove-unit" effect="dark" content="删除家属信息" placement="top-end">-->
+        <!--              <el-button type="danger" plain icon="el-icon-delete" circle @click.prevent="removeDomain(relative)" />-->
+        <!--            </el-tooltip>-->
+        <!--          </el-row>-->
+        <!--          <el-row>-->
+        <!--            <el-col :xl="6" :lg="7" :md="10" :sm="12" :xs="15">-->
+        <!--              <el-form-item :key="relative.key" :label=" '与走失老人的关系' " :prop="'relatives.' + index + '.relationship'" :rules="{ required: true, message: '请输入与走失老人的关系', trigger: 'blur' }">-->
+        <!--                <el-input v-model="relative.update" />-->
+        <!--              </el-form-item>-->
+        <!--            </el-col>-->
+        <!--            <el-col :xl="12" :lg="14" :md="16" :sm="17" :xs="20">-->
+        <!--              <el-form-item :key="relative.key" :label=" '备注' " :prop="'relatives.' + index + '.remark'">-->
+        <!--                <el-input v-model="relative.update" />-->
+        <!--              </el-form-item>-->
+        <!--            </el-col>-->
+        <!--          </el-row>-->
+        <!--        </div>-->
+        <el-row>
+          <el-col :xl="5" :lg="8" :md="10" :sm="18" :xs="24">
+            <el-form-item label="老人职业" prop="job">
+              <el-input v-model.number="update.models.job" />
+            </el-form-item>
+          </el-col>
+          <el-col :xl="5" :lg="8" :md="10" :sm="18" :xs="24">
+            <el-form-item label="老人相貌特征" prop="look">
+              <el-input v-model.number="update.models.look" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-          <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="具体位置" prop="name">
-              <el-input v-model="update.models.name" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="详细地址" prop="address">
-              <el-input v-model="update.models.address" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="电话" prop="telephone">
-              <el-input v-model="update.models.telephone" />
+          <el-col :xl="6" :lg="10" :md="115" :sm="18" :xs="24">
+            <el-form-item label="老人照片上传" prop="photo">
+              <el-upload
+                list-type="picture"
+                action=""
+                accept=".jpg, .png"
+                :limit="1"
+                :auto-upload="false"
+                :file-list="fileList"
+                :on-change="getFile"
+                :on-preview="handlePictureCardPreview"
+                :on-remove="handleUploadRemove"
+              >
+                <el-button size="small" type="primary">选择图片上传</el-button>
+                <div slot="tip" class="el-upload__tip">只能上传一张jpg/png文件</div>
+              </el-upload>
+              <el-dialog :visible.sync="dialogVisible" append-to-body>
+                <img width="100%" :src="dialogImageUrl" alt>
+              </el-dialog>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :sl="24">
-            <el-form-item label="备注" prop="remark">
-              <el-input v-model="update.models.remark" type="textarea" />
+            <el-form-item label="具体描述" prop="description">
+              <el-input v-model="update.models.description" type="textarea" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -247,7 +401,8 @@ import setRule from '@/utils/form-validate'
 import Pagination from '@/components/Pagination'
 import * as role from '@/api/system-manage/role'
 import * as elderly from '@/api/elderly-manage/elderly'
-import { regionData, CodeToText } from 'element-china-area-data'
+import * as relative from '@/api/elderly-manage/relative'
+import { regionData, CodeToText, TextToCode } from 'element-china-area-data'
 
 export default {
   name: 'Shelter',
@@ -260,42 +415,93 @@ export default {
       center: { lng: 0, lat: 0 },
       zoom: 13,
       markers: [{ lng: 117.207875, lat: 39.092447, showFlag: false }],
+      keyword: null,
+      location: null,
+      infoWindow: {
+        show: true,
+        contents: '地址为：'
+      },
       detialmap: null,
       // 三级地址联动数据项（不带全部）
       options: regionData,
       selectedOptions: [],
-      query: { name: null, address: null, province: null, city: null, area: null },
+      selectedUpdataOptions: [],
+      // 日期选择器快捷键
+      pickerOptions: {
+        shortcuts: [{
+          text: '今天',
+          onClick(picker) {
+            picker.$emit('pick', new Date())
+          }
+        }, {
+          text: '昨天',
+          onClick(picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24)
+            picker.$emit('pick', date)
+          }
+        }, {
+          text: '一周前',
+          onClick(picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', date)
+          }
+        }]
+      },
+      // 图片上传配置项
+      dialogVisible: false,
+      fileList: [],
+      dialogImageUrl: null,
+      query: { name: null, province: null, city: null, area: null, gender: null, lostLng: 0, lostLat: 0, age: null, height: null, lostTime: null, lostAddress: null, look: null, job: null, idCard: null, description: null, createTime: null, updateTime: null, remark: null, photo: null },
       page: { total: 0, current: 1, size: 20 },
       sort: { prop: 'sort', order: 'ascending' },
       detail: {
         dialog: { title: '详细信息', visible: false, labelWidth: '120px' },
-        models: { name: null, province: null, city: null, area: null, address: null, lng: 0, lat: 0, telephone: null, remark: null }
+        models: { name: null, province: null, city: null, area: null, gender: null, lostLng: 0, lostLat: 0, age: null, height: null, lostTime: null, lostAddress: null, look: null, job: null, idCard: null, description: null, createTime: null, updateTime: null, remark: null, photo: null }
       },
-      create: {
-        dialog: { title: '添加信息', visible: false, labelWidth: '120px' },
-        models: { name: null, province: null, city: null, area: null, address: null, lng: 0, lat: 0, telephone: null, remark: null },
-        rules: {
-          name: setRule('名称', [{ required: true }, { length: [0, 50] }]),
-          province: setRule('所在地', [{ selected: true }]),
-          address: setRule('详细地址', [{ required: true }]),
-          lng: setRule('具体位置', [{ selected: true }]),
-          telephone: setRule('所在地', [{ required: true }]),
-          remark: setRule('备注', [{ length: [0, 255] }])
-        }
+      relativeDetail: {
+        dialog: { title: '家属信息', visible: false, labelWidth: '120px' },
+        models: [{ name: null, gender: null, phoneNumber: null, relationship: null, remark: null }, { name: null, gender: null, phoneNumber: null, relationship: null, remark: null }]
       },
       update: {
-        dialog: { title: '编辑角色信息', visible: false, labelWidth: '120px' },
-        models: { name: null, province: null, city: null, area: null, address: null, lng: 0, lat: 0, telephone: null, remark: null },
+        dialog: { title: '老人信息录入', visible: false, labelWidth: '150px' },
+        models: {
+          name: null,
+          gender: null,
+          age: null,
+          height: null,
+          lostTime: '',
+          province: null,
+          city: null,
+          area: null,
+          lostAddress: null,
+          lostLng: null,
+          lostLat: null,
+          job: null,
+          idCard: null,
+          description: null,
+          look: null,
+          photo: '',
+          relatives: [
+            { name: null, gender: null, phoneNumber: null, relationship: null, remark: null }
+          ]
+        },
         rules: {
-          name: setRule('名称', [{ required: true }, { length: [0, 50] }]),
-          province: setRule('所在地', [{ selected: true }]),
-          address: setRule('详细地址', [{ required: true }]),
-          lng: setRule('具体位置', [{ selected: true }]),
-          telephone: setRule('所在地', [{ required: true }]),
-          remark: setRule('备注', [{ length: [0, 255] }])
+          name: setRule('老人名字', [{ required: true }]),
+          gender: setRule('老人性别', [{ selected: true }]),
+          province: setRule('户籍所在地', [{ selected: true }]),
+          age: setRule('老人年龄', [{ required: true }]),
+          height: setRule('老人身高', [{ required: true }]),
+          lostTime: setRule('走失时间', [{ required: true }]),
+          address: setRule('户籍地址', [{ required: true }]),
+          lostAddress: setRule('走失时的详细地址', [{ required: true }]),
+          lostLng: setRule('走失位置', [{ selected: true }]),
+          photo: setRule('上传老人图片', [{ selected: true }]),
+          idCard: setRule('身份证号', [{ required: true }])
         }
       },
-      loading: { list: true, export: false, detail: false, update: false },
+      loading: { list: true, export: false, detail: false, update: false, relativeDetail: false },
       sortOrders: ['ascending', 'descending']
     }
   },
@@ -339,39 +545,49 @@ export default {
       this.detail.dialog.visible = true
       this.loading.detail = false
     },
-    handleCreate() {
-      this.create.dialog.visible = true
+    handleRelative(row) {
+      this.loading.relativeDetail = true
+      this.relativeDetail.dialog.visible = true
+      relative.get(row.id).then(response => {
+        this.relativeDetail.models = response.data
+      }).catch(reject => {
+      })
+      this.loading.relativeDetail = false
     },
-    createData() {
-      this.$refs['formCreate'].validate((valid) => {
-        if (!valid) return false
-        role.create(this.create.models).then(response => {
-          // 为方便连续添加，create对话框不关闭
-          // 需要清空的表单，手动清空，至少清空一个必填项，防止点击两遍
-          this.create.models.name = ''
-          // 因为添加修改共用了accessTo，进行清空操作
-          this.accessTo = []
-          // 重新获取数据
-          this.getDatas()
-        }).catch(reject => {
-        })
+    handleCreate() {
+      this.$router.push({
+        path: '/system-operation/informationEntry'
       })
     },
     handleUpdate(row) {
       // 若列表数据展示了全部属性，则可直接拷贝列表数据用于编辑
       this.update.models = Object.assign({}, row)
+      this.selectedUpdataOptions.push(TextToCode[this.update.models.province].code)
+      this.selectedUpdataOptions.push(TextToCode[this.update.models.province][this.update.models.city].code)
+      this.selectedUpdataOptions.push(TextToCode[this.update.models.province][this.update.models.city][this.update.models.area].code)
+      // this.dialogImageUrl = 'data:image/png;base64,' + this.update.models.photo
+
+      // this.dialogVisible = true
+      if (this.fileList.length === 0) {
+        this.fileList.push({ name: this.update.models.name + '老人图片.png', url: 'data:image/png;base64,' + this.update.models.photo })
+      }
+      const temp = { lng: 0, lat: 0, showFlag: false }
+      temp.lat = this.update.models.lostLat
+      temp.lng = this.update.models.lostLng
+      this.center.lat = this.update.models.lostLng
+      this.center.lng = this.update.models.lostLng
+      this.markers.splice(0, 1, temp)
+      this.infoWindow.contents = '地址：' + this.update.models.lostAddress
       this.update.dialog.visible = true
       this.loading.update = true
       this.loading.update = false
-
-      this.$nextTick(() => {
-        this.$refs['formUpdate'].clearValidate()
-      })
+      // this.$nextTick(() => {
+      //   this.$refs['formUpdate'].clearValidate()
+      // })
     },
     updateData() {
       this.$refs['formUpdate'].validate((valid) => {
         if (!valid) return false
-        // this.update.models.access = this.treeToArray(this.accessTo)
         const tempData = Object.assign({}, this.update.models)
         role.update(tempData).then(response => {
           // 重新获取数据
@@ -415,6 +631,12 @@ export default {
       this.query.city = CodeToText[value[1]]
       this.query.area = CodeToText[value[2]]
     },
+    handleUpdateChange(value) {
+      // console.log(value)
+      this.update.models.province = CodeToText[value[0]]
+      this.update.models.city = CodeToText[value[1]]
+      this.update.models.area = CodeToText[value[2]]
+    },
     handlerDetail({ BMap, map }) {
       this.center.lng = this.detail.models.lostLng
       this.center.lat = this.detail.models.lostLat
@@ -426,6 +648,51 @@ export default {
       // map.addOverlay(marker) // 将标注添加到地图中
       // var circle = new BMap.Circle(point, 6, { strokeColor: 'Red', strokeWeight: 6, strokeOpacity: 1, Color: 'Red', fillColor: '#f03' })
       // map.addOverlay(circle)
+    },
+    getFile(file, fileList) {
+      this.getBase64(file.raw).then(res => {
+        const params = res.split(',')
+        console.log(params, 'params')
+        if (params.length > 0) {
+          this.update.models.photo = params[1]
+        }
+      })
+    },
+    handleUploadRemove(file, fileList) {
+      this.update.models.photo = ''
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url
+      this.dialogVisible = true
+    },
+    handler({ BMap, map }) {
+      this.center.lng = this.update.models.lostLng
+      this.center.lat = this.update.models.lostLat
+      this.zoom = 19
+    },
+    getClickInfo(e) {
+      // this.center.lng = e.point.lng
+      // this.center.lat = e.point.lat
+      const temp = { lng: 0, lat: 0, showFlag: false }
+      temp.lat = e.point.lat
+      temp.lng = e.point.lng
+      this.markers.splice(0, 1, temp)
+      this.lng = e.point.lng
+      this.lat = e.point.lat
+      /* 创建地址解析器的实例 */
+      const geoCoder = new BMap.Geocoder()
+      /* 获取位置对应的坐标 */
+      // geoCoder.getPoint(this.addressKeyword, point => {
+      //   this.selectedLng = point.lng
+      //   this.selectedLat = point.lat
+      // })
+      /* 利用坐标获取地址的详细信息 */
+      geoCoder.getLocation(e.point, res => {
+        console.log(res)
+        this.infoWindow.contents = '地址：' + res.address
+      })
+      this.update.models.lostLat = e.point.lat
+      this.update.models.lostLng = e.point.lng
     }
   }
 }
@@ -435,7 +702,7 @@ export default {
 .mapSmall {
   width: 600px;
   height: 300px;
-/*margin-left: 50px;*/
+  margin-left: 0px;
   margin-top: 6px;
   margin-bottom: 6px;
   border: 2px dashed #ccc;
@@ -447,5 +714,6 @@ export default {
 .anchorBL {
   display: none !important;
 }
+
 </style>
 
