@@ -63,7 +63,7 @@ export function create(data) {
     method: 'post',
     data: {
       elderly: data,
-      photo: data.photo,
+      photos: data.photos,
       relatives: data.relatives
     }
   })

@@ -144,7 +144,6 @@
               list-type="picture"
               action=""
               accept=".jpg, .png"
-              :limit="1"
               :auto-upload="false"
               :file-list="fileList"
               :on-change="getFile"
@@ -238,6 +237,7 @@ export default {
         show: true,
         contents: '地址为：'
       },
+      photos: [],
       // 日期选择器快捷键
       pickerOptions: {
         shortcuts: [{
@@ -286,7 +286,7 @@ export default {
           idCard: null,
           description: null,
           look: null,
-          photo: '',
+          photos: [],
           relatives: [
             { name: null, gender: null, phoneNumber: null, relationship: null, remark: null }
           ]
@@ -301,7 +301,7 @@ export default {
           address: setRule('户籍地址', [{ required: true }]),
           lostAddress: setRule('走失时的详细地址', [{ required: true }]),
           lostLng: setRule('走失位置', [{ selected: true }]),
-          photo: setRule('上传老人图片', [{ selected: true }]),
+          photos: setRule('上传老人图片', [{ selected: true }]),
           idCard: setRule('身份证号', [{ required: true }])
         }
       },
@@ -392,12 +392,22 @@ export default {
         const params = res.split(',')
         console.log(params, 'params')
         if (params.length > 0) {
-          this.create.models.photo = params[1]
+          // this.create.models.photo = params[1]
+          this.create.models.photos.push(params[1])
         }
       })
     },
     handleUploadRemove(file, fileList) {
-      this.create.models.photo = ''
+      // const t = this.photos.indexOf(file)
+      this.getBase64(file.raw).then(res => {
+        const params = res.split(',')
+        console.log(params, 'params')
+        if (params.length > 0) {
+          // this.create.models.photo = params[1]
+          const t = this.create.models.photos.indexOf(params[1])
+          this.create.models.photos.splice(t, 1)
+        }
+      })
     },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url
