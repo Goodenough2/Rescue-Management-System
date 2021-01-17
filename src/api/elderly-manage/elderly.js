@@ -27,7 +27,7 @@ export function get(id) {
 // 根据id获取数据
 export function getRelative(id) {
   return request({
-    url: `/elderly/getRelative/${id}`,
+    url: `/elderly/getRelatives/${id}`,
     method: 'get'
   })
 }
@@ -35,7 +35,7 @@ export function getRelative(id) {
 // 根据当前用户所有权限数据
 export function getAllAccess() {
   return request({
-    url: '/role/access',
+    url: '/elderly/access',
     method: 'get'
   })
 }
@@ -43,7 +43,7 @@ export function getAllAccess() {
 // 根据当前用户所有权限数据
 export function getAccess(id) {
   return request({
-    url: `/role/${id}/access`,
+    url: `/elderly/${id}/access`,
     method: 'get'
   })
 }

@@ -10,7 +10,7 @@
         @change="handleChange"
       />
       <el-input v-model.trim="query.name" class="query-item" style="width: 120px" placeholder="姓名" clearable @clear="handleQuery" />
-      <el-input v-model.trim="query.address" class="query-item" style="width: 120px" placeholder="详细地址" clearable @clear="handleQuery" />
+      <!--      <el-input v-model.trim="query.address" class="query-item" style="width: 120px" placeholder="详细地址" clearable @clear="handleQuery" />-->
       <el-button class="tool tool-query" type="primary" icon="el-icon-search" @click="handleQuery">查询</el-button>
       <el-button class="tool tool-create" type="primary" icon="el-icon-edit" @click="handleCreate">录入老人信息</el-button>
       <el-button class="tool tool-create" type="danger" icon="el-icon-delete" @click="handleDeletes">批量删除</el-button>
@@ -171,18 +171,17 @@
 
     <el-dialog v-loading="loading.relativeDetail" custom-class="dialog-fullscreen dialog-detail" :title="relativeDetail.dialog.title" :visible.sync="relativeDetail.dialog.visible" :modal="false" :modal-append-to-body="false">
       <el-form ref="formDetail" label-position="right" :label-width="relativeDetail.dialog.labelWidth">
-<!--        <el-row>-->
-<!--          <el-col :xl="4" :lg="8" :md="12" :sm="18" :xs="24">-->
-<!--            <el-form-item label="点击添加">-->
-<!--              <el-button @click="addDomain">新增家属信息</el-button>-->
-<!--            </el-form-item>-->
-<!--          </el-col>-->
-<!--        </el-row>-->
+        <!--        <el-row>-->
+        <!--          <el-col :xl="4" :lg="8" :md="12" :sm="18" :xs="24">-->
+        <!--            <el-form-item label="点击添加">-->
+        <!--              <el-button @click="addDomain">新增家属信息</el-button>-->
+        <!--            </el-form-item>-->
+        <!--          </el-col>-->
+        <!--        </el-row>-->
         <div v-for="(relative, index) in relativeDetail.models" :key="index">
           <el-row>
             <el-col :xl="12" :lg="14" :md="16" :sm="17" :xs="20">
-              <el-form-item :key="relative.key" :label="'家属' + (index + 1)+':'" :prop="'relatives.' + index + '.name'">
-              </el-form-item>
+              <el-form-item :key="relative.key" :label="'家属' + (index + 1)+':'" :prop="'relatives.' + index + '.name'" />
             </el-col>
           </el-row>
           <el-row>
@@ -421,6 +420,7 @@ export default {
         contents: '地址为：'
       },
       detialmap: null,
+      detialBMap: null,
       // 三级地址联动数据项（不带全部）
       options: regionData,
       selectedOptions: [],
@@ -452,7 +452,7 @@ export default {
       dialogVisible: false,
       fileList: [],
       dialogImageUrl: null,
-      query: { name: null, province: null, city: null, area: null, gender: null, lostLng: 0, lostLat: 0, age: null, height: null, lostTime: null, lostAddress: null, look: null, job: null, idCard: null, description: null, createTime: null, updateTime: null, remark: null, photo: null },
+      query: { name: null, province: null, city: null, area: null },
       page: { total: 0, current: 1, size: 20 },
       sort: { prop: 'sort', order: 'ascending' },
       detail: {
@@ -534,10 +534,15 @@ export default {
     handleDetail(row) {
       // 若列表数据展示了全部属性，则可直接拷贝列表数据
       this.detail.models = Object.assign({}, row)
-      const temp = { lng: 0, lat: 0, showFlag: false }
+      const temp = { lng: 0, lat: 0 }
       temp.lat = this.detail.models.lostLat
       temp.lng = this.detail.models.lostLng
-      this.center.lat = this.detail.models.lostLng
+      // if (this.detialmap != null) {
+      //   // console.log("ssssss")
+      //   const point = new this.detialBMap.Point(this.detail.models.lostLng, this.detail.models.lostLat)
+      //   this.detialmap.setCenterAndZoom(point, 13)
+      // }
+      this.center.lat = this.detail.models.lostLat
       this.center.lng = this.detail.models.lostLng
       this.markers.splice(0, 1, temp)
       this.loading.detail = true
@@ -573,7 +578,7 @@ export default {
       const temp = { lng: 0, lat: 0, showFlag: false }
       temp.lat = this.update.models.lostLat
       temp.lng = this.update.models.lostLng
-      this.center.lat = this.update.models.lostLng
+      this.center.lat = this.update.models.lostLat
       this.center.lng = this.update.models.lostLng
       this.markers.splice(0, 1, temp)
       this.infoWindow.contents = '地址：' + this.update.models.lostAddress
@@ -641,12 +646,7 @@ export default {
       this.center.lat = this.detail.models.lostLat
       this.zoom = 19
       this.detialmap = map
-      // var point = new BMap.Point(this.center.lng, this.center.lng)
-      // map.centerAndZoom(point, 13)
-      // var marker = new BMap.Marker(point) // 创建标注
-      // map.addOverlay(marker) // 将标注添加到地图中
-      // var circle = new BMap.Circle(point, 6, { strokeColor: 'Red', strokeWeight: 6, strokeOpacity: 1, Color: 'Red', fillColor: '#f03' })
-      // map.addOverlay(circle)
+      this.detialBMap = BMap
     },
     getFile(file, fileList) {
       this.getBase64(file.raw).then(res => {
