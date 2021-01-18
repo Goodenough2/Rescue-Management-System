@@ -151,7 +151,7 @@
               :on-remove="handleUploadRemove"
             >
               <el-button size="small" type="primary">选择图片上传</el-button>
-              <div slot="tip" class="el-upload__tip">只能上传一张jpg/png文件</div>
+              <div slot="tip" class="el-upload__tip">只能上传jpg/png格式的文件</div>
             </el-upload>
             <el-dialog :visible.sync="dialogVisible" append-to-body>
               <img width="100%" :src="dialogImageUrl" alt>
@@ -237,7 +237,6 @@ export default {
         show: true,
         contents: '地址为：'
       },
-      photos: [],
       // 日期选择器快捷键
       pickerOptions: {
         shortcuts: [{
@@ -399,15 +398,17 @@ export default {
     },
     handleUploadRemove(file, fileList) {
       // const t = this.photos.indexOf(file)
-      this.getBase64(file.raw).then(res => {
-        const params = res.split(',')
-        console.log(params, 'params')
-        if (params.length > 0) {
-          // this.create.models.photo = params[1]
-          const t = this.create.models.photos.indexOf(params[1])
-          this.create.models.photos.splice(t, 1)
-        }
-      })
+      const t = fileList.indexOf(file)
+      this.update.models.photos.splice(t, 1)
+      // this.getBase64(file.raw).then(res => {
+      //   const params = res.split(',')
+      //   console.log(params, 'params')
+      //   if (params.length > 0) {
+      //     // this.create.models.photo = params[1]
+      //     const t = this.create.models.photos.indexOf(params[1])
+      //     this.create.models.photos.splice(t, 1)
+      //   }
+      // })
     },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url

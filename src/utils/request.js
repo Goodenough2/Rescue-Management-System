@@ -126,7 +126,6 @@ service.interceptors.response.use(
       case responseState.updateConflictFailure:
       case responseState.noFaceDetecetedFailure:
       case responseState.featueExtractFailure:
-      case responseState.bad:
       case responseState.notFound:
       case responseState.updateDataNotFound:
       case responseState.allDeleteDataNotFound:
@@ -137,6 +136,7 @@ service.interceptors.response.use(
           Message.error({ message: res.message, duration: 4000 })
         }
         return Promise.reject()
+      case responseState.bad:
       case responseState.rankupDataIsTop:
       case responseState.exportDataNotFound:
       case responseState.partialDeleteDataNotFound:

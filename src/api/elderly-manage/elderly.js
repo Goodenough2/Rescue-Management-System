@@ -24,10 +24,18 @@ export function get(id) {
     method: 'get'
   })
 }
-// 根据id获取数据
+// 根据id获取亲属信息
 export function getRelative(id) {
   return request({
     url: `/elderly/getRelatives/${id}`,
+    method: 'get'
+  })
+}
+
+// 根据id获取图片
+export function getPhoto(id) {
+  return request({
+    url: `/elderly/getPhotos/${id}`,
     method: 'get'
   })
 }
@@ -74,7 +82,10 @@ export function update(data) {
   return request({
     url: '/elderly/update',
     method: 'put',
-    data
+    data: {
+      elderly: data,
+      photos: data.photos
+    }
   })
 }
 

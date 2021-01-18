@@ -27,9 +27,15 @@
       <el-table-column label="市" prop="city" :sort-orders="sortOrders" align="center" width="80" show-overflow-tooltip />
       <el-table-column label="区/县" prop="area" :sort-orders="sortOrders" align="center" width="80" show-overflow-tooltip />
       <el-table-column label="姓名" prop="name" :sort-orders="sortOrders" align="center" width="80" show-overflow-tooltip />
+      <el-table-column label="性别" :sort-orders="sortOrders" align="center" width="50" show-overflow-tooltip>
+        <template slot-scope="{row}">
+          <span v-if="row.gender=== 0">女</span>
+          <span v-if="row.gender=== 1">男</span>
+        </template>
+      </el-table-column>
       <el-table-column label="年龄" prop="age" :sort-orders="sortOrders" align="center" width="50" show-overflow-tooltip />
       <el-table-column label="走失时间" prop="lostTime" :sort-orders="sortOrders" align="center" width="170" show-overflow-tooltip />
-      <el-table-column label="走失地点" prop="lostAddress" :sort-orders="sortOrders" align="center" width="200" show-overflow-tooltip />
+      <el-table-column label="走失地点" prop="lostAddress" :sort-orders="sortOrders" align="center" width="220" show-overflow-tooltip />
       <el-table-column label="老人工作" prop="job" :sort-orders="sortOrders" align="center" width="120" show-overflow-tooltip />
       <el-table-column label="最近更新时间" prop="updateTime" :sort-orders="sortOrders" align="center" width="170" show-overflow-tooltip />
       <el-table-column label="家属描述" prop="description" :sort-orders="sortOrders" align="left" show-overflow-tooltip />
@@ -92,9 +98,11 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :xl="6" :md="12" :sm="24">
+          <el-col :xl="24" :md="24" :sm="24">
             <el-form-item label="老人照片">
-              <img :src="'data:image/png;base64,'+ detail.models.photo" style="width: 300px;height: 300px">
+              <div v-for="(photo, index) in detail.models.photos" :key="index">
+                <img :src="'data:image/png;base64,'+ photo" style="width: 200px;height: 200px" alt="">
+              </div>
             </el-form-item>
           </el-col>
         </el-row>
@@ -219,7 +227,7 @@
       </el-form>
     </el-dialog>
 
-    <el-dialog v-loading="loading.update" custom-class="dialog-fullscreen dialog-update" :title="update.dialog.title" :visible.sync="update.dialog.visible" :modal="false" :modal-append-to-body="false" :close-on-click-modal="false">
+    <el-dialog v-loading="loading.update" custom-class="dialog-fullscreen dialog-update" :title="update.dialog.title" :visible.sync="update.dialog.visible" :modal="false" :modal-append-to-body="false" :close-on-click-modal="false" :before-close="handleUpdateClose">
       <el-form ref="formUpdate" :rules="update.rules" :model="update.models" label-position="right" :label-width="update.dialog.labelWidth">
         <el-row>
           <el-col :xl="5" :lg="8" :md="10" :sm="18" :xs="24">
@@ -362,7 +370,6 @@
                 list-type="picture"
                 action=""
                 accept=".jpg, .png"
-                :limit="1"
                 :auto-upload="false"
                 :file-list="fileList"
                 :on-change="getFile"
@@ -370,7 +377,7 @@
                 :on-remove="handleUploadRemove"
               >
                 <el-button size="small" type="primary">选择图片上传</el-button>
-                <div slot="tip" class="el-upload__tip">只能上传一张jpg/png文件</div>
+                <div slot="tip" class="el-upload__tip">只能上传jpg/png格式的文件</div>
               </el-upload>
               <el-dialog :visible.sync="dialogVisible" append-to-body>
                 <img width="100%" :src="dialogImageUrl" alt>
@@ -387,7 +394,7 @@
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="update.dialog.visible = false">取消</el-button>
+        <el-button @click="update.dialog.visible = false;fileList = []">取消</el-button>
         <el-button type="primary" @click="updateData()">提交</el-button>
       </div>
     </el-dialog>
@@ -457,7 +464,7 @@ export default {
       sort: { prop: 'sort', order: 'ascending' },
       detail: {
         dialog: { title: '详细信息', visible: false, labelWidth: '120px' },
-        models: { name: null, province: null, city: null, area: null, gender: null, lostLng: 0, lostLat: 0, age: null, height: null, lostTime: null, lostAddress: null, look: null, job: null, idCard: null, description: null, createTime: null, updateTime: null, remark: null, photo: null }
+        models: { name: null, province: null, city: null, area: null, gender: null, lostLng: 0, lostLat: 0, age: null, height: null, lostTime: null, lostAddress: null, look: null, job: null, idCard: null, description: null, createTime: null, updateTime: null, remark: null, photos: [] }
       },
       relativeDetail: {
         dialog: { title: '家属信息', visible: false, labelWidth: '120px' },
@@ -481,7 +488,7 @@ export default {
           idCard: null,
           description: null,
           look: null,
-          photo: '',
+          photos: [],
           relatives: [
             { name: null, gender: null, phoneNumber: null, relationship: null, remark: null }
           ]
@@ -545,6 +552,9 @@ export default {
       this.center.lat = this.detail.models.lostLat
       this.center.lng = this.detail.models.lostLng
       this.markers.splice(0, 1, temp)
+      elderly.getPhoto(row.id).then(responses => {
+        this.detail.models['photos'] = responses.data
+      })
       this.loading.detail = true
       this.detail.dialog.visible = true
       this.loading.detail = false
@@ -570,11 +580,16 @@ export default {
       this.selectedUpdataOptions.push(TextToCode[this.update.models.province][this.update.models.city].code)
       this.selectedUpdataOptions.push(TextToCode[this.update.models.province][this.update.models.city][this.update.models.area].code)
       // this.dialogImageUrl = 'data:image/png;base64,' + this.update.models.photo
+      elderly.getPhoto(row.id).then(responses => {
+        this.update.models['photos'] = responses.data
+        if (this.fileList.length === 0) {
+          for (var i in this.update.models.photos) {
+            this.fileList.push({ name: this.update.models.name + '老人图片.png', url: 'data:image/png;base64,' + this.update.models.photos[i] })
+          }
+        }
+      }).catch(reject => {
+      })
 
-      // this.dialogVisible = true
-      if (this.fileList.length === 0) {
-        this.fileList.push({ name: this.update.models.name + '老人图片.png', url: 'data:image/png;base64,' + this.update.models.photo })
-      }
       const temp = { lng: 0, lat: 0, showFlag: false }
       temp.lat = this.update.models.lostLat
       temp.lng = this.update.models.lostLng
@@ -649,16 +664,36 @@ export default {
       this.detialBMap = BMap
     },
     getFile(file, fileList) {
+      console.log(file)
+      console.log(fileList)
       this.getBase64(file.raw).then(res => {
         const params = res.split(',')
         console.log(params, 'params')
         if (params.length > 0) {
-          this.update.models.photo = params[1]
+          this.update.models.photos.push(params[1])
+        }
+      })
+    },
+    // 获取图片转base64
+    getBase64(file) {
+      return new Promise(function(resolve, reject) {
+        const reader = new FileReader()
+        let imgResult = ''
+        reader.readAsDataURL(file)
+        reader.onload = function() {
+          imgResult = reader.result
+        }
+        reader.onerror = function(error) {
+          reject(error)
+        }
+        reader.onloadend = function() {
+          resolve(imgResult)
         }
       })
     },
     handleUploadRemove(file, fileList) {
-      this.update.models.photo = ''
+      const t = fileList.indexOf(file)
+      this.update.models.photos.splice(t, 1)
     },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url
@@ -692,6 +727,10 @@ export default {
       })
       this.update.models.lostLat = e.point.lat
       this.update.models.lostLng = e.point.lng
+    },
+    handleUpdateClose(done) {
+      this.fileList = []
+      done()
     }
   }
 }
@@ -701,7 +740,7 @@ export default {
 .mapSmall {
   width: 600px;
   height: 300px;
-  margin-left: 0px;
+  /*margin-left: 0px;*/
   margin-top: 6px;
   margin-bottom: 6px;
   border: 2px dashed #ccc;
