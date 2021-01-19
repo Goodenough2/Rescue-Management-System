@@ -549,11 +549,12 @@ export default {
       this.center.lng = this.detail.models.lostLng
       this.markers.splice(0, 1, temp)
       elderly.getPhoto(row.id).then(responses => {
+        this.loading.detail = true
         this.detail.models['photos'] = responses.data
+        this.loading.detail = false
+        console.log(this.detail.models.photos)
       })
-      this.loading.detail = true
       this.detail.dialog.visible = true
-      this.loading.detail = false
     },
     handleRelative(row) {
       this.loading.relativeDetail = true
