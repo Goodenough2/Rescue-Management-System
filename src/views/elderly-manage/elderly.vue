@@ -257,6 +257,7 @@
                 type="datetime"
                 placeholder="选择日期时间"
                 align="right"
+                value-format="yyyy-MM-dd HH:mm:ss"
                 :picker-options="pickerOptions"
               />
             </el-form-item>
@@ -576,6 +577,7 @@ export default {
       this.selectedUpdataOptions.push(TextToCode[this.update.models.province][this.update.models.city][this.update.models.area].code)
       // this.dialogImageUrl = 'data:image/png;base64,' + this.update.models.photo
       this.fileList = []
+      // this.update.models.lostTime = new Date(this.update.models.lostTime).toISOString()// 2016-06-26T16:00:00.000Z
       elderly.getPhoto(row.id).then(responses => {
         this.update.models['photos'] = responses.data
         for (var i in this.update.models.photos) {

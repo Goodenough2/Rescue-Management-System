@@ -29,6 +29,7 @@
               type="datetime"
               placeholder="选择日期时间"
               align="right"
+              value-format="yyyy-MM-dd HH:mm:ss"
               :picker-options="pickerOptions"
             />
           </el-form-item>
