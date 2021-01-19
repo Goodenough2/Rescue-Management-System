@@ -364,8 +364,8 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :xl="6" :lg="10" :md="115" :sm="18" :xs="24">
-            <el-form-item label="老人照片上传" prop="photo">
+          <el-col :xl="6" :lg="10" :md="15" :sm="18" :xs="24">
+            <el-form-item label="老人照片上传" prop="photos">
               <el-upload
                 list-type="picture"
                 action=""
@@ -503,7 +503,7 @@ export default {
           address: setRule('户籍地址', [{ required: true }]),
           lostAddress: setRule('走失时的详细地址', [{ required: true }]),
           lostLng: setRule('走失位置', [{ selected: true }]),
-          photo: setRule('上传老人图片', [{ selected: true }]),
+          // photos: setRule('上传老人图片', [{ required: true }]),
           idCard: setRule('身份证号', [{ required: true }])
         }
       },
@@ -544,11 +544,6 @@ export default {
       const temp = { lng: 0, lat: 0 }
       temp.lat = this.detail.models.lostLat
       temp.lng = this.detail.models.lostLng
-      // if (this.detialmap != null) {
-      //   // console.log("ssssss")
-      //   const point = new this.detialBMap.Point(this.detail.models.lostLng, this.detail.models.lostLat)
-      //   this.detialmap.setCenterAndZoom(point, 13)
-      // }
       this.center.lat = this.detail.models.lostLat
       this.center.lng = this.detail.models.lostLng
       this.markers.splice(0, 1, temp)
@@ -580,12 +575,11 @@ export default {
       this.selectedUpdataOptions.push(TextToCode[this.update.models.province][this.update.models.city].code)
       this.selectedUpdataOptions.push(TextToCode[this.update.models.province][this.update.models.city][this.update.models.area].code)
       // this.dialogImageUrl = 'data:image/png;base64,' + this.update.models.photo
+      this.fileList = []
       elderly.getPhoto(row.id).then(responses => {
         this.update.models['photos'] = responses.data
-        if (this.fileList.length === 0) {
-          for (var i in this.update.models.photos) {
-            this.fileList.push({ name: this.update.models.name + '老人图片.png', url: 'data:image/png;base64,' + this.update.models.photos[i] })
-          }
+        for (var i in this.update.models.photos) {
+          this.fileList.push({ name: this.update.models.name + '老人图片.png', url: 'data:image/png;base64,' + this.update.models.photos[i] })
         }
       }).catch(reject => {
       })
@@ -597,14 +591,18 @@ export default {
       this.center.lng = this.update.models.lostLng
       this.markers.splice(0, 1, temp)
       this.infoWindow.contents = '地址：' + this.update.models.lostAddress
-      this.update.dialog.visible = true
       this.loading.update = true
+      this.update.dialog.visible = true
       this.loading.update = false
-      // this.$nextTick(() => {
-      //   this.$refs['formUpdate'].clearValidate()
-      // })
+      this.$nextTick(() => {
+        this.$refs['formUpdate'].clearValidate()
+      })
     },
     updateData() {
+      if (this.update.models.photos.length === 0) {
+        this.$message({ type: 'warning', message: '请上传至少一张走失人员图片', duration: 4000 })
+        return false
+      }
       this.$refs['formUpdate'].validate((valid) => {
         if (!valid) return false
         const tempData = Object.assign({}, this.update.models)
@@ -733,15 +731,15 @@ export default {
       done()
     },
     addDomain() {
-      this.create.models.relatives.push(
+      this.update.models.relatives.push(
         { name: null, gender: null, phoneNumber: null, relationship: null, remark: null }
       )
     },
     removeDomain(item) {
-      if (this.create.models.relatives.length > 1) {
-        var index = this.create.models.relatives.indexOf(item)
+      if (this.update.models.relatives.length > 1) {
+        var index = this.update.models.relatives.indexOf(item)
         if (index !== -1) {
-          this.create.models.relatives.splice(index, 1)
+          this.update.models.relatives.splice(index, 1)
         }
       }
     }

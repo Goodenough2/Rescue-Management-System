@@ -139,7 +139,7 @@
       </el-row>
       <el-row>
         <el-col :xl="6" :lg="10" :md="115" :sm="18" :xs="24">
-          <el-form-item label="老人照片上传" prop="photo">
+          <el-form-item label="老人照片上传" prop="photos">
             <el-upload
               list-type="picture"
               action=""
