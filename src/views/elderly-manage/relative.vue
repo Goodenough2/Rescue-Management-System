@@ -29,6 +29,7 @@
       <el-table-column label="电话号码" prop="phoneNumber" :sort-orders="sortOrders" align="center" width="150" show-overflow-tooltip />
       <el-table-column label="与老人关系" prop="relationship" :sort-orders="sortOrders" align="center" width="150" show-overflow-tooltip />
       <el-table-column label="所属老人" prop="elderlyName" :sort-orders="sortOrders" align="center" width="150" show-overflow-tooltip />
+      <el-table-column label="老人身份证号" prop="elderlyIdCard" :sort-orders="sortOrders" align="center" width="200" show-overflow-tooltip />
       <el-table-column label="家属备注" prop="remark" :sort-orders="sortOrders" align="left" show-overflow-tooltip />
       <el-table-column fixed="right" label="操作" align="center" width="180">
         <template slot-scope="{row}">
@@ -80,8 +81,15 @@
         </el-row>
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="所属老人姓名">
+            <el-form-item label="老人姓名">
               {{ detail.models.elderlyName }}
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :xl="6" :md="12" :sm="24">
+            <el-form-item label="老人身份证号">
+              {{ detail.models.elderlyIdCard }}
             </el-form-item>
           </el-col>
         </el-row>
@@ -99,31 +107,31 @@
       <el-form ref="formCreate" :rules="create.rules" :model="create.models" label-position="right" :label-width="create.dialog.labelWidth">
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="用户角色" prop="roleId">
-              <el-select v-model="create.models.roleId" clearable>
-                <el-option v-for="item in roles" :key="item.id" :label="item.name" :value="item.id" />
+            <el-form-item label="姓名" prop="elderlyId">
+              <el-select v-model="create.models.elderlyId" clearable filterable>
+                <el-option v-for="item in elderlies" :key="item.id" :label="item.name" :value="item.id" />
               </el-select>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="用户名" prop="username">
-              <el-input v-model="create.models.username" />   <!-- 在这里做了修改 -->
+            <el-form-item label="性别" prop="gender">
+              <el-input v-model="create.models.gender" />   <!-- 在这里做了修改 -->
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="密码" prop="password">
-              <el-input v-model="create.models.password" show-password />   <!-- 在这里做了修改 -->
+            <el-form-item label="电话号码" prop="phoneNumber">
+              <el-input v-model="create.models.phoneNumber" />   <!-- 在这里做了修改 -->
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="用户工号" prop="code">
-              <el-input v-model="create.models.code" type="number" />
+            <el-form-item label="与老人关系" prop="relationship">
+              <el-input v-model="create.models.relationship"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -145,37 +153,37 @@
       <el-form ref="formEdit" :rules="update.rules" :model="update.models" label-position="right" :label-width="update.dialog.labelWidth">
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="用户角色" prop="roleId">
-              <el-select v-model="update.models.roleId" clearable>
-                <el-option v-for="item in roles" :key="item.id" :label="item.name" :value="item.id" />
+            <el-form-item label="姓名" prop="elderlyId">
+              <el-select v-model="update.models.elderlyId" clearable filterable>
+                <el-option v-for="item in elderlies" :key="item.id" :label="item.name" :value="item.id" />
               </el-select>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="用户名" prop="username">
-              <el-input v-model="update.models.username" />
+            <el-form-item label="性别" prop="name">
+              <el-input v-model="update.models.name" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="密码" prop="password">
-              <el-input v-model="update.models.password" />
+            <el-form-item label="电话号码" prop="phoneNumber">
+              <el-input v-model="update.models.phoneNumber" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="用户工号" prop="code">
-              <el-input v-model="update.models.code" />
+            <el-form-item label="与老人关系" prop="relationship">
+              <el-input v-model="update.models.relationship" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :sl="24">
-            <el-form-item label="备注" prop="remark">
+            <el-form-item label="老人姓名" prop="remark">
               <el-input v-model="update.models.remark" type="textarea" />
             </el-form-item>
           </el-col>
@@ -193,46 +201,45 @@
 import adaptive from '@/directive/el-table'
 import setRule from '@/utils/form-validate'
 import Pagination from '@/components/Pagination'
-import * as user from '@/api/system-manage/user'
-import * as role from '@/api/system-manage/role'
 import * as relative from '@/api/elderly-manage/relative'
+import * as elderly from '@/api/elderly-manage/elderly'
 
 export default {
-  name: 'Account',
+  name: 'Relative',
   components: { Pagination },
   directives: { adaptive },
   data() {
     return {
-      access: this.$store.getters.access['SystemManage']['Account'],
+      access: this.$store.getters.access['ElderlyManage']['Relative'],
       datas: null,
-      roles: null,
+      elderlies: null,
       query: { name: null, gender: null, elderlyName: null },
       page: { total: 0, current: 1, size: 20 },
       sort: { prop: 'sort', order: 'ascending' },
       detail: {
-        dialog: { title: '家属信息', visible: false, labelWidth: '120px' },
-        models: { name: null, gender: null, phoneNumber: null, relationship: null, elderlyId: null, elderlyName: null, remark: null }
+        dialog: { title: '亲属信息', visible: false, labelWidth: '120px' },
+        models: { name: null, gender: null, phoneNumber: null, relationship: null, elderlyId: null, elderlyName: null, remark: null, elderlyIdCard: null }
       },
       create: {
-        dialog: { title: '添加用户', visible: false, labelWidth: '120px' },
-        models: { username: null, password: null, roleId: null, code: null, remark: null },
+        dialog: { title: '添加亲属', visible: false, labelWidth: '120px' },
+        models: { name: null, gender: null, phoneNumber: null, relationship: null, elderlyId: null, elderlyName: null, remark: null, elderlyIdCard: null },
         rules: {
-          username: setRule('用户名', [{ required: true }, { length: [0, 50] }]),
-          password: setRule('密码', [{ required: true }, { length: [0, 10] }]),
-          roleId: setRule('用户角色', [{ required: true }]),
-          code: setRule('用户工号', [{ required: true }, { length: [0, 50] }]),
-          remark: setRule(' ', [{ length: [0, 255] }])
+          name: setRule('姓名', [{ required: true }]),
+          gender: setRule('性别', [{ selected: true }]),
+          phoneNumber: setRule('电话号码', [{ required: true }]),
+          relationship: setRule('关系', [{ required: true }]),
+          elderlyId: setRule('老人姓名', [{ selected: true }])
         }
       },
       update: {
-        dialog: { title: '编辑角色信息', visible: false, labelWidth: '120px' },
-        models: { username: null, password: null, roleId: null, code: null, state: null, remark: null },
+        dialog: { title: '编辑亲属信息', visible: false, labelWidth: '120px' },
+        models: { name: null, gender: null, phoneNumber: null, relationship: null, elderlyId: null, elderlyName: null, remark: null, elderlyIdCard: null },
         rules: {
-          username: setRule('用户名', [{ required: true }, { length: [0, 50] }]),
-          password: setRule('密码', [{ required: true }, { length: [0, 10] }]),
-          roleId: setRule('用户角色', [{ required: true }]),
-          code: setRule('用户工号', [{ required: true }, { length: [0, 50] }]),
-          remark: setRule('备注', [{ length: [0, 255] }])
+          name: setRule('姓名', [{ required: true }]),
+          gender: setRule('性别', [{ selected: true }]),
+          phoneNumber: setRule('电话号码', [{ required: true }]),
+          relationship: setRule('关系', [{ required: true }]),
+          elderlyId: setRule('老人姓名', [{ selected: true }])
         }
       },
       loading: { list: true, export: false, detail: false, update: false },
@@ -241,8 +248,7 @@ export default {
   },
   created() {
     this.getDatas()
-    this.getRoles()
-    // this.getAccess()
+    this.getElderly()
   },
   methods: {
     getDatas() {
@@ -254,23 +260,13 @@ export default {
       }).catch(reject => {
         this.loading.list = false
       })
-      // var j = relative.getList(this.query, this.page, this.sort)
-      // this.datas = j.data.items
-      // this.page.total = j.data.total
-      // this.loading.list = false
     },
-    getRoles() {
-      role.getlist().then(response => {
-        this.roles = response.data
+    getElderly() {
+      elderly.getlist().then(response => {
+        this.elderlies = response.data
       }).catch(reject => {
       })
     },
-    // getAccess() {
-    //   user.getAccess().then(response => {
-    //     console.log('access', response.data)
-    //   }).catch(reject => {
-    //   })
-    // },
     handleQuery() {
       this.page.current = 1
       this.getDatas()
@@ -284,13 +280,6 @@ export default {
       // 若列表数据展示了全部属性，则可直接拷贝列表数据
       this.detail.models = Object.assign({}, row)
       this.detail.dialog.visible = true
-      // this.loading.detail = true
-      // role.get(row.id).then(response => {
-      //   this.detail.models = response.data
-      //   this.loading.detail = false
-      // }).catch(reject => {
-      //   this.loading.detail = false
-      // })
     },
     handleCreate() {
       this.create.dialog.visible = true
@@ -298,10 +287,10 @@ export default {
     createData() {
       this.$refs['formCreate'].validate((valid) => {
         if (!valid) return false
-        user.create(this.create.models).then(response => {
+        relative.create(this.create.models).then(response => {
           // 为方便连续添加，create对话框不关闭
           // 需要清空的表单，手动清空，至少清空一个必填项，防止点击两遍
-          this.create.models.username = '' // 这里做了修改
+          this.create.models.name = '' // 这里做了修改
           // 重新获取数据
           this.getDatas()
         }).catch(reject => {
@@ -312,13 +301,6 @@ export default {
       // 若列表数据展示了全部属性，则可直接拷贝列表数据用于编辑
       this.update.models = Object.assign({}, row)
       this.update.dialog.visible = true
-      // this.loading.update = true
-      // role.get(row.id).then(response => {
-      //   this.update.models = response.data
-      //   this.loading.update = false
-      // }).catch(reject => {
-      //   this.loading.update = false
-      // })
       this.$nextTick(() => {
         this.$refs['formEdit'].clearValidate()
       })
@@ -327,7 +309,7 @@ export default {
       this.$refs['formEdit'].validate((valid) => {
         if (!valid) return false
         const tempData = Object.assign({}, this.update.models)
-        user.update(tempData).then(response => {
+        relative.update(tempData).then(response => {
           // 重新获取数据
           this.getDatas()
           this.update.dialog.visible = false
@@ -355,7 +337,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        user.del(ids).then(response => {
+        relative.del(ids).then(response => {
           // 重新获取数据
           this.getDatas()
         }).catch(reject => {

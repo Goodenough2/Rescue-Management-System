@@ -525,10 +525,6 @@ export default {
       }).catch(reject => {
         this.loading.list = false
       })
-      // var j = elderly.getList(this.query, this.page, this.sort)
-      // this.datas = j.data.items
-      // this.page.total = j.data.total
-      // this.loading.list = false
     },
     handleQuery() {
       this.page.current = 1

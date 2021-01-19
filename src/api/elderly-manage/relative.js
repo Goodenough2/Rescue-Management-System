@@ -28,7 +28,7 @@ export function get(id) {
 // 根据当前用户所有权限数据
 export function getAllAccess() {
   return request({
-    url: '/role/access',
+    url: '/relative/access',
     method: 'get'
   })
 }
@@ -36,7 +36,7 @@ export function getAllAccess() {
 // 根据当前用户所有权限数据
 export function getAccess(id) {
   return request({
-    url: `/role/${id}/access`,
+    url: `/relative/${id}/access`,
     method: 'get'
   })
 }
@@ -44,7 +44,7 @@ export function getAccess(id) {
 // 获得下拉列表的数据
 export function getlist() {
   return request({
-    url: '/role/selectList',
+    url: '/relative/selectList',
     method: 'get'
   })
 }
@@ -52,20 +52,16 @@ export function getlist() {
 // 添加数据
 export function create(data) {
   return request({
-    url: '/elderly/create',
+    url: '/relative/create',
     method: 'post',
-    data: {
-      elderly: data,
-      photo: data.photo,
-      relatives: data.relatives
-    }
+    data
   })
 }
 
 // 更新数据
 export function update(data) {
   return request({
-    url: '/role/update',
+    url: '/relative/update',
     method: 'put',
     data
   })
@@ -74,7 +70,7 @@ export function update(data) {
 // 删除、批量删除数据
 export function del(data) {
   return request({
-    url: '/role/delete',
+    url: '/relative/delete',
     method: 'delete',
     data: data
   })
