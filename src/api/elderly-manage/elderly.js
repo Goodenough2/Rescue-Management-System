@@ -84,7 +84,8 @@ export function update(data) {
     method: 'put',
     data: {
       elderly: data,
-      photos: data.photos
+      photos: data.photos,
+      relatives: data.relatives
     }
   })
 }
