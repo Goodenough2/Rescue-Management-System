@@ -1,0 +1,22 @@
+{
+  "code": 20000,
+  "data": {
+    "total": 1,
+    "items": [
+      {
+        "id": "002395dba148b4cedeee8b35",
+        "name": "张三",
+        "gender": 1,
+        "age": 35,
+        "phoneNumber": "13905468547",
+        "transportationType": 0,
+        "canGo": 1,
+        "userId": "971a37c1dc9e4324a87841b1e1e21d24",
+        "userName": "cyb010526",
+        "userCode": "C001",
+        "groupId": "",
+        "remark": "暂无"
+      }
+    ]
+  }
+}

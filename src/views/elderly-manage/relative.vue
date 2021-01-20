@@ -22,8 +22,8 @@
       <el-table-column label="姓名" prop="name" :sort-orders="sortOrders" align="center" width="100" show-overflow-tooltip />
       <el-table-column label="性别" prop="gender" :sort-orders="sortOrders" align="center" width="70" show-overflow-tooltip>
         <template slot-scope="{row}">
-          <span v-if="row.gender === 0">女</span>
-          <span v-if="row.gender === 1">男</span>
+          <span v-if="row.gender == 0">女</span>
+          <span v-if="row.gender == 1">男</span>
         </template>
       </el-table-column>
       <el-table-column label="电话号码" prop="phoneNumber" :sort-orders="sortOrders" align="center" width="150" show-overflow-tooltip />
@@ -107,17 +107,18 @@
       <el-form ref="formCreate" :rules="create.rules" :model="create.models" label-position="right" :label-width="create.dialog.labelWidth">
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="姓名" prop="elderlyId">
-              <el-select v-model="create.models.elderlyId" clearable filterable>
-                <el-option v-for="item in elderlies" :key="item.id" :label="item.name" :value="item.id" />
-              </el-select>
+            <el-form-item label="亲属姓名" prop="name">
+              <el-input v-model="create.models.name" />   <!-- 在这里做了修改 -->
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
             <el-form-item label="性别" prop="gender">
-              <el-input v-model="create.models.gender" />   <!-- 在这里做了修改 -->
+              <el-select v-model="create.models.gender">
+                <el-option label="女" value="0" />
+                <el-option label="男" value="1" />
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -130,8 +131,17 @@
         </el-row>
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
+            <el-form-item label="老人姓名" prop="elderlyId">
+              <el-select v-model="create.models.elderlyId" clearable filterable>
+                <el-option v-for="item in elderlies" :key="item.id" :label="item.name" :value="item.id" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :xl="6" :md="12" :sm="24">
             <el-form-item label="与老人关系" prop="relationship">
-              <el-input v-model="create.models.relationship"/>
+              <el-input v-model="create.models.relationship" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -153,17 +163,26 @@
       <el-form ref="formEdit" :rules="update.rules" :model="update.models" label-position="right" :label-width="update.dialog.labelWidth">
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="姓名" prop="elderlyId">
-              <el-select v-model="update.models.elderlyId" clearable filterable>
-                <el-option v-for="item in elderlies" :key="item.id" :label="item.name" :value="item.id" />
-              </el-select>
+            <el-form-item label="亲属姓名" prop="name">
+              <el-input v-model="update.models.name" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :xl="6" :md="12" :sm="24">
+            <el-form-item label="电话号码" prop="phoneNumber">
+              <el-input v-model="update.models.phoneNumber" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="性别" prop="name">
-              <el-input v-model="update.models.name" />
+            <el-form-item label="性别" prop="gender">
+              <el-select v-model="update.models.gender">
+                <el-option label="女" value="0" />
+                <el-option label="男" value="1" />
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -176,6 +195,15 @@
         </el-row>
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
+            <el-form-item label="老人姓名" prop="elderlyId">
+              <el-select v-model="update.models.elderlyId" clearable filterable>
+                <el-option v-for="item in elderlies" :key="item.id" :label="item.name" :value="item.id" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :xl="6" :md="12" :sm="24">
             <el-form-item label="与老人关系" prop="relationship">
               <el-input v-model="update.models.relationship" />
             </el-form-item>
@@ -183,7 +211,7 @@
         </el-row>
         <el-row>
           <el-col :sl="24">
-            <el-form-item label="老人姓名" prop="remark">
+            <el-form-item label="备注" prop="remark">
               <el-input v-model="update.models.remark" type="textarea" />
             </el-form-item>
           </el-col>
@@ -283,6 +311,7 @@ export default {
     },
     handleCreate() {
       this.create.dialog.visible = true
+      this.create.models.gender = this.create.models.gender.toString()
     },
     createData() {
       this.$refs['formCreate'].validate((valid) => {
@@ -300,6 +329,7 @@ export default {
     handleUpdate(row) {
       // 若列表数据展示了全部属性，则可直接拷贝列表数据用于编辑
       this.update.models = Object.assign({}, row)
+      this.update.models.gender = this.update.models.gender.toString()
       this.update.dialog.visible = true
       this.$nextTick(() => {
         this.$refs['formEdit'].clearValidate()
