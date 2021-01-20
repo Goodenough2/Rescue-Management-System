@@ -1,19 +1,26 @@
 {
   "code": 20000,
   "data": {
-    "total": 2,
+    "total": 1,
     "items": [
       {
         "id": "002395dba148b4cedeee8b35",
-        "name": "新城桥派出所",
-        "province": "江苏省",
-        "city": "南通市",
-        "area": "崇川区",
-        "address": "虹桥路10号",
-        "lng": 120.885254,
-        "lat": 32.004528,
-        "telephone": "(0513)85513542",
-        "remark": ""
+        "code": "C001",
+        "name": "小分队1",
+        "missionId": "",
+        "remark": "南通大学红十字会分队",
+        "members": [
+          {
+            "id": "002395dba148b4cedeee8b35",
+            "name": "张三",
+            "phoneNumber": "13925846857"
+          },
+          {
+            "id": "002395dba148b4cedeee8b35",
+            "name": "李四",
+            "phoneNumber": "13925846857"
+          }
+        ]
       }
     ]
   }

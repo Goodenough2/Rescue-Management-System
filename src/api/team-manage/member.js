@@ -1,4 +1,4 @@
-// 走失人员管理api接口
+// 队员管理api接口
 import request from '@/utils/request'
 
 // 获取列表数据（查询、翻页）

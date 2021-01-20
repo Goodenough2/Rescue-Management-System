@@ -1,10 +1,10 @@
-// 走失人员管理api接口
+// 团队管理api接口
 import request from '@/utils/request'
 
 // 获取列表数据（查询、翻页）
 export function getList(query, page, sort) {
   return request({
-    url: '/elderly/list',
+    url: '/group/list',
     method: 'post',
     data: {
       page: { current: page.current, size: page.size },
@@ -12,7 +12,7 @@ export function getList(query, page, sort) {
       query: { ...query }
     }
   })
-  // const geoData = require('@/static/test/elderly.json')
+  // const geoData = require('@/static/test/team.json')
   // console.log(geoData.data)
   // return geoData
 }
@@ -20,14 +20,14 @@ export function getList(query, page, sort) {
 // 根据id获取数据
 export function get(id) {
   return request({
-    url: `/role/${id}/detail`,
+    url: `/group/${id}/detail`,
     method: 'get'
   })
 }
 // 根据id获取亲属信息
 export function getRelative(id) {
   return request({
-    url: `/elderly/getRelatives/${id}`,
+    url: `/group/getRelatives/${id}`,
     method: 'get'
   })
 }
@@ -35,23 +35,7 @@ export function getRelative(id) {
 // 根据id获取图片
 export function getPhoto(id) {
   return request({
-    url: `/elderly/getPhotos/${id}`,
-    method: 'get'
-  })
-}
-
-// 根据当前用户所有权限数据
-export function getAllAccess() {
-  return request({
-    url: '/elderly/access',
-    method: 'get'
-  })
-}
-
-// 根据当前用户所有权限数据
-export function getAccess(id) {
-  return request({
-    url: `/elderly/${id}/access`,
+    url: `/group/getPhotos/${id}`,
     method: 'get'
   })
 }
@@ -59,7 +43,7 @@ export function getAccess(id) {
 // 获得下拉列表的数据
 export function getlist() {
   return request({
-    url: '/elderly/selectList',
+    url: '/group/selectList',
     method: 'get'
   })
 }
@@ -67,33 +51,25 @@ export function getlist() {
 // 添加数据
 export function create(data) {
   return request({
-    url: '/elderly/create',
+    url: '/group/create',
     method: 'post',
-    data: {
-      elderly: data,
-      photos: data.photos,
-      relatives: data.relatives
-    }
+    data
   })
 }
 
 // 更新数据
 export function update(data) {
   return request({
-    url: '/elderly/update',
+    url: '/group/update',
     method: 'put',
-    data: {
-      elderly: data,
-      photos: data.photos,
-      relatives: data.relatives
-    }
+    data
   })
 }
 
 // 删除、批量删除数据
 export function del(data) {
   return request({
-    url: '/elderly/delete',
+    url: '/group/delete',
     method: 'delete',
     data: data
   })
