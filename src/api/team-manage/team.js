@@ -53,7 +53,10 @@ export function create(data) {
   return request({
     url: '/group/create',
     method: 'post',
-    data
+    data: {
+      group: data,
+      members: data.members
+    }
   })
 }
 
@@ -62,7 +65,10 @@ export function update(data) {
   return request({
     url: '/group/update',
     method: 'put',
-    data
+    data: {
+      group: data,
+      members: data.members
+    }
   })
 }
 
