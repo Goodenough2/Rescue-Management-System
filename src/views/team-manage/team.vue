@@ -1,7 +1,7 @@
 <template>
   <div class="app-container list">
     <div class="toolbar">
-      <el-input v-model.trim="query.userCode" class="query-item" style="width: 120px" placeholder="团队编号" clearable @clear="handleQuery" />
+      <el-input v-model.trim="query.code" class="query-item" style="width: 120px" placeholder="团队编号" clearable @clear="handleQuery" />
       <el-input v-model.trim="query.name" class="query-item" style="width: 120px" placeholder="团队名称" clearable @clear="handleQuery" />
       <el-button class="tool tool-query" type="primary" icon="el-icon-search" @click="handleQuery">查询</el-button>
       <el-button v-if="access.create.allow" class="tool tool-create" type="primary" icon="el-icon-edit" @click="handleCreate">添加</el-button>

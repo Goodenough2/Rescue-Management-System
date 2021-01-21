@@ -1,7 +1,7 @@
 <template>
   <div class="app-container list">
     <div class="toolbar">
-      <el-input v-model.trim="query.code" class="query-item" style="width: 120px" placeholder="工号" clearable @clear="handleQuery" />
+      <el-input v-model.trim="query.userCode" class="query-item" style="width: 120px" placeholder="工号" clearable @clear="handleQuery" />
       <el-input v-model.trim="query.name" class="query-item" style="width: 120px" placeholder="姓名" clearable @clear="handleQuery" />
       <el-select v-model="query.gender" class="query-item" style="width:120px" placeholder="性别" clearable @clear="handleQuery">
         <el-option label="女" value="0" />
@@ -28,7 +28,7 @@
           <span>{{ (page.current - 1) * page.size + scope.$index + 1 }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="工号" prop="code" :sort-orders="sortOrders" align="center" width="100" show-overflow-tooltip />
+      <el-table-column label="工号" prop="userCode" :sort-orders="sortOrders" align="center" width="100" show-overflow-tooltip />
       <el-table-column label="姓名" prop="name" :sort-orders="sortOrders" align="center" width="100" show-overflow-tooltip />
       <el-table-column label="性别" prop="gender" :sort-orders="sortOrders" align="center" width="70" show-overflow-tooltip>
         <template slot-scope="{row}">
@@ -47,8 +47,8 @@
       </el-table-column>
       <el-table-column label="能否执行任务" prop="canGo" :sort-orders="sortOrders" align="center" width="150" show-overflow-tooltip>
         <template slot-scope="{row}">
-          <span v-if="row.canGo == 0">不能执行</span>
-          <span v-if="row.canGo == 1">可以执行</span>
+          <span v-if="row.canGo == true">可以执行</span>
+          <span v-if="row.canGo == false">不能执行</span>
         </template>
       </el-table-column>
       <el-table-column label="绑定用户名" prop="username" :sort-orders="sortOrders" align="center" width="150" show-overflow-tooltip />
@@ -75,7 +75,7 @@
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
             <el-form-item label="工号">
-              {{ detail.models.code }}
+              {{ detail.models.userCode }}
             </el-form-item>
           </el-col>
         </el-row>
@@ -147,7 +147,7 @@
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
             <el-form-item label="年龄" prop="age">
-              <el-input v-model="create.models.age" type="number"/>
+              <el-input v-model="create.models.age" type="number" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -191,7 +191,7 @@
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
             <el-form-item label="能否执行任务" prop="canGo">
-              <el-switch v-model="create.models.canGo" :active-value="1" :inactive-value="0" />
+              <el-switch v-model="create.models.canGo" :active-value="true" :inactive-value="false" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -265,7 +265,7 @@
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
             <el-form-item label="能否执行任务" prop="canGo">
-              <el-switch v-model="update.models.canGo" :active-value="1" :inactive-value="0" />
+              <el-switch v-model="update.models.canGo" :active-value="true" :inactive-value="false" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -301,16 +301,16 @@ export default {
       access: this.$store.getters.access['TeamManage']['Member'],
       datas: null,
       users: null,
-      query: { name: null, gender: null, code: null, canGo: null, transportationType: null },
+      query: { name: null, gender: null, userCode: null, canGo: null, transportationType: null },
       page: { total: 0, current: 1, size: 20 },
       sort: { prop: 'sort', order: 'ascending' },
       detail: {
         dialog: { title: '队员信息', visible: false, labelWidth: '120px' },
-        models: { name: null, gender: null, code: null, canGo: null, age: null, phoneNumber: null, userId: null, username: null, groupId: null, transportationType: null, remark: null }
+        models: { name: null, gender: null, userCode: null, canGo: null, age: null, phoneNumber: null, userId: null, username: null, groupId: null, transportationType: null, remark: null }
       },
       create: {
         dialog: { title: '添加队员', visible: false, labelWidth: '120px' },
-        models: { name: null, gender: null, code: null, canGo: null, age: null, phoneNumber: null, userId: null, username: null, groupId: null, transportationType: null, remark: null },
+        models: { name: null, gender: null, userCode: null, canGo: null, age: null, phoneNumber: null, userId: null, username: null, groupId: null, transportationType: null, remark: null },
         rules: {
           name: setRule('姓名', [{ required: true }]),
           gender: setRule('性别', [{ selected: true }]),
@@ -323,7 +323,7 @@ export default {
       },
       update: {
         dialog: { title: '编辑队员信息', visible: false, labelWidth: '120px' },
-        models: { name: null, gender: null, code: null, canGo: null, age: null, phoneNumber: null, userId: null, username: null, groupId: null, transportationType: null, remark: null },
+        models: { name: null, gender: null, userCode: null, canGo: null, age: null, phoneNumber: null, userId: null, username: null, groupId: null, transportationType: null, remark: null },
         rules: {
           name: setRule('姓名', [{ required: true }]),
           gender: setRule('性别', [{ selected: true }]),
@@ -378,7 +378,6 @@ export default {
     },
     handleCreate() {
       this.create.dialog.visible = true
-      this.create.models.gender = this.create.models.gender.toString()
     },
     createData() {
       this.$refs['formCreate'].validate((valid) => {

@@ -24,7 +24,7 @@ export function get(id) {
 // 获得下拉列表的数据
 export function getlist() {
   return request({
-    url: '/user/selectlist',
+    url: '/user/selectList',
     method: 'get'
   })
 }
