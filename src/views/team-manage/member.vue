@@ -1,7 +1,7 @@
 <template>
   <div class="app-container list">
     <div class="toolbar">
-      <el-input v-model.trim="query.userCode" class="query-item" style="width: 120px" placeholder="工号" clearable @clear="handleQuery" />
+      <el-input v-model.trim="query.code" class="query-item" style="width: 120px" placeholder="工号" clearable @clear="handleQuery" />
       <el-input v-model.trim="query.name" class="query-item" style="width: 120px" placeholder="姓名" clearable @clear="handleQuery" />
       <el-select v-model="query.gender" class="query-item" style="width:120px" placeholder="性别" clearable @clear="handleQuery">
         <el-option label="女" value="0" />
@@ -28,7 +28,7 @@
           <span>{{ (page.current - 1) * page.size + scope.$index + 1 }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="工号" prop="userCode" :sort-orders="sortOrders" align="center" width="100" show-overflow-tooltip />
+      <el-table-column label="工号" prop="code" :sort-orders="sortOrders" align="center" width="100" show-overflow-tooltip />
       <el-table-column label="姓名" prop="name" :sort-orders="sortOrders" align="center" width="100" show-overflow-tooltip />
       <el-table-column label="性别" prop="gender" :sort-orders="sortOrders" align="center" width="70" show-overflow-tooltip>
         <template slot-scope="{row}">
@@ -75,7 +75,7 @@
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
             <el-form-item label="工号">
-              {{ detail.models.userCode }}
+              {{ detail.models.code }}
             </el-form-item>
           </el-col>
         </el-row>
@@ -301,16 +301,16 @@ export default {
       access: this.$store.getters.access['TeamManage']['Member'],
       datas: null,
       users: null,
-      query: { name: null, gender: null, userCode: null, canGo: null, transportationType: null },
+      query: { name: null, gender: null, code: null, canGo: null, transportationType: null },
       page: { total: 0, current: 1, size: 20 },
       sort: { prop: 'sort', order: 'ascending' },
       detail: {
         dialog: { title: '队员信息', visible: false, labelWidth: '120px' },
-        models: { name: null, gender: null, userCode: null, canGo: null, age: null, phoneNumber: null, userId: null, userName: null, groupId: null, transportationType: null, remark: null }
+        models: { name: null, gender: null, code: null, canGo: null, age: null, phoneNumber: null, userId: null, userName: null, groupId: null, transportationType: null, remark: null }
       },
       create: {
         dialog: { title: '添加队员', visible: false, labelWidth: '120px' },
-        models: { name: null, gender: null, userCode: null, canGo: null, age: null, phoneNumber: null, userId: null, userName: null, groupId: null, transportationType: null, remark: null },
+        models: { name: null, gender: null, code: null, canGo: null, age: null, phoneNumber: null, userId: null, userName: null, groupId: null, transportationType: null, remark: null },
         rules: {
           name: setRule('姓名', [{ required: true }]),
           gender: setRule('性别', [{ selected: true }]),
@@ -323,7 +323,7 @@ export default {
       },
       update: {
         dialog: { title: '编辑队员信息', visible: false, labelWidth: '120px' },
-        models: { name: null, gender: null, userCode: null, canGo: null, age: null, phoneNumber: null, userId: null, userName: null, groupId: null, transportationType: null, remark: null },
+        models: { name: null, gender: null, code: null, canGo: null, age: null, phoneNumber: null, userId: null, userName: null, groupId: null, transportationType: null, remark: null },
         rules: {
           name: setRule('姓名', [{ required: true }]),
           gender: setRule('性别', [{ selected: true }]),
