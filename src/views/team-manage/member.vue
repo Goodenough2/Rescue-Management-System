@@ -51,7 +51,7 @@
           <span v-if="row.canGo == 1">可以执行</span>
         </template>
       </el-table-column>
-      <el-table-column label="绑定用户名" prop="userName" :sort-orders="sortOrders" align="center" width="150" show-overflow-tooltip />
+      <el-table-column label="绑定用户名" prop="username" :sort-orders="sortOrders" align="center" width="150" show-overflow-tooltip />
       <el-table-column label="备注" prop="remark" :sort-orders="sortOrders" align="left" show-overflow-tooltip />
       <el-table-column fixed="right" label="操作" align="center" width="180">
         <template slot-scope="{row}">
@@ -121,7 +121,7 @@
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
             <el-form-item label="用户名">
-              {{ detail.models.userName }}
+              {{ detail.models.username }}
             </el-form-item>
           </el-col>
         </el-row>
@@ -306,11 +306,11 @@ export default {
       sort: { prop: 'sort', order: 'ascending' },
       detail: {
         dialog: { title: '队员信息', visible: false, labelWidth: '120px' },
-        models: { name: null, gender: null, code: null, canGo: null, age: null, phoneNumber: null, userId: null, userName: null, groupId: null, transportationType: null, remark: null }
+        models: { name: null, gender: null, code: null, canGo: null, age: null, phoneNumber: null, userId: null, username: null, groupId: null, transportationType: null, remark: null }
       },
       create: {
         dialog: { title: '添加队员', visible: false, labelWidth: '120px' },
-        models: { name: null, gender: null, code: null, canGo: null, age: null, phoneNumber: null, userId: null, userName: null, groupId: null, transportationType: null, remark: null },
+        models: { name: null, gender: null, code: null, canGo: null, age: null, phoneNumber: null, userId: null, username: null, groupId: null, transportationType: null, remark: null },
         rules: {
           name: setRule('姓名', [{ required: true }]),
           gender: setRule('性别', [{ selected: true }]),
@@ -323,7 +323,7 @@ export default {
       },
       update: {
         dialog: { title: '编辑队员信息', visible: false, labelWidth: '120px' },
-        models: { name: null, gender: null, code: null, canGo: null, age: null, phoneNumber: null, userId: null, userName: null, groupId: null, transportationType: null, remark: null },
+        models: { name: null, gender: null, code: null, canGo: null, age: null, phoneNumber: null, userId: null, username: null, groupId: null, transportationType: null, remark: null },
         rules: {
           name: setRule('姓名', [{ required: true }]),
           gender: setRule('性别', [{ selected: true }]),
