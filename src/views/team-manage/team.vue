@@ -108,7 +108,7 @@
         <div v-for="(member, index) in create.models.members" :key="index" class="unit">
           <el-row>
             <el-col :xl="15" :lg="15" :md="16" :sm="17" :xs="20">
-              <el-form-item :key="member.key" :label="'队员' + (index + 1) + '姓名'" :prop="'members.' + index + '.name'" :rules="{ required: true, message: '请选择队员姓名', trigger: 'blur' }">
+              <el-form-item :key="member.key" :label="'队员' + (index + 1) + '姓名'" :prop="'members.' + index + '.id'" :rules="{ required: true, message: '请选择队员姓名', trigger: 'blur' }">
                 <el-select v-model="member.id" clearable filterable>
                   <el-option v-for="item in members" :key="item.id" :label="item.name" :value="item.id" />
                 </el-select>
@@ -164,7 +164,7 @@
         <div v-for="(member, index) in update.models.members" :key="index" class="unit">
           <el-row>
             <el-col :xl="15" :lg="15" :md="16" :sm="17" :xs="20">
-              <el-form-item :key="member.key" :label="'队员' + (index + 1) + '姓名'" :prop="'members.' + index + '.name'" :rules="{ required: true, message: '请选择队员姓名', trigger: 'blur' }">
+              <el-form-item :key="member.key" :label="'队员' + (index + 1) + '姓名'" :prop="'members.' + index + '.id'" :rules="{ required: true, message: '请选择队员姓名', trigger: 'blur' }">
                 <el-select v-model="member.id" clearable filterable>
                   <el-option v-for="item in members" :key="item.id" :label="item.name" :value="item.id" />
                 </el-select>
@@ -291,7 +291,11 @@ export default {
     createData() {
       this.$refs['formCreate'].validate((valid) => {
         if (!valid) return false
-        team.create(this.create.models).then(response => {
+        var membersId = []
+        for (const i in this.create.models.members) {
+          membersId.push(this.create.models.members[i].id)
+        }
+        team.create(this.create.models, membersId).then(response => {
           // 为方便连续添加，create对话框不关闭
           // 需要清空的表单，手动清空，至少清空一个必填项，防止点击两遍
           this.create.models.name = '' // 这里做了修改
@@ -313,7 +317,11 @@ export default {
       this.$refs['formEdit'].validate((valid) => {
         if (!valid) return false
         const tempData = Object.assign({}, this.update.models)
-        team.update(tempData).then(response => {
+        var membersId = []
+        for (const i in this.update.models.members) {
+          membersId.push(this.update.models.members[i].id)
+        }
+        team.update(tempData, membersId).then(response => {
           // 重新获取数据
           this.getDatas()
           this.update.dialog.visible = false

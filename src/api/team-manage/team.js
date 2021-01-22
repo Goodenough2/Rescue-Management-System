@@ -49,25 +49,25 @@ export function getlist() {
 }
 
 // 添加数据
-export function create(data) {
+export function create(data, membersId) {
   return request({
     url: '/group/create',
     method: 'post',
     data: {
       group: data,
-      members: data.members
+      membersId: membersId
     }
   })
 }
 
 // 更新数据
-export function update(data) {
+export function update(data, membersId) {
   return request({
     url: '/group/update',
     method: 'put',
     data: {
       group: data,
-      members: data.members
+      membersId: membersId
     }
   })
 }
