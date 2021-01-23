@@ -9,7 +9,7 @@ export default {
   name: 'StandardManage',
   meta: {
     title: '走失类型管理',
-    icon: 'skill'
+    icon: 'theme'
   },
   children: [
     {

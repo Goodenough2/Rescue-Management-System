@@ -28,7 +28,7 @@
           <span>{{ (page.current - 1) * page.size + scope.$index + 1 }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="工号" prop="userCode" :sort-orders="sortOrders" align="center" width="100" show-overflow-tooltip />
+      <el-table-column label="工号" prop="userCode" :sort-orders="sortOrders" align="center" width="150" show-overflow-tooltip />
       <el-table-column label="姓名" prop="name" :sort-orders="sortOrders" align="center" width="100" show-overflow-tooltip />
       <el-table-column label="性别" prop="gender" :sort-orders="sortOrders" align="center" width="70" show-overflow-tooltip>
         <template slot-scope="{row}">
