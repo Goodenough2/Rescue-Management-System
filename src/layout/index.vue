@@ -13,6 +13,7 @@
     <right-panel v-if="showSettings">
       <settings />
     </right-panel>
+    <operate-notify />
   </div>
 </template>
 

@@ -313,6 +313,57 @@
             "allow": true
           }
         }
+      },
+      "StandardManage": {
+        "allow": true,
+        "Standard": {
+          "allow": true,
+          "view": {
+            "allow": true
+          },
+          "import": {
+            "allow": true
+          },
+          "create": {
+            "allow": true
+          },
+          "update": {
+            "allow": true
+          },
+          "detail": {
+            "allow": true
+          },
+          "delete": {
+            "allow": true
+          },
+          "export": {
+            "allow": true
+          }
+        },
+        "Reason": {
+          "allow": true,
+          "view": {
+            "allow": true
+          },
+          "import": {
+            "allow": true
+          },
+          "create": {
+            "allow": true
+          },
+          "update": {
+            "allow": true
+          },
+          "detail": {
+            "allow": true
+          },
+          "delete": {
+            "allow": true
+          },
+          "export": {
+            "allow": true
+          }
+        }
       }
     }
   }
