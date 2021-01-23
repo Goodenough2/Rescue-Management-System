@@ -10,7 +10,7 @@ export default {
   created() {
     // 建立连接
     // createSocket(process.env.VUE_APP_BASE_API.replace('http', 'ws') + '/websocket/alarm/' + getToken())
-    createSocket('ws://localhost:8888/api/v1' + '/websocket/alarm/' + getToken())
+    createSocket('ws://localhost:8888' + '/websocket/alarm/' + getToken())
     // 注册监听事件
     window.addEventListener('onmessageWS', e => {
       try {
@@ -20,6 +20,7 @@ export default {
           dangerouslyUseHTMLString: true,
           offset: 140,
           message: notifyHtml,
+          position: 'bottom-right',
           onClick: () => {
             this.$router.replace({ path: '/a/b/c（路由）', query: { id: data.id }}) // 相应点击动作
           }

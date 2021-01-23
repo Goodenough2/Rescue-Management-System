@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { AppHeader, Sidebar, TagsView, Navbar, Subpage, Settings, RightPanel } from './components'
+import { AppHeader, Sidebar, TagsView, Navbar, Subpage, Settings, RightPanel, OperateNotify } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 import { mapGetters } from 'vuex'
 
@@ -31,7 +31,8 @@ export default {
     Navbar,
     Subpage,
     RightPanel,
-    Settings
+    Settings,
+    OperateNotify
   },
   mixins: [ResizeMixin],
   computed: {
