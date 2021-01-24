@@ -14,6 +14,7 @@ import elderlyManageRouter from './modules/elderly-manage'
 import areaManageRouter from './modules/area-manage'
 import teamManageRouter from './modules/team-manage'
 import standardManageRouter from './modules/standard-manage'
+import missionManageRouter from './modules/mission-manage'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -96,6 +97,7 @@ export const asyncRoutes = [
   elderlyManageRouter,
   standardManageRouter,
   teamManageRouter,
+  missionManageRouter,
   areaManageRouter,
   logManageRouter,
   systemManageRouter,

@@ -1,14 +1,12 @@
 <template>
   <div class="app-container list">
     <div class="toolbar">
+      <el-input v-model.trim="query.name" class="query-item" style="width: 120px" placeholder="家属姓名" clearable @clear="handleQuery" />
       <el-select v-model="query.gender" class="query-item" style="width:120px" placeholder="性别" clearable @clear="handleQuery">
         <el-option label="女" value="0" />
         <el-option label="男" value="1" />
-        <el-option label="不限" value="2" />
       </el-select>
-      <el-select v-model="query.lostReasonId" class="query-item" style="width:300px" placeholder="走失原因" clearable filterable @clear="handleQuery">
-        <el-option v-for="item in reasons" :key="item.id" :label="item.name" :value="item.id" />
-      </el-select>
+      <el-input v-model.trim="query.elderlyName" class="query-item" style="width: 120px" placeholder="老人姓名" clearable @clear="handleQuery" />
       <el-button class="tool tool-query" type="primary" icon="el-icon-search" @click="handleQuery">查询</el-button>
       <el-button v-if="access.create.allow" class="tool tool-create" type="primary" icon="el-icon-edit" @click="handleCreate">添加</el-button>
       <el-button v-if="access.delete.allow" class="tool tool-create" type="danger" icon="el-icon-delete" @click="handleDeletes">批量删除</el-button>
@@ -21,29 +19,18 @@
           <span>{{ (page.current - 1) * page.size + scope.$index + 1 }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="等级" prop="level" :sort-orders="sortOrders" align="center" width="100" show-overflow-tooltip>
-        <template slot-scope="{row}">
-          <span>{{ row.level + '级' }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="走失年龄下界" prop="ageBelow" :sort-orders="sortOrders" align="center" width="120" show-overflow-tooltip />
-      <el-table-column label="走失年龄下界" prop="ageOver" :sort-orders="sortOrders" align="center" width="120" show-overflow-tooltip />
-      <el-table-column label="性别" prop="gender" :sort-orders="sortOrders" align="center" width="100" show-overflow-tooltip>
+      <el-table-column label="姓名" prop="name" :sort-orders="sortOrders" align="center" width="100" show-overflow-tooltip />
+      <el-table-column label="性别" prop="gender" :sort-orders="sortOrders" align="center" width="70" show-overflow-tooltip>
         <template slot-scope="{row}">
           <span v-if="row.gender == 0">女</span>
           <span v-if="row.gender == 1">男</span>
-          <span v-if="row.gender == 2">不限</span>
         </template>
       </el-table-column>
-      <el-table-column label="走失超过时间" prop="lostDuration" :sort-orders="sortOrders" align="center" width="120" show-overflow-tooltip />
-      <el-table-column label="有无精神病史" prop="mentalMedicalHistory" :sort-orders="sortOrders" align="center" width="120" show-overflow-tooltip>
-        <template slot-scope="{row}">
-          <span v-if="row.mentalMedicalHistory == true">有</span>
-          <span v-if="row.mentalMedicalHistory == false">无</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="走失原因" prop="lostReasonName" :sort-orders="sortOrders" align="center" width="300" show-overflow-tooltip />
-      <el-table-column label="备注" prop="remark" :sort-orders="sortOrders" align="left" show-overflow-tooltip />
+      <el-table-column label="电话号码" prop="phoneNumber" :sort-orders="sortOrders" align="center" width="150" show-overflow-tooltip />
+      <el-table-column label="与老人关系" prop="relationship" :sort-orders="sortOrders" align="center" width="150" show-overflow-tooltip />
+      <el-table-column label="所属老人" prop="elderlyName" :sort-orders="sortOrders" align="center" width="150" show-overflow-tooltip />
+      <el-table-column label="老人身份证号" prop="elderlyIdCard" :sort-orders="sortOrders" align="center" width="200" show-overflow-tooltip />
+      <el-table-column label="家属备注" prop="remark" :sort-orders="sortOrders" align="left" show-overflow-tooltip />
       <el-table-column fixed="right" label="操作" align="center" width="180">
         <template slot-scope="{row}">
           <el-tooltip class="item" effect="dark" content="详情" placement="top-end">
@@ -65,53 +52,44 @@
       <el-form ref="formDetail" label-position="right" :label-width="detail.dialog.labelWidth">
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="等级">
-              {{ detail.models.level + '级' }}
+            <el-form-item label="家属名称">
+              {{ detail.models.name }}
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="走失年龄下界">
-              {{ detail.models.ageBelow }}
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="走失年龄上界">
-              {{ detail.models.ageOver }}
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="性别">
+            <el-form-item label="家属性别">
               <span v-if="detail.models.gender == 0">女</span>
               <span v-if="detail.models.gender == 1">男</span>
-              <span v-if="detail.models.gender == 2">不限</span>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="走失超过时间">
-              {{ detail.models.lostDuration }}
+            <el-form-item label="电话">
+              {{ detail.models.phoneNumber }}
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="走失原因">
-              {{ detail.models.lostReasonName }}
+            <el-form-item label="与老人关系">
+              {{ detail.models.relationship }}
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="有无精神病史">
-              <span v-if="detail.models.mentalMedicalHistory == 0">无</span>
-              <span v-if="detail.models.mentalMedicalHistory == 1">有</span>
+            <el-form-item label="老人姓名">
+              {{ detail.models.elderlyName }}
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :xl="6" :md="12" :sm="24">
+            <el-form-item label="老人身份证号">
+              {{ detail.models.elderlyIdCard }}
             </el-form-item>
           </el-col>
         </el-row>
@@ -129,16 +107,8 @@
       <el-form ref="formCreate" :rules="create.rules" :model="create.models" label-position="right" :label-width="create.dialog.labelWidth">
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="等级" prop="level">
-              <el-input v-model="create.models.level" disabled />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="年龄区间" prop="ageBelow">
-              <el-input v-model="create.models.ageBelow" type="number" style="width: 40%" /> ~
-              <el-input v-model="create.models.ageOver" type="number" style="width: 40%" />
+            <el-form-item label="亲属姓名" prop="name">
+              <el-input v-model="create.models.name" />   <!-- 在这里做了修改 -->
             </el-form-item>
           </el-col>
         </el-row>
@@ -148,31 +118,30 @@
               <el-select v-model="create.models.gender">
                 <el-option label="女" value="0" />
                 <el-option label="男" value="1" />
-                <el-option label="不限" value="2" />
               </el-select>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="走失超过时间" prop="lostDuration">
-              <el-input v-model="create.models.lostDuration" style="width: 40%" type="number"/> (小时/h)
+            <el-form-item label="电话号码" prop="phoneNumber">
+              <el-input v-model="create.models.phoneNumber" />   <!-- 在这里做了修改 -->
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="走失原因" prop="lostReasonId">
-              <el-select v-model="create.models.lostReasonId" clearable filterable>
-                <el-option v-for="item in reasons" :key="item.id" :label="item.name" :value="item.id" />
+            <el-form-item label="老人姓名" prop="elderlyId">
+              <el-select v-model="create.models.elderlyId" clearable filterable>
+                <el-option v-for="item in elderlies" :key="item.id" :label="item.name" :value="item.id" />
               </el-select>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="有无精神病史" prop="mentalMedicalHistory">
-              <el-switch v-model="create.models.mentalMedicalHistory" :active-value="true" :inactive-value="false" />
+            <el-form-item label="与老人关系" prop="relationship">
+              <el-input v-model="create.models.relationship" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -194,16 +163,16 @@
       <el-form ref="formEdit" :rules="update.rules" :model="update.models" label-position="right" :label-width="update.dialog.labelWidth">
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="等级" prop="level">
-              <el-input v-model="update.models.level" disabled />
+            <el-form-item label="亲属姓名" prop="name">
+              <el-input v-model="update.models.name" />
             </el-form-item>
           </el-col>
         </el-row>
+
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="年龄区间" prop="ageBelow">
-              <el-input v-model="update.models.ageBelow" type="number" style="width: 40%" /> ~
-              <el-input v-model="update.models.ageOver" type="number" style="width: 40%" />
+            <el-form-item label="电话号码" prop="phoneNumber">
+              <el-input v-model="update.models.phoneNumber" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -213,31 +182,30 @@
               <el-select v-model="update.models.gender">
                 <el-option label="女" value="0" />
                 <el-option label="男" value="1" />
-                <el-option label="不限" value="2" />
               </el-select>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="走失超过时间" prop="lostDuration">
-              <el-input v-model="update.models.lostDuration" style="width: 40%" type="number"/> (小时/h)
+            <el-form-item label="电话号码" prop="phoneNumber">
+              <el-input v-model="update.models.phoneNumber" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="走失原因" prop="lostReasonId">
-              <el-select v-model="update.models.lostReasonId" clearable filterable>
-                <el-option v-for="item in reasons" :key="item.id" :label="item.name" :value="item.id" />
+            <el-form-item label="老人姓名" prop="elderlyId">
+              <el-select v-model="update.models.elderlyId" clearable filterable>
+                <el-option v-for="item in elderlies" :key="item.id" :label="item.name" :value="item.id" />
               </el-select>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="有无精神病史" prop="mentalMedicalHistory">
-              <el-switch v-model="update.models.mentalMedicalHistory" :active-value="true" :inactive-value="false" />
+            <el-form-item label="与老人关系" prop="relationship">
+              <el-input v-model="update.models.relationship" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -261,46 +229,45 @@
 import adaptive from '@/directive/el-table'
 import setRule from '@/utils/form-validate'
 import Pagination from '@/components/Pagination'
-import * as reason from '@/api/standard-manage/reason'
-import * as standard from '@/api/standard-manage/standard'
+import * as relative from '@/api/elderly-manage/relative'
+import * as elderly from '@/api/elderly-manage/elderly'
 
 export default {
-  name: 'Standard',
+  name: 'Relative',
   components: { Pagination },
   directives: { adaptive },
   data() {
     return {
-      access: this.$store.getters.access['StandardManage']['Standard'],
+      access: this.$store.getters.access['ElderlyManage']['Relative'],
       datas: null,
-      reasons: null,
-      currentLevel: null,
-      query: { gender: null, lostReasonId: null },
+      elderlies: null,
+      query: { name: null, gender: null, elderlyName: null },
       page: { total: 0, current: 1, size: 20 },
       sort: { prop: 'sort', order: 'ascending' },
       detail: {
-        dialog: { title: '等级信息', visible: false, labelWidth: '120px' },
-        models: { ageBelow: null, ageOver: null, gender: null, lostDuration: null, lostReasonId: null, lostReasonName: null, mentalMedicalHistory: null, level: null, remark: null }
+        dialog: { title: '亲属信息', visible: false, labelWidth: '120px' },
+        models: { name: null, gender: null, phoneNumber: null, relationship: null, elderlyId: null, elderlyName: null, remark: null, elderlyIdCard: null }
       },
       create: {
-        dialog: { title: '添加等级', visible: false, labelWidth: '120px' },
-        models: { ageBelow: null, ageOver: null, gender: null, lostDuration: null, lostReasonId: null, lostReasonName: null, mentalMedicalHistory: null, level: null, remark: null },
+        dialog: { title: '添加亲属', visible: false, labelWidth: '120px' },
+        models: { name: null, gender: null, phoneNumber: null, relationship: null, elderlyId: null, elderlyName: null, remark: null, elderlyIdCard: null },
         rules: {
-          ageBelow: setRule('年龄区间', [{ required: true }]),
+          name: setRule('姓名', [{ required: true }]),
           gender: setRule('性别', [{ selected: true }]),
-          lostDuration: setRule('走失超过时间', [{ required: true }]),
-          lostReasonId: setRule('走失原因', [{ selected: true }]),
-          mentalMedicalHistory: setRule('有无精神病史', [{ selected: true }])
+          phoneNumber: setRule('电话号码', [{ required: true }]),
+          relationship: setRule('关系', [{ required: true }]),
+          elderlyId: setRule('老人姓名', [{ selected: true }])
         }
       },
       update: {
-        dialog: { title: '编辑等级', visible: false, labelWidth: '120px' },
-        models: { ageBelow: null, ageOver: null, gender: null, lostDuration: null, lostReasonId: null, lostReasonName: null, mentalMedicalHistory: null, level: null, remark: null },
+        dialog: { title: '编辑亲属信息', visible: false, labelWidth: '120px' },
+        models: { name: null, gender: null, phoneNumber: null, relationship: null, elderlyId: null, elderlyName: null, remark: null, elderlyIdCard: null },
         rules: {
-          ageBelow: setRule('年龄区间', [{ required: true }]),
+          name: setRule('姓名', [{ required: true }]),
           gender: setRule('性别', [{ selected: true }]),
-          lostDuration: setRule('走失超过时间', [{ required: true }]),
-          lostReasonId: setRule('走失原因', [{ selected: true }]),
-          mentalMedicalHistory: setRule('有无精神病史', [{ selected: true }])
+          phoneNumber: setRule('电话号码', [{ required: true }]),
+          relationship: setRule('关系', [{ required: true }]),
+          elderlyId: setRule('老人姓名', [{ selected: true }])
         }
       },
       loading: { list: true, export: false, detail: false, update: false },
@@ -309,26 +276,22 @@ export default {
   },
   created() {
     this.getDatas()
-    this.getReason()
+    this.getElderly()
   },
   methods: {
     getDatas() {
       this.loading.list = true
-      standard.getList(this.query, this.page, this.sort).then(response => {
+      relative.getList(this.query, this.page, this.sort).then(response => {
         this.datas = response.data.items
         this.page.total = response.data.total
         this.loading.list = false
       }).catch(reject => {
         this.loading.list = false
       })
-      // var j = standard.getList(this.query, this.page, this.sort)
-      // this.datas = j.data.items
-      // this.page.total = j.data.total
-      // this.loading.list = false
     },
-    getReason() {
-      reason.getlist().then(response => {
-        this.reasons = response.data
+    getElderly() {
+      elderly.getlist().then(response => {
+        this.elderlies = response.data
       }).catch(reject => {
       })
     },
@@ -347,25 +310,13 @@ export default {
       this.detail.dialog.visible = true
     },
     handleCreate() {
-      this.create.models.level = this.datas == null ? 1 : this.datas.length + 1
       this.create.dialog.visible = true
+      this.create.models.gender = this.create.models.gender.toString()
     },
     createData() {
-      if (this.create.models.ageOver == null) {
-        this.$message({ type: 'warning', message: '请确定年龄区间上限', duration: 4000 })
-        return false
-      }
-      if (this.create.models.ageBelow == null) {
-        this.$message({ type: 'warning', message: '请确定年龄区间下限', duration: 4000 })
-        return false
-      }
-      if (parseInt(this.create.models.ageBelow) > parseInt(this.create.models.ageOver)) {
-        this.$message({ type: 'warning', message: '年龄区间下限不能大于上限', duration: 4000 })
-        return false
-      }
       this.$refs['formCreate'].validate((valid) => {
         if (!valid) return false
-        standard.create(this.create.models).then(response => {
+        relative.create(this.create.models).then(response => {
           // 为方便连续添加，create对话框不关闭
           // 需要清空的表单，手动清空，至少清空一个必填项，防止点击两遍
           this.create.models.name = '' // 这里做了修改
@@ -385,22 +336,10 @@ export default {
       })
     },
     updateData() {
-      if (this.update.models.ageOver == null) {
-        this.$message({ type: 'warning', message: '请确定年龄区间上限', duration: 4000 })
-        return false
-      }
-      if (this.update.models.ageBelow == null) {
-        this.$message({ type: 'warning', message: '请确定年龄区间下限', duration: 4000 })
-        return false
-      }
-      if (parseInt(this.update.models.ageBelow) > parseInt(this.update.models.ageOver)) {
-        this.$message({ type: 'warning', message: '年龄区间下限不能大于上限', duration: 4000 })
-        return false
-      }
       this.$refs['formEdit'].validate((valid) => {
         if (!valid) return false
         const tempData = Object.assign({}, this.update.models)
-        standard.update(tempData).then(response => {
+        relative.update(tempData).then(response => {
           // 重新获取数据
           this.getDatas()
           this.update.dialog.visible = false
@@ -428,7 +367,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        standard.del(ids).then(response => {
+        relative.del(ids).then(response => {
           // 重新获取数据
           this.getDatas()
         }).catch(reject => {
