@@ -51,6 +51,23 @@
         </el-col>
       </el-row>
       <el-row>
+        <el-col :xl="5" :lg="8" :md="10" :sm="18" :xs="24">
+          <el-form-item label="老人失踪原因" prop="lostReasonId">
+            <el-select v-model="create.models.lostReasonId" style="width: 100%" clearable filterable>
+              <el-option v-for="item in reasons" :key="item.id" :label="item.name" :value="item.id" />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :xl="5" :lg="8" :md="10" :sm="18" :xs="24">
+          <el-form-item label="有无精神病史" prop="mentalMedicalHistory">
+            <el-select v-model="create.models.mentalMedicalHistory" clearable>
+              <el-option label="无" value="0" />
+              <el-option label="有" value="1" />
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
         <el-col :xl="5" :lg="8" :md="12" :sm="18" :xs="24">
           <el-form-item label="走失位置" prop="lostLng">
             <el-button @click="addAddress">点击选择位置</el-button>
@@ -222,6 +239,7 @@
 import adaptive from '@/directive/el-table'
 import setRule from '@/utils/form-validate'
 import * as elderly from '@/api/elderly-manage/elderly'
+import * as reason from '@/api/standard-manage/reason'
 import { regionData, CodeToText } from 'element-china-area-data'
 
 export default {
@@ -268,6 +286,7 @@ export default {
       dialogVisible: false,
       fileList: [],
       dialogImageUrl: null,
+      reasons: null,
       create: {
         dialog: { title: '老人信息录入', visible: false, labelWidth: '150px' },
         models: {
@@ -286,6 +305,8 @@ export default {
           idCard: null,
           description: null,
           look: null,
+          lostReasonId: null,
+          mentalMedicalHistory: null,
           photos: [],
           relatives: [
             { name: null, gender: null, phoneNumber: null, relationship: null, remark: null }
@@ -302,6 +323,8 @@ export default {
           lostAddress: setRule('走失时的详细地址', [{ required: true }]),
           lostLng: setRule('走失位置', [{ selected: true }]),
           photos: setRule('上传老人图片', [{ selected: true }]),
+          lostReasonId: setRule('走失原因', [{ selected: true }]),
+          mentalMedicalHistory: setRule('有无精神病史', [{ selected: true }]),
           idCard: setRule('身份证号', [{ required: true }])
         }
       },
@@ -313,6 +336,9 @@ export default {
       },
       loading: { list: true, export: false, detail: false, address: false }
     }
+  },
+  created() {
+    this.getReason()
   },
   methods: {
     handler({ BMap, map }) {
@@ -349,6 +375,11 @@ export default {
         console.log(res)
         this.infoWindow.contents = '地址：' + res.address
       })
+    },
+    getReason() {
+      reason.getlist().then(responses => {
+        this.reasons = responses.data
+      }).catch(reject => {})
     },
     addAddress() {
       this.loading.address = true
