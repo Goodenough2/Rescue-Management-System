@@ -3,18 +3,18 @@ import request from '@/utils/request'
 
 // 获取列表数据（查询、翻页）
 export function getList(query, page, sort) {
-  return request({
-    url: '/elderly/list',
-    method: 'post',
-    data: {
-      page: { current: page.current, size: page.size },
-      sort: { property: sort.prop, direction: sort.order },
-      query: { ...query }
-    }
-  })
-  // const geoData = require('@/static/test/elderly.json')
-  // console.log(geoData.data)
-  // return geoData
+  // return request({
+  //   url: '/elderly/list',
+  //   method: 'post',
+  //   data: {
+  //     page: { current: page.current, size: page.size },
+  //     sort: { property: sort.prop, direction: sort.order },
+  //     query: { ...query }
+  //   }
+  // })
+  const geoData = require('@/static/test/elderly.json')
+  console.log(geoData.data)
+  return geoData
 }
 
 // 根据id获取数据

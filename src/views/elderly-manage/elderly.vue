@@ -148,6 +148,21 @@
         </el-row>
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
+            <el-form-item label="走失原因">
+              {{ detail.models.lostReasonName }}
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :xl="6" :md="12" :sm="24">
+            <el-form-item label="有无精神病史">
+              <span v-if="detail.models.mentalMedicalHistory==0">无</span>
+              <span v-if="detail.models.mentalMedicalHistory==1">有</span>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :xl="6" :md="12" :sm="24">
             <el-form-item label="家属描述">
               {{ detail.models.description }}
             </el-form-item>
@@ -275,6 +290,23 @@
           <el-col :xl="5" :lg="8" :md="10" :sm="18" :xs="24">
             <el-form-item label="老人身高(cm)" prop="height">
               <el-input v-model.number="update.models.height" type="number" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :xl="5" :lg="8" :md="10" :sm="18" :xs="24">
+            <el-form-item label="老人失踪原因" prop="lostReasonId">
+              <el-select v-model="update.models.lostReasonId" style="width: 100%" clearable filterable>
+                <el-option v-for="item in reasons" :key="item.id" :label="item.name" :value="item.id" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :xl="5" :lg="8" :md="10" :sm="18" :xs="24">
+            <el-form-item label="有无精神病史" prop="mentalMedicalHistory">
+              <el-select v-model="update.models.mentalMedicalHistory" clearable>
+                <el-option label="无" value="0" />
+                <el-option label="有" value="1" />
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -409,6 +441,7 @@ import Pagination from '@/components/Pagination'
 import * as elderly from '@/api/elderly-manage/elderly'
 // import * as relative from '@/api/elderly-manage/relative'
 import { regionData, CodeToText, TextToCode } from 'element-china-area-data'
+import * as reason from '@/api/standard-manage/reason'
 
 export default {
   name: 'Elderly',
@@ -460,12 +493,13 @@ export default {
       dialogVisible: false,
       fileList: [],
       dialogImageUrl: null,
+      reasons: null,
       query: { name: null, province: null, city: null, area: null },
       page: { total: 0, current: 1, size: 20 },
       sort: { prop: 'sort', order: 'ascending' },
       detail: {
         dialog: { title: '详细信息', visible: false, labelWidth: '120px' },
-        models: { name: null, province: null, city: null, area: null, gender: null, lostLng: 0, lostLat: 0, age: null, height: null, lostTime: null, lostAddress: null, look: null, job: null, idCard: null, description: null, createTime: null, updateTime: null, remark: null, photos: [] }
+        models: { name: null, province: null, city: null, area: null, gender: null, lostLng: 0, lostLat: 0, age: null, height: null, lostTime: null, lostAddress: null, look: null, job: null, idCard: null, description: null, createTime: null, updateTime: null, remark: null, photos: [], lostReasonId: null, lostReasonName: null, mentalMedicalHistory: null }
       },
       relativeDetail: {
         dialog: { title: '家属信息', visible: false, labelWidth: '120px' },
@@ -490,6 +524,9 @@ export default {
           description: null,
           look: null,
           photos: [],
+          lostReasonId: null,
+          lostReasonName: null,
+          mentalMedicalHistory: null,
           relatives: [
             { name: null, gender: null, phoneNumber: null, relationship: null, remark: null }
           ]
@@ -504,6 +541,8 @@ export default {
           address: setRule('户籍地址', [{ required: true }]),
           lostAddress: setRule('走失时的详细地址', [{ required: true }]),
           lostLng: setRule('走失位置', [{ selected: true }]),
+          lostReasonId: setRule('走失原因', [{ selected: true }]),
+          mentalMedicalHistory: setRule('有无精神病史', [{ selected: true }]),
           // photos: setRule('上传老人图片', [{ required: true }]),
           idCard: setRule('身份证号', [{ required: true }])
         }
@@ -514,17 +553,27 @@ export default {
   },
   created() {
     this.getDatas()
+    this.getReason()
   },
   methods: {
     getDatas() {
       this.loading.list = true
-      elderly.getList(this.query, this.page, this.sort).then(response => {
-        this.datas = response.data.items
-        this.page.total = response.data.total
-        this.loading.list = false
-      }).catch(reject => {
-        this.loading.list = false
-      })
+      // elderly.getList(this.query, this.page, this.sort).then(response => {
+      //   this.datas = response.data.items
+      //   this.page.total = response.data.total
+      //   this.loading.list = false
+      // }).catch(reject => {
+      //   this.loading.list = false
+      // })
+      var j = elderly.getList(this.query, this.page, this.sort)
+      this.datas = j.data.items
+      this.page.total = j.data.total
+      this.loading.list = false
+    },
+    getReason() {
+      reason.getlist().then(responses => {
+        this.reasons = responses.data
+      }).catch(reject => {})
     },
     handleQuery() {
       this.page.current = 1
@@ -590,6 +639,8 @@ export default {
       this.center.lng = this.update.models.lostLng
       this.markers.splice(0, 1, temp)
       this.infoWindow.contents = '地址：' + this.update.models.lostAddress
+      this.update.models.gender = this.update.models.gender.toString()
+      this.update.models.mentalMedicalHistory = this.update.models.mentalMedicalHistory.toString()
       this.loading.update = true
       this.update.dialog.visible = true
       this.loading.update = false
