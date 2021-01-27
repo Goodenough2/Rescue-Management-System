@@ -558,17 +558,17 @@ export default {
   methods: {
     getDatas() {
       this.loading.list = true
-      // elderly.getList(this.query, this.page, this.sort).then(response => {
-      //   this.datas = response.data.items
-      //   this.page.total = response.data.total
-      //   this.loading.list = false
-      // }).catch(reject => {
-      //   this.loading.list = false
-      // })
-      var j = elderly.getList(this.query, this.page, this.sort)
-      this.datas = j.data.items
-      this.page.total = j.data.total
-      this.loading.list = false
+      elderly.getList(this.query, this.page, this.sort).then(response => {
+        this.datas = response.data.items
+        this.page.total = response.data.total
+        this.loading.list = false
+      }).catch(reject => {
+        this.loading.list = false
+      })
+      // var j = elderly.getList(this.query, this.page, this.sort)
+      // this.datas = j.data.items
+      // this.page.total = j.data.total
+      // this.loading.list = false
     },
     getReason() {
       reason.getlist().then(responses => {
