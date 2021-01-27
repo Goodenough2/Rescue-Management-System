@@ -156,8 +156,8 @@
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
             <el-form-item label="有无精神病史">
-              <span v-if="detail.models.mentalMedicalHistory==0">无</span>
-              <span v-if="detail.models.mentalMedicalHistory==1">有</span>
+              <span v-if="detail.models.mentalMedicalHistory==false">无</span>
+              <span v-if="detail.models.mentalMedicalHistory==true">有</span>
             </el-form-item>
           </el-col>
         </el-row>
@@ -304,8 +304,8 @@
           <el-col :xl="5" :lg="8" :md="10" :sm="18" :xs="24">
             <el-form-item label="有无精神病史" prop="mentalMedicalHistory">
               <el-select v-model="update.models.mentalMedicalHistory" clearable>
-                <el-option label="无" value="0" />
-                <el-option label="有" value="1" />
+                <el-option label="无" value="false" />
+                <el-option label="有" value="true" />
               </el-select>
             </el-form-item>
           </el-col>

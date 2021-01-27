@@ -61,8 +61,8 @@
         <el-col :xl="5" :lg="8" :md="10" :sm="18" :xs="24">
           <el-form-item label="有无精神病史" prop="mentalMedicalHistory">
             <el-select v-model="create.models.mentalMedicalHistory" clearable>
-              <el-option label="无" value="0" />
-              <el-option label="有" value="1" />
+              <el-option label="无" value="false" />
+              <el-option label="有" value="true" />
             </el-select>
           </el-form-item>
         </el-col>
