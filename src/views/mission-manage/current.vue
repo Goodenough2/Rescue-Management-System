@@ -107,7 +107,7 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :xl="12" :md="16" :sm="24">
+          <el-col :xl="14" :md="18" :sm="24">
             <el-form-item label="任务进度">
               <el-steps :active="detail.models.status" finish-status="success" style="margin-top: 2px;margin-bottom: 5px">
                 <el-step title="走失老人录入" />
@@ -137,7 +137,7 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :xl="12" :md="16" :sm="24">
+          <el-col :xl="14" :md="18" :sm="24">
             <el-form-item label="走失老人信息">
               <div class="elderlyInfo">
                 <el-form ref="form" label-width="100px">
@@ -152,26 +152,26 @@
                         {{ detail.models.elderlyAge }}
                       </el-form-item>
                     </el-col>
-                    <el-col :xl="4" :md="8" :sm="24">
+                    <el-col :xl="8" :md="10" :sm="24">
                       <el-form-item label="走失时间">
                         {{ detail.models.elderlyLostTime }}
                       </el-form-item>
                     </el-col>
                   </el-row>
                   <el-row>
-                    <el-col :xl="4" :md="8" :sm="24">
+                    <el-col :xl="8" :md="10" :sm="24">
                       <el-form-item label="身份证号">
                         {{ detail.models.elderlyIdCard }}
                       </el-form-item>
                     </el-col>
-                    <el-col :xl="4" :md="6" :sm="24">
+                    <el-col :xl="8" :md="10" :sm="24">
                       <el-form-item label="相貌特征">
                         {{ detail.models.elderlyLook }}
                       </el-form-item>
                     </el-col>
                   </el-row>
                   <el-row>
-                    <el-col :xl="4" :md="8" :sm="24">
+                    <el-col :xl="8" :md="10" :sm="24">
                       <el-form-item label="具体走失地">
                         <baidu-map class="mapSmall" :center="center" :zoom="zoom" :scroll-wheel-zoom="false" @ready="handlerDetail">
                           <bm-overview-map anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :is-open="true" />
@@ -183,19 +183,19 @@
                     </el-col>
                   </el-row>
                   <el-row>
-                    <el-col :xl="4" :md="8" :sm="24">
+                    <el-col :xl="8" :md="10" :sm="24">
                       <el-form-item label="走失原因">
                         {{ detail.models.elderlyLostReasonName }}
                       </el-form-item>
                     </el-col>
-                    <el-col :xl="4" :md="8" :sm="24">
+                    <el-col :xl="10" :md="12" :sm="24">
                       <el-form-item label="走失地址">
                         {{ detail.models.elderlyLostAddress }}
                       </el-form-item>
                     </el-col>
                   </el-row>
                   <el-row>
-                    <el-col :xl="4" :md="6" :sm="24">
+                    <el-col :xl="8" :md="10" :sm="24">
                       <el-form-item label="家属备注">
                         {{ detail.models.elderlyLook }}
                       </el-form-item>
@@ -215,7 +215,7 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :xl="6" :md="12" :sm="24">
+          <el-col :xl="14" :md="18" :sm="24">
             <el-form-item label="搜寻队员信息" v-if="detail.models.members.length != 0">
               <div v-for="(member, index) in detail.models.members" :key="index"  class="elderlyInfo">
                 <el-form ref="form" label-width="100px">
@@ -225,7 +225,7 @@
                         {{ member.name }}
                       </el-form-item>
                     </el-col>
-                    <el-col :xl="4" :md="8" :sm="24">
+                    <el-col :xl="8" :md="10" :sm="24">
                       <el-form-item :key="member.key" label="电话号码">
                         {{ member.phoneNumber }}
                       </el-form-item>
