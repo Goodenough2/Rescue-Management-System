@@ -10,7 +10,7 @@ export default {
   created() {
     // 建立连接
     // createSocket(process.env.VUE_APP_BASE_API.replace('http', 'ws') + '/websocket/alarm/' + getToken())
-    createSocket('ws://localhost:8888' + '/websocket/alarm/' + getToken())
+    createSocket('ws://localhost:8888' + '/websocket/' + getToken())
     // 注册监听事件
     window.addEventListener('onmessageWS', e => {
       try {
