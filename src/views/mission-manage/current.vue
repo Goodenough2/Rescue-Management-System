@@ -396,7 +396,7 @@ export default {
         show: true,
         contents: '地址为：'
       },
-      query: { name: null, code: null, status: null, elderlyName: null, level: null, memberNum: null },
+      query: { name: null, code: null, status: null, elderlyName: null },
       page: { total: 0, current: 1, size: 20 },
       sort: { prop: 'sort', order: 'ascending' },
       detail: {
