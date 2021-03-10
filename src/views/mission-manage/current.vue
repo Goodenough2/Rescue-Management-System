@@ -50,6 +50,11 @@
           <span>{{ row.memberNum + '人' }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="实际人数" prop="currNum" :sort-orders="sortOrders" align="center" width="110" show-overflow-tooltip>
+        <template slot-scope="{row}">
+          <span>{{ row.currNum + '人' }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="走失老人姓名" prop="elderlyName" :sort-orders="sortOrders" align="center" width="110" show-overflow-tooltip />
       <el-table-column label="走失地" prop="elderlyLostAddress" :sort-orders="sortOrders" align="center" width="180" show-overflow-tooltip />
       <el-table-column label="信息最近更新时间" prop="elderlyUpdateTime" :sort-orders="sortOrders" align="center" width="200" show-overflow-tooltip sortable>
@@ -96,6 +101,13 @@
           <el-col :xl="6" :md="12" :sm="24">
             <el-form-item label="所需人数">
               {{ detail.models.memberNum + '人' }}
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :xl="6" :md="12" :sm="24">
+            <el-form-item label="所需人数">
+              {{ detail.models.currNum + '人' }}
             </el-form-item>
           </el-col>
         </el-row>
@@ -309,7 +321,7 @@
       <el-form ref="formEdit" :rules="update.rules" :model="update.models" label-position="right" :label-width="update.dialog.labelWidth">
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="亲属姓名" prop="name">
+            <el-form-item label="任务名称" prop="name">
               <el-input v-model="update.models.name" />
             </el-form-item>
           </el-col>
@@ -317,41 +329,25 @@
 
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="电话号码" prop="phoneNumber">
-              <el-input v-model="update.models.phoneNumber" />
+            <el-form-item label="任务编号" prop="code">
+              <el-input v-model="update.models.code" />
             </el-form-item>
           </el-col>
         </el-row>
+<!--        <el-row>-->
+<!--          <el-col :xl="6" :md="12" :sm="24">-->
+<!--            <el-form-item label="任务等级" prop="level">-->
+<!--              <el-select v-model="update.models.level">-->
+<!--                <el-option label="女" value="0" />-->
+<!--                <el-option label="男" value="1" />-->
+<!--              </el-select>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--        </el-row>-->
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="性别" prop="gender">
-              <el-select v-model="update.models.gender">
-                <el-option label="女" value="0" />
-                <el-option label="男" value="1" />
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="电话号码" prop="phoneNumber">
-              <el-input v-model="update.models.phoneNumber" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="老人姓名" prop="elderlyId">
-              <el-select v-model="update.models.elderlyId" clearable filterable>
-                <el-option v-for="item in elderlies" :key="item.id" :label="item.name" :value="item.id" />
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :xl="6" :md="12" :sm="24">
-            <el-form-item label="与老人关系" prop="relationship">
-              <el-input v-model="update.models.relationship" />
+            <el-form-item label="任务所需人数" prop="memberNum">
+              <el-input v-model="update.models.memberNum" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -429,6 +425,7 @@ export default {
           level: null,
           memberNum: null,
           elderlyMentalMedicalHistory: null,
+          currNum: null,
           members: []
         }
       },
@@ -444,14 +441,42 @@ export default {
         }
       },
       update: {
-        dialog: { title: '编辑亲属信息', visible: false, labelWidth: '120px' },
-        models: { name: null, gender: null, phoneNumber: null, relationship: null, elderlyId: null, elderlyName: null, remark: null, elderlyIdCard: null },
+        dialog: { title: '编辑任务信息', visible: false, labelWidth: '120px' },
+        models: {
+          code: null,
+          status: null,
+          remark: null,
+          elderlyId: null,
+          elderlyName: null,
+          elderlyGender: null,
+          elderlyAge: null,
+          elderlyHeight: null,
+          elderlyLostTime: null,
+          elderlyProvince: null,
+          elderlyCity: null,
+          elderlyArea: null,
+          elderlyLostAddress: null,
+          elderlyLostLng: null,
+          elderlyLostLat: null,
+          elderlyLostReasonName: null,
+          elderlyLook: null,
+          elderlyJob: null,
+          elderlyIdCard: null,
+          elderlyDescription: null,
+          elderlyCreateTime: null,
+          elderlyLostReasonId: null,
+          elderlyUpdateTime: null,
+          elderlyRemark: null,
+          level: null,
+          memberNum: null,
+          elderlyMentalMedicalHistory: null,
+          currNum: null,
+          members: []
+        },
         rules: {
           name: setRule('姓名', [{ required: true }]),
-          gender: setRule('性别', [{ selected: true }]),
-          phoneNumber: setRule('电话号码', [{ required: true }]),
-          relationship: setRule('关系', [{ required: true }]),
-          elderlyId: setRule('老人姓名', [{ selected: true }])
+          code: setRule('编码', [{ required: true }]),
+          memberNum: setRule('任务所需人数', [{ required: true }])
         }
       },
       loading: { list: true, export: false, detail: false, update: false },
@@ -523,7 +548,7 @@ export default {
     handleUpdate(row) {
       // 若列表数据展示了全部属性，则可直接拷贝列表数据用于编辑
       this.update.models = Object.assign({}, row)
-      this.update.models.gender = this.update.models.gender.toString()
+      // this.update.models.gender = this.update.models.gender.toString()
       this.update.dialog.visible = true
       this.$nextTick(() => {
         this.$refs['formEdit'].clearValidate()

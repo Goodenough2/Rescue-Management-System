@@ -13,8 +13,8 @@
         <el-dropdown id="tool-userinfo" class="app-tool" trigger="click">
           <span class="el-dropdown-link">
             <i class="iconfont vue-icon-user2" />
-            <span>{{ user.roleName }}</span>
-            <span>{{ user.name }}</span>
+<!--            <span>{{ user.roleName }}</span>-->
+<!--            <span>{{ user.name }}</span>-->
             <i class="el-icon-caret-bottom" />
           </span>
           <el-dropdown-menu slot="dropdown">
