@@ -28,12 +28,12 @@ const actions = {
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password }).then(response => {
         // 存放token放入localStorage
-        commit('SET_TOKEN', response.token)
-        commit('SET_USER', response.user)
-        setToken(response.token)
-        // commit('SET_TOKEN', response.data.token)
-        // commit('SET_USER', response.data.user)
-        // setToken(response.data.token)
+        // commit('SET_TOKEN', response.token)
+        // commit('SET_USER', response.user)
+        // setToken(response.token)
+        commit('SET_TOKEN', response.data.token)
+        commit('SET_USER', response.data.user)
+        setToken(response.data.token)
         resolve()
       }).catch(error => {
         reject(error)

@@ -4,8 +4,8 @@
       <el-input v-model.trim="query.userCode" class="query-item" style="width: 120px" placeholder="工号" clearable @clear="handleQuery" />
       <el-input v-model.trim="query.name" class="query-item" style="width: 120px" placeholder="姓名" clearable @clear="handleQuery" />
       <el-select v-model="query.gender" class="query-item" style="width:120px" placeholder="性别" clearable @clear="handleQuery">
-        <el-option label="女" value="0" />
-        <el-option label="男" value="1" />
+        <el-option label="女" value="FEMALE" />
+        <el-option label="男" value="MALE" />
       </el-select>
       <el-select v-model="query.transportationType" class="query-item" style="width:120px" placeholder="出行方式" clearable @clear="handleQuery">
         <el-option label="步行" value="0" />
@@ -32,17 +32,17 @@
       <el-table-column label="姓名" prop="name" :sort-orders="sortOrders" align="center" width="100" show-overflow-tooltip />
       <el-table-column label="性别" prop="gender" :sort-orders="sortOrders" align="center" width="70" show-overflow-tooltip>
         <template slot-scope="{row}">
-          <span v-if="row.gender == 0">女</span>
-          <span v-if="row.gender == 1">男</span>
+          <span v-if="row.gender == 'FEMALE'">女</span>
+          <span v-if="row.gender == 'MALE'">男</span>
         </template>
       </el-table-column>
       <el-table-column label="年龄" prop="age" :sort-orders="sortOrders" align="center" width="70" show-overflow-tooltip />
       <el-table-column label="电话号码" prop="phoneNumber" :sort-orders="sortOrders" align="center" width="150" show-overflow-tooltip />
       <el-table-column label="出行方式" prop="transportationType" :sort-orders="sortOrders" align="center" width="100" show-overflow-tooltip>
         <template slot-scope="{row}">
-          <span v-if="row.transportationType == 0">步行</span>
-          <span v-if="row.transportationType == 1">非机动车</span>
-          <span v-if="row.transportationType == 2">机动车</span>
+          <span v-if="row.transportationType == 'FOOT'">步行</span>
+          <span v-if="row.transportationType == 'NONE_MOTOR_VEHICLE'">非机动车</span>
+          <span v-if="row.transportationType == 'MOTOR_VEHICLE'">机动车</span>
         </template>
       </el-table-column>
       <el-table-column label="能否执行任务" prop="canGo" :sort-orders="sortOrders" align="center" width="150" show-overflow-tooltip>
@@ -96,17 +96,17 @@
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
             <el-form-item label="性别">
-              <span v-if="detail.models.gender == 0">女</span>
-              <span v-if="detail.models.gender == 1">男</span>
+              <span v-if="detail.models.gender == 'FEMALE'">女</span>
+              <span v-if="detail.models.gender == 'MALE'">男</span>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
             <el-form-item label="出行方式">
-              <span v-if="detail.models.transportationType == 0">步行</span>
-              <span v-if="detail.models.transportationType == 1">非机动车</span>
-              <span v-if="detail.models.transportationType == 2">机动车</span>
+              <span v-if="detail.models.transportationType == 'FOOT'">步行</span>
+              <span v-if="detail.models.transportationType == 'NONE_MOTOR_VEHICLE'">非机动车</span>
+              <span v-if="detail.models.transportationType == 'MOTOR_VEHICLE'">机动车</span>
             </el-form-item>
           </el-col>
         </el-row>
@@ -229,8 +229,8 @@
           <el-col :xl="6" :md="12" :sm="24">
             <el-form-item label="性别" prop="gender">
               <el-select v-model="update.models.gender">
-                <el-option label="女" value="0" />
-                <el-option label="男" value="1" />
+                <el-option label="女" value="FEMALE" />
+                <el-option label="男" value="MALE" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -255,9 +255,9 @@
           <el-col :xl="6" :md="12" :sm="24">
             <el-form-item label="出行方式" prop="transportationType">
               <el-select v-model="update.models.transportationType">
-                <el-option label="步行" value="0" />
-                <el-option label="非机动车" value="1" />
-                <el-option label="机动车" value="2" />
+                <el-option label="步行" value="FOOT" />
+                <el-option label="非机动车" value="NONE_MOTOR_VEHICLE" />
+                <el-option label="机动车" value="MOTOR_VEHICLE" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -364,6 +364,12 @@ export default {
     },
     handleQuery() {
       this.page.current = 1
+      if (this.query.gender === '') {
+        this.query.gender = null
+      }
+      if (this.query.transportationType === '') {
+        this.query.transportationType = null
+      }
       this.getDatas()
     },
     handleSort(data) {

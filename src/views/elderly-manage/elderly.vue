@@ -29,8 +29,8 @@
       <el-table-column label="姓名" prop="name" :sort-orders="sortOrders" align="center" width="80" show-overflow-tooltip />
       <el-table-column label="性别" :sort-orders="sortOrders" align="center" width="50" show-overflow-tooltip>
         <template slot-scope="{row}">
-          <span v-if="row.gender=== 0">女</span>
-          <span v-if="row.gender=== 1">男</span>
+          <span v-if="row.gender== 'FEMALE'">女</span>
+          <span v-if="row.gender== 'MALE'">男</span>
         </template>
       </el-table-column>
       <el-table-column label="年龄" prop="age" :sort-orders="sortOrders" align="center" width="50" show-overflow-tooltip />
@@ -92,8 +92,8 @@
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
             <el-form-item label="老人性别">
-              <span v-if="detail.models.gender==0">女</span>
-              <span v-if="detail.models.gender==1">男</span>
+              <span v-if="detail.models.gender=='FEMALE'">女</span>
+              <span v-if="detail.models.gender=='MALE'">男</span>
             </el-form-item>
           </el-col>
         </el-row>
@@ -577,6 +577,9 @@ export default {
     },
     handleQuery() {
       this.page.current = 1
+      if (this.query.gender === '') {
+        this.query.gender = null
+      }
       this.getDatas()
     },
     handleSort(data) {
