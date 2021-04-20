@@ -1,11 +1,11 @@
 import { login, logout, getAccess } from '@/api/account'
-import { getToken, setToken, removeToken, getUserName, setUserName, removeUserName } from '@/utils/auth'
+import { getToken, setToken, removeToken } from '@/utils/auth'
 // import router, { resetRouter } from '@/router'
 import { resetRouter } from '@/router'
 
 const state = {
   token: getToken(),
-  user: getUserName(),
+  user: {},
   access: null
 }
 
@@ -28,17 +28,12 @@ const actions = {
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password }).then(response => {
         // 存放token放入localStorage
-        commit('SET_TOKEN', response.token)
-        commit('SET_USER', response.user)
-        // this.$store.getters.user = response.user
-        // state.user = response.user
-        // console.log('ssssssssss' + state.user)
-        // this.$store.getters.dispatch('username', response.user)
-        setToken(response.token)
-        setUserName(response.user)
-        // commit('SET_TOKEN', response.data.token)
-        // commit('SET_USER', response.data.user)
-        // setToken(response.data.token)
+        // commit('SET_TOKEN', response.token)
+        // commit('SET_USER', response.user)
+        // setToken(response.token)
+        commit('SET_TOKEN', response.data.token)
+        commit('SET_USER', response.data.user)
+        setToken(response.data.token)
         resolve()
       }).catch(error => {
         reject(error)
@@ -77,7 +72,6 @@ const actions = {
         commit('SET_ACCESS', null)
         removeToken()
         resetRouter()
-        removeUserName()
         resolve()
       }).catch(error => {
         reject(error)

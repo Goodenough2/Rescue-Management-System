@@ -30,9 +30,9 @@
       <el-table-column label="走失年龄下界" prop="ageOver" :sort-orders="sortOrders" align="center" width="120" show-overflow-tooltip />
       <el-table-column label="性别" prop="gender" :sort-orders="sortOrders" align="center" width="100" show-overflow-tooltip>
         <template slot-scope="{row}">
-          <span v-if="row.gender == 0">女</span>
-          <span v-if="row.gender == 1">男</span>
-          <span v-if="row.gender == 2">不限</span>
+          <span v-if="row.gender == 'FEMALE'">女</span>
+          <span v-if="row.gender == 'MALE'">男</span>
+          <span v-if="row.gender == 'UNKNOWN'">不限</span>
         </template>
       </el-table-column>
       <el-table-column label="走失超过时间" prop="lostDuration" :sort-orders="sortOrders" align="center" width="120" show-overflow-tooltip />
@@ -87,9 +87,9 @@
         <el-row>
           <el-col :xl="6" :md="12" :sm="24">
             <el-form-item label="性别">
-              <span v-if="detail.models.gender == 0">女</span>
-              <span v-if="detail.models.gender == 1">男</span>
-              <span v-if="detail.models.gender == 2">不限</span>
+              <span v-if="detail.models.gender == 'FEMALE'">女</span>
+              <span v-if="detail.models.gender == 'MALE'">男</span>
+              <span v-if="detail.models.gender == 'UNKNOWN'">不限</span>
             </el-form-item>
           </el-col>
         </el-row>
@@ -211,9 +211,9 @@
           <el-col :xl="6" :md="12" :sm="24">
             <el-form-item label="性别" prop="gender">
               <el-select v-model="update.models.gender">
-                <el-option label="女" value="0" />
-                <el-option label="男" value="1" />
-                <el-option label="不限" value="2" />
+                <el-option label="女" value="FEMALE" />
+                <el-option label="男" value="MALE" />
+                <el-option label="不限" value="UNKNOWN" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -334,6 +334,9 @@ export default {
     },
     handleQuery() {
       this.page.current = 1
+      if (this.query.gender === '') {
+        this.query.gender = null
+      }
       this.getDatas()
     },
     handleSort(data) {
