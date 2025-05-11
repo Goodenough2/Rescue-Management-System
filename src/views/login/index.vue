@@ -137,7 +137,7 @@ export default {
         username: setRule('账号', [{ required: true, trigger: 'change' }]),
         password: setRule('密码', [{ required: true, trigger: 'change' }])
       },
-      passwordVisible: false,
+      passwordVisible: true,
       capslockTooltip: false,
       loading: false,
       showDialog: false,
@@ -278,20 +278,20 @@ export default {
           width: 85%;
           margin-left: 35px;
 
-          /deep/ input {
-            background: transparent;
-            border: 0px;
-            -webkit-appearance: none;
-            border-radius: 0px;
-            padding: 12px 5px 12px 15px;
-            color: $light-gray;
-            height: 48px;
+          // /deep/ input {
+          //   background: transparent;
+          //   border: 0px;
+          //   -webkit-appearance: none;
+          //   border-radius: 0px;
+          //   padding: 12px 5px 12px 15px;
+          //   color: $light-gray;
+          //   height: 48px;
 
-            &:-webkit-autofill {
-              box-shadow: 0 0 0px 1000px $darker-bg inset !important;
-              -webkit-text-fill-color: $cursor !important;
-            }
-          }
+          //   &:-webkit-autofill {
+          //     box-shadow: 0 0 0px 1000px $darker-bg inset !important;
+          //     -webkit-text-fill-color: $cursor !important;
+          //   }
+          // }
         }
 
         .input-left-icon {

@@ -78,18 +78,18 @@ export default {
   position: relative;
   overflow: hidden;
   width: 100%;
-  /deep/ {
-    .el-scrollbar__bar {
-      bottom: 0px;
-    }
-    .el-scrollbar__wrap {
-      height: 61px;
-    }
-    .el-scrollbar__bar.is-horizontal {
-      .el-scrollbar__thumb{
-        background-color: $scrollbarColor;
-      }
-    }
-  }
+  // /deep/ {
+  //   .el-scrollbar__bar {
+  //     bottom: 0px;
+  //   }
+  //   .el-scrollbar__wrap {
+  //     height: 61px;
+  //   }
+  //   .el-scrollbar__bar.is-horizontal {
+  //     .el-scrollbar__thumb{
+  //       background-color: $scrollbarColor;
+  //     }
+  //   }
+  // }
 }
 </style>
